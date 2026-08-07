@@ -58,6 +58,7 @@ id splashSubtitle
 id splashTitle
 id timeInput
 layout activity_book_appointment
+layout activity_doctor_details
 layout activity_login
 layout activity_main
 layout activity_register

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/md_theme_light_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <TextView
+                    android:id="@+id/doctorName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Doctor Name"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/md_theme_light_onSurface" />
+
+                <TextView
+                    android:id="@+id/doctorSpecialization"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Specialization"
+                    android:textSize="18sp"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/md_theme_light_secondary" />
+
+                <TextView
+                    android:id="@+id/doctorEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="doctor@email.com"
+                    android:textSize="16sp"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@color/md_theme_light_onSurface" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/bookButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Book Appointment"
+                    android:layout_marginTop="32dp"
+                    app:cornerRadius="12dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+</ScrollView>

@@ -3940,6 +3940,7 @@ layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
 layout activity_book_appointment
+layout activity_doctor_details
 layout activity_login
 layout activity_main
 layout activity_register

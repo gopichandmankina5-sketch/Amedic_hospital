@@ -17,13 +17,13 @@ class DoctorDetailsActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val doctor = intent.getParcelableExtra<Doctor>(EXTRA_DOCTOR)
-        doctor?.let {
-            binding.doctorName.text = it.name
-            binding.doctorSpecialization.text = it.specialization ?: "General"
-            binding.doctorEmail.text = it.email ?: "Unavailable"
+        doctor?.let { doctorObj ->
+            binding.doctorName.text = doctorObj.name
+            binding.doctorSpecialization.text = doctorObj.specialization ?: "General"
+            binding.doctorEmail.text = doctorObj.email ?: "Unavailable"
             binding.bookButton.setOnClickListener {
                 val intent = Intent(this, BookAppointmentActivity::class.java)
-                intent.putExtra("doctorName", it.name)
+                intent.putExtra("doctorName", doctorObj.name)
                 startActivity(intent)
             }
         }
