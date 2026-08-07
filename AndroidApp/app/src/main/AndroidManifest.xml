@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.amedick.hospitalapp">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application
+        android:name=".HospitalApplication"
+        android:allowBackup="true"
+        android:icon="@android:drawable/sym_def_app_icon"
+        android:label="AmedicK"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AmedicKApp">
+
+        <activity
+            android:name="com.amedick.hospitalapp.activities.SplashActivity"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+        <activity
+            android:name="com.amedick.hospitalapp.activities.LoginActivity"
+            android:exported="false" />
+
+        <activity
+            android:name="com.amedick.hospitalapp.activities.RegisterActivity"
+            android:exported="false" />
+
+        <activity
+            android:name="com.amedick.hospitalapp.activities.MainActivity"
+            android:exported="false" />
+
+        <activity
+            android:name="com.amedick.hospitalapp.activities.BookAppointmentActivity"
+            android:exported="false" />
+
+    </application>
+</manifest>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AmedicK</string>
+    <string name="splash_welcome">Welcome to AmedicK</string>
+    <string name="login_title">Login</string>
+    <string name="register_title">Register</string>
+    <string name="home_title">Dashboard</string>
+    <string name="doctors_title">Doctors</string>
+    <string name="appointments_title">Appointments</string>
+    <string name="profile_title">Profile</string>
+    <string name="settings_title">Settings</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="name_hint">Name</string>
+    <string name="phone_hint">Phone</string>
+    <string name="specialization_hint">Specialization</string>
+    <string name="login_button">Login</string>
+    <string name="register_button">Register</string>
+    <string name="logout_button">Logout</string>
+    <string name="book_appointment">Book Appointment</string>
+    <string name="appointment_history">Appointment History</string>
+    <string name="no_doctors_message">No doctors found</string>
+    <string name="no_appointments_message">No appointments available</string>
+    <string name="search_hint">Search doctors</string>
+    <string name="favorites_title">Favorite Doctors</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="sync_appointments">Sync Appointments</string>
+    <string name="request_failed">Request failed. Please try again.</string>
+</resources>

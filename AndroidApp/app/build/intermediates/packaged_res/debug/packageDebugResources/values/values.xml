@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="md_theme_dark_background">#0F172A</color>
+    <color name="md_theme_dark_error">#CF6679</color>
+    <color name="md_theme_dark_onPrimary">#00317A</color>
+    <color name="md_theme_dark_onSecondary">#00382F</color>
+    <color name="md_theme_dark_onSurface">#E2E8F0</color>
+    <color name="md_theme_dark_primary">#ABC1FF</color>
+    <color name="md_theme_dark_secondary">#6BF3DC</color>
+    <color name="md_theme_dark_surface">#111827</color>
+    <color name="md_theme_light_background">#F6F8FF</color>
+    <color name="md_theme_light_error">#B00020</color>
+    <color name="md_theme_light_onPrimary">#FFFFFF</color>
+    <color name="md_theme_light_onSecondary">#FFFFFF</color>
+    <color name="md_theme_light_onSurface">#1F2937</color>
+    <color name="md_theme_light_primary">#3366FF</color>
+    <color name="md_theme_light_secondary">#00BFA5</color>
+    <color name="md_theme_light_surface">#FFFFFF</color>
+    <color name="purple_500">#6200EE</color>
+    <color name="purple_700">#3700B3</color>
+    <color name="teal_200">#03DAC5</color>
+    <string name="app_name">AmedicK</string>
+    <string name="appointment_history">Appointment History</string>
+    <string name="appointments_title">Appointments</string>
+    <string name="book_appointment">Book Appointment</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="doctors_title">Doctors</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="email_hint">Email</string>
+    <string name="favorites_title">Favorite Doctors</string>
+    <string name="home_title">Dashboard</string>
+    <string name="login_button">Login</string>
+    <string name="login_title">Login</string>
+    <string name="logout_button">Logout</string>
+    <string name="name_hint">Name</string>
+    <string name="no_appointments_message">No appointments available</string>
+    <string name="no_doctors_message">No doctors found</string>
+    <string name="password_hint">Password</string>
+    <string name="phone_hint">Phone</string>
+    <string name="profile_title">Profile</string>
+    <string name="register_button">Register</string>
+    <string name="register_title">Register</string>
+    <string name="request_failed">Request failed. Please try again.</string>
+    <string name="search_hint">Search doctors</string>
+    <string name="settings_title">Settings</string>
+    <string name="specialization_hint">Specialization</string>
+    <string name="splash_welcome">Welcome to AmedicK</string>
+    <string name="sync_appointments">Sync Appointments</string>
+    <style name="Theme.AmedicKApp" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/md_theme_light_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
+        <item name="colorSecondary">@color/md_theme_light_secondary</item>
+        <item name="colorOnSecondary">@color/md_theme_light_onSecondary</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="android:navigationBarColor">?attr/colorPrimary</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+    <style name="Theme.AmedicKApp.Dark" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/md_theme_dark_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_dark_onPrimary</item>
+        <item name="colorSecondary">@color/md_theme_dark_secondary</item>
+        <item name="colorOnSecondary">@color/md_theme_dark_onSecondary</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="android:navigationBarColor">?attr/colorPrimary</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+</resources>

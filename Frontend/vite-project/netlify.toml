@@ -1,0 +1,12 @@
+# Netlify configuration for the Vite (React) app living in /Frontend/vite-project
+
+[build]
+  base = "Frontend/vite-project"
+  command = "npm run build"
+  publish = "dist"
+
+# SPA routing: send all non-file requests to index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
