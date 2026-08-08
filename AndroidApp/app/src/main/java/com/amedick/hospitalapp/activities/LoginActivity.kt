@@ -115,9 +115,14 @@ class LoginActivity : AppCompatActivity() {
                             is LoginState.Loading -> setLoading(true)
                             is LoginState.Success -> {
                                 setLoading(false)
-                                startActivity(Intent(this@LoginActivity, MainActivity::class.java).apply {
-                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                })
+                                val role = state.user?.role
+                                val intent = when (role) {
+                                    "admin" -> Intent(this@LoginActivity, AdminDashboardActivity::class.java)
+                                    "doctor" -> Intent(this@LoginActivity, DoctorDashboardActivity::class.java)
+                                    else -> Intent(this@LoginActivity, MainActivity::class.java)
+                                }
+                                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                startActivity(intent)
                                 finish()
                             }
                             is LoginState.Error -> {

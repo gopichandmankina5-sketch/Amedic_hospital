@@ -6,7 +6,11 @@ import android.view.View;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
+import com.amedick.hospitalapp.activities.AdminDashboardActivity;
+import com.amedick.hospitalapp.activities.AdminDashboardActivity_MembersInjector;
 import com.amedick.hospitalapp.activities.BookAppointmentActivity;
+import com.amedick.hospitalapp.activities.DoctorDashboardActivity;
+import com.amedick.hospitalapp.activities.DoctorDashboardActivity_MembersInjector;
 import com.amedick.hospitalapp.activities.DoctorDetailsActivity;
 import com.amedick.hospitalapp.activities.LoginActivity;
 import com.amedick.hospitalapp.activities.MainActivity;
@@ -34,6 +38,7 @@ import com.amedick.hospitalapp.viewmodel.RegisterViewModel;
 import com.amedick.hospitalapp.viewmodel.RegisterViewModel_HiltModules_KeyModule_ProvideFactory;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -349,20 +354,19 @@ public final class DaggerHospitalApplication_HiltComponents_SingletonC {
     }
 
     @Override
-    public void injectAppointmentHistoryFragment(
-        AppointmentHistoryFragment appointmentHistoryFragment) {
+    public void injectAppointmentHistoryFragment(AppointmentHistoryFragment arg0) {
     }
 
     @Override
-    public void injectDoctorListFragment(DoctorListFragment doctorListFragment) {
+    public void injectDoctorListFragment(DoctorListFragment arg0) {
     }
 
     @Override
-    public void injectHomeFragment(HomeFragment homeFragment) {
+    public void injectHomeFragment(HomeFragment arg0) {
     }
 
     @Override
-    public void injectProfileFragment(ProfileFragment profileFragment) {
+    public void injectProfileFragment(ProfileFragment arg0) {
     }
 
     @Override
@@ -411,27 +415,37 @@ public final class DaggerHospitalApplication_HiltComponents_SingletonC {
     }
 
     @Override
-    public void injectBookAppointmentActivity(BookAppointmentActivity bookAppointmentActivity) {
+    public void injectAdminDashboardActivity(AdminDashboardActivity arg0) {
+      injectAdminDashboardActivity2(arg0);
     }
 
     @Override
-    public void injectDoctorDetailsActivity(DoctorDetailsActivity doctorDetailsActivity) {
+    public void injectBookAppointmentActivity(BookAppointmentActivity arg0) {
     }
 
     @Override
-    public void injectLoginActivity(LoginActivity loginActivity) {
+    public void injectDoctorDashboardActivity(DoctorDashboardActivity arg0) {
+      injectDoctorDashboardActivity2(arg0);
     }
 
     @Override
-    public void injectMainActivity(MainActivity mainActivity) {
+    public void injectDoctorDetailsActivity(DoctorDetailsActivity arg0) {
     }
 
     @Override
-    public void injectRegisterActivity(RegisterActivity registerActivity) {
+    public void injectLoginActivity(LoginActivity arg0) {
     }
 
     @Override
-    public void injectSplashActivity(SplashActivity splashActivity) {
+    public void injectMainActivity(MainActivity arg0) {
+    }
+
+    @Override
+    public void injectRegisterActivity(RegisterActivity arg0) {
+    }
+
+    @Override
+    public void injectSplashActivity(SplashActivity arg0) {
     }
 
     @Override
@@ -457,6 +471,19 @@ public final class DaggerHospitalApplication_HiltComponents_SingletonC {
     @Override
     public ViewComponentBuilder viewComponentBuilder() {
       return new ViewCBuilder(singletonCImpl, activityRetainedCImpl, activityCImpl);
+    }
+
+    @CanIgnoreReturnValue
+    private AdminDashboardActivity injectAdminDashboardActivity2(AdminDashboardActivity instance) {
+      AdminDashboardActivity_MembersInjector.injectAuthRepository(instance, singletonCImpl.authRepositoryProvider.get());
+      return instance;
+    }
+
+    @CanIgnoreReturnValue
+    private DoctorDashboardActivity injectDoctorDashboardActivity2(
+        DoctorDashboardActivity instance) {
+      DoctorDashboardActivity_MembersInjector.injectAuthRepository(instance, singletonCImpl.authRepositoryProvider.get());
+      return instance;
     }
   }
 
@@ -641,7 +668,7 @@ public final class DaggerHospitalApplication_HiltComponents_SingletonC {
     }
 
     @Override
-    public void injectHospitalApplication(HospitalApplication hospitalApplication) {
+    public void injectHospitalApplication(HospitalApplication arg0) {
     }
 
     @Override

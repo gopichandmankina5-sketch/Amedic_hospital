@@ -18,7 +18,9 @@ import dagger.hilt.processor.internal.definecomponent.codegen._dagger_hilt_andro
 import dagger.hilt.processor.internal.definecomponent.codegen._dagger_hilt_android_internal_builders_ViewWithFragmentComponentBuilder;
 import dagger.hilt.processor.internal.definecomponent.codegen._dagger_hilt_components_SingletonComponent;
 import hilt_aggregated_deps._com_amedick_hospitalapp_HospitalApplication_GeneratedInjector;
+import hilt_aggregated_deps._com_amedick_hospitalapp_activities_AdminDashboardActivity_GeneratedInjector;
 import hilt_aggregated_deps._com_amedick_hospitalapp_activities_BookAppointmentActivity_GeneratedInjector;
+import hilt_aggregated_deps._com_amedick_hospitalapp_activities_DoctorDashboardActivity_GeneratedInjector;
 import hilt_aggregated_deps._com_amedick_hospitalapp_activities_DoctorDetailsActivity_GeneratedInjector;
 import hilt_aggregated_deps._com_amedick_hospitalapp_activities_LoginActivity_GeneratedInjector;
 import hilt_aggregated_deps._com_amedick_hospitalapp_activities_MainActivity_GeneratedInjector;
@@ -79,7 +81,9 @@ import hilt_aggregated_deps._dagger_hilt_android_internal_modules_HiltWrapper_Ac
     },
     aggregatedDeps = {
         _com_amedick_hospitalapp_HospitalApplication_GeneratedInjector.class,
+        _com_amedick_hospitalapp_activities_AdminDashboardActivity_GeneratedInjector.class,
         _com_amedick_hospitalapp_activities_BookAppointmentActivity_GeneratedInjector.class,
+        _com_amedick_hospitalapp_activities_DoctorDashboardActivity_GeneratedInjector.class,
         _com_amedick_hospitalapp_activities_DoctorDetailsActivity_GeneratedInjector.class,
         _com_amedick_hospitalapp_activities_LoginActivity_GeneratedInjector.class,
         _com_amedick_hospitalapp_activities_MainActivity_GeneratedInjector.class,

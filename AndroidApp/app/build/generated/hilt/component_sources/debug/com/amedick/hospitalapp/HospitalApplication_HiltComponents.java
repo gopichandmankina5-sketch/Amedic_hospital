@@ -1,6 +1,8 @@
 package com.amedick.hospitalapp;
 
+import com.amedick.hospitalapp.activities.AdminDashboardActivity_GeneratedInjector;
 import com.amedick.hospitalapp.activities.BookAppointmentActivity_GeneratedInjector;
+import com.amedick.hospitalapp.activities.DoctorDashboardActivity_GeneratedInjector;
 import com.amedick.hospitalapp.activities.DoctorDetailsActivity_GeneratedInjector;
 import com.amedick.hospitalapp.activities.LoginActivity_GeneratedInjector;
 import com.amedick.hospitalapp.activities.MainActivity_GeneratedInjector;
@@ -195,7 +197,9 @@ public final class HospitalApplication_HiltComponents {
       }
   )
   @ActivityScoped
-  public abstract static class ActivityC implements BookAppointmentActivity_GeneratedInjector,
+  public abstract static class ActivityC implements AdminDashboardActivity_GeneratedInjector,
+      BookAppointmentActivity_GeneratedInjector,
+      DoctorDashboardActivity_GeneratedInjector,
       DoctorDetailsActivity_GeneratedInjector,
       LoginActivity_GeneratedInjector,
       MainActivity_GeneratedInjector,

@@ -19,17 +19,35 @@ class AuthRepository @Inject constructor(
 ) {
     suspend fun login(email: String, password: String): Result<User> {
         return try {
-            val result = auth.signInWithEmailAndPassword(email, password).await()
+            val result = try {
+                auth.signInWithEmailAndPassword(email.trim(), password).await()
+            } catch (e: Exception) {
+                throw Exception(mapFirebaseAuthError(e), e)
+            }
+            
             val uid = result.user?.uid ?: throw Exception("User not found")
-            val userDoc = firestore.collection("Users").document(uid).get().await()
+            
+            val userDoc = try {
+                firestore.collection("Users").document(uid).get().await()
+            } catch (e: Exception) {
+                throw Exception("Failed to load user profile data: ${e.message}", e)
+            }
+            
+            if (!userDoc.exists()) {
+                throw Exception("User role is not configured. Please contact administrator.")
+            }
+            
             val user = userDoc.toObject(User::class.java)
-                ?: User(uid = uid, email = result.user?.email.orEmpty()).also {
-                    firestore.collection("Users").document(uid).set(it).await()
-                }
+                ?: throw Exception("User profile could not be parsed.")
+            
+            if (user.role.isNullOrBlank()) {
+                throw Exception("User role is not configured. Please contact administrator.")
+            }
+            
             runCatching { saveFcmToken(uid) }
             Result.success(user)
         } catch (e: Exception) {
-            Result.failure(Exception(mapFirebaseAuthError(e)))
+            Result.failure(e)
         }
     }
 
@@ -93,16 +111,36 @@ class AuthRepository @Inject constructor(
     }
 
     private fun mapFirebaseAuthError(e: Exception): String {
+        if (e is com.google.firebase.auth.FirebaseAuthException) {
+            android.util.Log.e("FirebaseAuth", "Login failed: ${e.errorCode} - ${e.message}", e)
+            return when (e.errorCode) {
+                "ERROR_INVALID_CREDENTIAL", "INVALID_LOGIN_CREDENTIALS", "wrong-password", "invalid-credential" -> "Incorrect email or password."
+                "ERROR_USER_NOT_FOUND", "user-not-found" -> "No account found with this email."
+                "ERROR_TOO_MANY_REQUESTS", "too-many-requests" -> "Too many login attempts. Please try again later."
+                "ERROR_USER_DISABLED", "user-disabled" -> "This account has been disabled."
+                else -> "Unable to sign in. Please try again."
+            }
+        }
+        
+        if (e is com.google.firebase.FirebaseNetworkException) {
+            android.util.Log.e("FirebaseAuth", "Login failed: Network Error", e)
+            return "Network connection failed. Please check your internet connection."
+        }
+
         return when (e) {
-            is FirebaseAuthInvalidCredentialsException -> "Email or password is incorrect."
+            is FirebaseAuthInvalidCredentialsException -> "Incorrect email or password."
             is FirebaseAuthInvalidUserException -> "No account found with this email."
             is FirebaseAuthUserCollisionException -> "An account with this email already exists."
             is FirebaseAuthWeakPasswordException -> "Password is too weak. Use at least 6 characters."
             else -> when {
                 e.message?.contains("network", ignoreCase = true) == true ->
-                    "No internet connection. Please check your network."
+                    "Network connection failed. Please check your internet connection."
+                e.message?.contains("User role is not configured", ignoreCase = true) == true ->
+                    e.message!!
+                e.message?.contains("Failed to load user profile data", ignoreCase = true) == true ->
+                    e.message!!
                 e.message?.contains("INVALID_LOGIN_CREDENTIALS") == true ->
-                    "Email or password is incorrect."
+                    "Incorrect email or password."
                 else -> "Something went wrong. Please try again."
             }
         }

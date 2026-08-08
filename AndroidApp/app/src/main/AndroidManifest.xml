@@ -58,6 +58,18 @@
             android:windowSoftInputMode="adjustResize"
             android:parentActivityName="com.amedick.hospitalapp.activities.DoctorDetailsActivity" />
 
+        <!-- Doctor Dashboard -->
+        <activity
+            android:name="com.amedick.hospitalapp.activities.DoctorDashboardActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Admin Dashboard -->
+        <activity
+            android:name="com.amedick.hospitalapp.activities.AdminDashboardActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
         <!-- FCM Service -->
         <service
             android:name=".notification.MyFirebaseMessagingService"

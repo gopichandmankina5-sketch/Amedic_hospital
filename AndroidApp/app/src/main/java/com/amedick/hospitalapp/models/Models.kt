@@ -11,7 +11,7 @@ data class User(
     val name: String = "",
     val email: String = "",
     val phone: String = "",
-    val role: String = "patient", // "patient", "doctor", "admin"
+    val role: String? = null, // "patient", "doctor", "admin"
     val profileImage: String = "",
     val fcmToken: String = "",
     @ServerTimestamp val createdAt: Date? = null

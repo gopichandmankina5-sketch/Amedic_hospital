@@ -58,6 +58,7 @@ drawable ic_doctor
 drawable ic_email
 drawable ic_home
 drawable ic_hospital
+drawable ic_logout
 drawable ic_phone
 drawable ic_profile
 drawable ic_search
@@ -72,6 +73,7 @@ id backButton
 id bookAppointmentCard
 id bookButton
 id bottomNavigation
+id btnLogout
 id cancelButton
 id changePasswordButton
 id circleBottom
@@ -141,6 +143,7 @@ id timeInput
 id timeInputLayout
 id timeText
 id toolbar
+id tvWelcomeMessage
 id upcomingCard
 id upcomingDate
 id upcomingDoctorName
@@ -148,7 +151,9 @@ id upcomingSection
 id upcomingStatus
 id upcomingTime
 id userNameText
+layout activity_admin_dashboard
 layout activity_book_appointment
+layout activity_doctor_dashboard
 layout activity_doctor_details
 layout activity_login
 layout activity_main

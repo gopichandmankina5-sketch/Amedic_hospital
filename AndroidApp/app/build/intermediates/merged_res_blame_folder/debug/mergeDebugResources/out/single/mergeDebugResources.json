@@ -4,12 +4,20 @@
         "source": "com.amedick.hospitalapp-main-73:/drawable/ic_calendar.xml"
     },
     {
+        "merged": "com.amedick.hospitalapp-debug-71:/layout_activity_doctor_dashboard.xml.flat",
+        "source": "com.amedick.hospitalapp-main-73:/layout/activity_doctor_dashboard.xml"
+    },
+    {
         "merged": "com.amedick.hospitalapp-debug-71:/layout_fragment_doctor_list.xml.flat",
         "source": "com.amedick.hospitalapp-main-73:/layout/fragment_doctor_list.xml"
     },
     {
         "merged": "com.amedick.hospitalapp-debug-71:/drawable_ic_doctor.xml.flat",
         "source": "com.amedick.hospitalapp-main-73:/drawable/ic_doctor.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-debug-71:/layout_activity_admin_dashboard.xml.flat",
+        "source": "com.amedick.hospitalapp-main-73:/layout/activity_admin_dashboard.xml"
     },
     {
         "merged": "com.amedick.hospitalapp-debug-71:/drawable_ic_phone.xml.flat",
@@ -38,6 +46,10 @@
     {
         "merged": "com.amedick.hospitalapp-debug-71:/layout_activity_splash.xml.flat",
         "source": "com.amedick.hospitalapp-main-73:/layout/activity_splash.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-debug-71:/drawable_ic_logout.xml.flat",
+        "source": "com.amedick.hospitalapp-main-73:/drawable/ic_logout.xml"
     },
     {
         "merged": "com.amedick.hospitalapp-debug-71:/menu_bottom_nav_menu.xml.flat",

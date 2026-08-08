@@ -3238,6 +3238,7 @@ drawable ic_email
 drawable ic_home
 drawable ic_hospital
 drawable ic_keyboard_black_24dp
+drawable ic_logout
 drawable ic_m3_chip_check
 drawable ic_m3_chip_checked_circle
 drawable ic_m3_chip_close
@@ -3449,6 +3450,7 @@ id browser_actions_menu_item_icon
 id browser_actions_menu_item_text
 id browser_actions_menu_items
 id browser_actions_menu_view
+id btnLogout
 id buttonPanel
 id cache_measures
 id callMeasure
@@ -3920,6 +3922,7 @@ id transition_position
 id transition_scene_layoutid_cache
 id transition_transform
 id triangle
+id tvWelcomeMessage
 id unchecked
 id uniform
 id unlabeled
@@ -4070,7 +4073,9 @@ layout abc_search_dropdown_item_icons_2line
 layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
+layout activity_admin_dashboard
 layout activity_book_appointment
+layout activity_doctor_dashboard
 layout activity_doctor_details
 layout activity_login
 layout activity_main

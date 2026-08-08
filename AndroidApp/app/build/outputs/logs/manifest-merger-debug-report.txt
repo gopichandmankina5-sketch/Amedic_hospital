@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:2:1-71:12
-INJECTED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:2:1-71:12
-INJECTED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:2:1-71:12
-INJECTED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:2:1-71:12
+ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:2:1-83:12
+INJECTED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:2:1-83:12
+INJECTED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:2:1-83:12
+INJECTED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:2:1-83:12
 MERGED from [androidx.databinding:viewbinding:8.3.2] C:\Users\gopic\.gradle\caches\transforms-4\0d496ba29aa584060f8562d7810a064e\transformed\jetified-viewbinding-8.3.2\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.navigation:navigation-common:2.8.0] C:\Users\gopic\.gradle\caches\transforms-4\d3060692919f6fc7be6585dc8b7326d3\transformed\navigation-common-2.8.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.navigation:navigation-common-ktx:2.8.0] C:\Users\gopic\.gradle\caches\transforms-4\81537e0337315f9258e3155fabbb494e\transformed\navigation-common-ktx-2.8.0\AndroidManifest.xml:2:1-7:12
@@ -93,8 +93,7 @@ MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.8.3] C:\Users\gopi
 MERGED from [androidx.lifecycle:lifecycle-runtime-ktx-android:2.8.3] C:\Users\gopic\.gradle\caches\transforms-4\7af7a5bad8e5d0092ca9604549d8e478\transformed\jetified-lifecycle-runtime-ktx-release\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.lifecycle:lifecycle-livedata-ktx:2.8.3] C:\Users\gopic\.gradle\caches\transforms-4\089d592f53b1312b70cfcfb14205edf8\transformed\jetified-lifecycle-livedata-ktx-2.8.3\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.3] C:\Users\gopic\.gradle\caches\transforms-4\33b431e8430c721930f92f5ced484355\transformed\jetified-lifecycle-viewmodel-ktx-2.8.3\AndroidManifest.xml:2:1-7:12
-MERGED from [androidx.room:room-runtime:2.6.1] C:\Users\gopic\.gradle\caches\transforms-4\6d739c2d930ef1442651b315a6bf6344\transformed\room-runtime-2.6.1\AndroidManifest.xml:17:1-31:12
-MERGED from [androidx.room:room-ktx:2.6.1] C:\Users\gopic\.gradle\caches\transforms-4\16f9bc237b688f1019bf911ceca17aa6\transformed\jetified-room-ktx-2.6.1\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.room:room-ktx:2.5.0] C:\Users\gopic\.gradle\caches\transforms-4\d5d1e813631fa118c83e023e96a74ab8\transformed\jetified-room-ktx-2.5.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.privacysandbox.ads:ads-adservices-java:1.0.0-beta05] C:\Users\gopic\.gradle\caches\transforms-4\e4fa1262234d931d49a99884a8be4330\transformed\jetified-ads-adservices-java-1.0.0-beta05\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] C:\Users\gopic\.gradle\caches\transforms-4\b32f65c727ff3f29ae111d2392a9985d\transformed\jetified-ads-adservices-1.0.0-beta05\AndroidManifest.xml:17:1-28:12
 MERGED from [com.google.firebase:firebase-installations-interop:17.1.1] C:\Users\gopic\.gradle\caches\transforms-4\54e7393651f61978aaa9d3912878c1bc\transformed\jetified-firebase-installations-interop-17.1.1\AndroidManifest.xml:15:1-19:12
@@ -105,14 +104,13 @@ MERGED from [androidx.fragment:fragment-ktx:1.8.2] C:\Users\gopic\.gradle\caches
 MERGED from [androidx.activity:activity-ktx:1.9.1] C:\Users\gopic\.gradle\caches\transforms-4\580ec2c0fc8127c6590732302f11fa9e\transformed\jetified-activity-ktx-1.9.1\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] C:\Users\gopic\.gradle\caches\transforms-4\266c175d8a379c36b7da1ac5a8b379ab\transformed\jetified-customview-poolingcontainer-1.0.0\AndroidManifest.xml:17:1-23:12
 MERGED from [androidx.core:core-ktx:1.13.1] C:\Users\gopic\.gradle\caches\transforms-4\e7e05eda65e6a8b60da6eb0dfb582bf3\transformed\jetified-core-ktx-1.13.1\AndroidManifest.xml:2:1-7:12
-MERGED from [androidx.sqlite:sqlite-framework:2.4.0] C:\Users\gopic\.gradle\caches\transforms-4\e9d565df056b3a6077e5a9ff4dd88eb0\transformed\sqlite-framework-2.4.0\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.sqlite:sqlite:2.4.0] C:\Users\gopic\.gradle\caches\transforms-4\c0972bcf562c88874369d24426c27765\transformed\sqlite-2.4.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.room:room-runtime:2.5.0] C:\Users\gopic\.gradle\caches\transforms-4\56170c78ac2cbdb17e88699a96f1d1fe\transformed\room-runtime-2.5.0\AndroidManifest.xml:17:1-31:12
 MERGED from [com.google.android.libraries.identity.googleid:googleid:1.1.0] C:\Users\gopic\.gradle\caches\transforms-4\1829f4202b5866dc7136f0fb33eae7cd\transformed\jetified-googleid-1.1.0\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.annotation:annotation-experimental:1.4.1] C:\Users\gopic\.gradle\caches\transforms-4\886fb7bb13b6b54093f34248ed1f93ae\transformed\jetified-annotation-experimental-1.4.1\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.sqlite:sqlite-framework:2.3.0] C:\Users\gopic\.gradle\caches\transforms-4\63ab267fb382f77dffeba7e7e7206506\transformed\sqlite-framework-2.3.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\gopic\.gradle\caches\transforms-4\dd948991b648b1b94add3c9f7f67edb2\transformed\cardview-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\gopic\.gradle\caches\transforms-4\35771ad1d192da5aef00c66a124b9ced\transformed\cursoradapter-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\gopic\.gradle\caches\transforms-4\cb11fe054fb5b14cc30c68d699d3ac42\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:17:1-55:12
-MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\gopic\.gradle\caches\transforms-4\671c3e880be81623dc8ed58d9afeb6a9\transformed\core-runtime-2.2.0\AndroidManifest.xml:17:1-22:12
 MERGED from [com.github.bumptech.glide:gifdecoder:4.16.0] C:\Users\gopic\.gradle\caches\transforms-4\b2e3fda7acd35952519ee7306be67926\transformed\jetified-gifdecoder-4.16.0\AndroidManifest.xml:2:1-9:12
 MERGED from [androidx.exifinterface:exifinterface:1.3.6] C:\Users\gopic\.gradle\caches\transforms-4\5d2a20298d451845d423db72168218ce\transformed\exifinterface-1.3.6\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\gopic\.gradle\caches\transforms-4\0b67bb4e904bd4f4993b279a7a4ca2a5\transformed\jetified-startup-runtime-1.1.1\AndroidManifest.xml:17:1-33:12
@@ -120,6 +118,7 @@ MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\gopic\.gradle\caches\trans
 MERGED from [com.google.firebase:firebase-components:18.0.0] C:\Users\gopic\.gradle\caches\transforms-4\e411515239a784a9a6143fa660622cd0\transformed\jetified-firebase-components-18.0.0\AndroidManifest.xml:15:1-20:12
 MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\gopic\.gradle\caches\transforms-4\8d738b9c4cedf62fa1733b797dbd57cc\transformed\interpolator-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\gopic\.gradle\caches\transforms-4\65160081a8d88b1fc7abbfd276f27b1e\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\gopic\.gradle\caches\transforms-4\671c3e880be81623dc8ed58d9afeb6a9\transformed\core-runtime-2.2.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\gopic\.gradle\caches\transforms-4\b89229fa2293930527a326ae8c65a668\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [com.google.firebase:firebase-datatransport:18.2.0] C:\Users\gopic\.gradle\caches\transforms-4\6cd3086daaea8d0f704fd0974c6b24f1\transformed\jetified-firebase-datatransport-18.2.0\AndroidManifest.xml:15:1-31:12
 MERGED from [com.google.android.datatransport:transport-backend-cct:3.1.9] C:\Users\gopic\.gradle\caches\transforms-4\459f198c25c0434438fea6b143b74655\transformed\jetified-transport-backend-cct-3.1.9\AndroidManifest.xml:15:1-37:12
@@ -128,6 +127,7 @@ MERGED from [com.google.android.datatransport:transport-runtime:3.1.9] C:\Users\
 MERGED from [com.google.android.datatransport:transport-api:3.1.0] C:\Users\gopic\.gradle\caches\transforms-4\e3237b6bcb42683acfa3f1e847da4028\transformed\jetified-transport-api-3.1.0\AndroidManifest.xml:15:1-20:12
 MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\gopic\.gradle\caches\transforms-4\2351f9c8e8ce4dc90196c5ba3857a168\transformed\documentfile-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.print:print:1.0.0] C:\Users\gopic\.gradle\caches\transforms-4\e33ad29ec01a75e8ef61c114a5704114\transformed\print-1.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.sqlite:sqlite:2.3.0] C:\Users\gopic\.gradle\caches\transforms-4\589a5cf5833c03a0c171ac93d561256a\transformed\sqlite-2.3.0\AndroidManifest.xml:17:1-22:12
 MERGED from [io.grpc:grpc-android:1.57.2] C:\Users\gopic\.gradle\caches\transforms-4\70ce4ee0ba37bdedc7f32384f888b820\transformed\jetified-grpc-android-1.57.2\AndroidManifest.xml:2:1-9:12
 MERGED from [com.google.dagger:dagger-lint-aar:2.48] C:\Users\gopic\.gradle\caches\transforms-4\af70c376553bba9407670f7d329bf8c4\transformed\jetified-dagger-lint-aar-2.48\AndroidManifest.xml:16:1-19:12
 MERGED from [com.google.firebase:protolite-well-known-types:18.0.0] C:\Users\gopic\.gradle\caches\transforms-4\a79ff3af933eeb27ce3e792924e74c66\transformed\jetified-protolite-well-known-types-18.0.0\AndroidManifest.xml:2:1-11:12
@@ -182,8 +182,8 @@ ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\A
 	android:name
 		ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:8:22-73
 application
-ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:10:5-70:19
-INJECTED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:10:5-70:19
+ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:10:5-82:19
+INJECTED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:10:5-82:19
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\gopic\.gradle\caches\transforms-4\27e1721834b38b8d26213ccd95737a00\transformed\material-1.12.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\gopic\.gradle\caches\transforms-4\27e1721834b38b8d26213ccd95737a00\transformed\material-1.12.0\AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.2.1] C:\Users\gopic\.gradle\caches\transforms-4\a471bc8177ac5449f43d2da62ccce4a2\transformed\constraintlayout-2.2.1\AndroidManifest.xml:7:5-20
@@ -258,14 +258,14 @@ MERGED from [androidx.core:core:1.13.1] C:\Users\gopic\.gradle\caches\transforms
 MERGED from [androidx.core:core:1.13.1] C:\Users\gopic\.gradle\caches\transforms-4\52641160084b5f9dc730889b66f091a4\transformed\core-1.13.1\AndroidManifest.xml:28:5-89
 MERGED from [androidx.lifecycle:lifecycle-process:2.8.3] C:\Users\gopic\.gradle\caches\transforms-4\551b4468ce8c985aaa8c02a4629baee7\transformed\jetified-lifecycle-process-2.8.3\AndroidManifest.xml:23:5-33:19
 MERGED from [androidx.lifecycle:lifecycle-process:2.8.3] C:\Users\gopic\.gradle\caches\transforms-4\551b4468ce8c985aaa8c02a4629baee7\transformed\jetified-lifecycle-process-2.8.3\AndroidManifest.xml:23:5-33:19
-MERGED from [androidx.room:room-runtime:2.6.1] C:\Users\gopic\.gradle\caches\transforms-4\6d739c2d930ef1442651b315a6bf6344\transformed\room-runtime-2.6.1\AndroidManifest.xml:23:5-29:19
-MERGED from [androidx.room:room-runtime:2.6.1] C:\Users\gopic\.gradle\caches\transforms-4\6d739c2d930ef1442651b315a6bf6344\transformed\room-runtime-2.6.1\AndroidManifest.xml:23:5-29:19
 MERGED from [androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] C:\Users\gopic\.gradle\caches\transforms-4\b32f65c727ff3f29ae111d2392a9985d\transformed\jetified-ads-adservices-1.0.0-beta05\AndroidManifest.xml:22:5-26:19
 MERGED from [androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] C:\Users\gopic\.gradle\caches\transforms-4\b32f65c727ff3f29ae111d2392a9985d\transformed\jetified-ads-adservices-1.0.0-beta05\AndroidManifest.xml:22:5-26:19
 MERGED from [com.google.android.gms:play-services-tasks:18.2.0] C:\Users\gopic\.gradle\caches\transforms-4\35e82e180a465f643c2541265e9d27f4\transformed\jetified-play-services-tasks-18.2.0\AndroidManifest.xml:4:5-20
 MERGED from [com.google.android.gms:play-services-tasks:18.2.0] C:\Users\gopic\.gradle\caches\transforms-4\35e82e180a465f643c2541265e9d27f4\transformed\jetified-play-services-tasks-18.2.0\AndroidManifest.xml:4:5-20
 MERGED from [com.google.android.gms:play-services-basement:18.4.0] C:\Users\gopic\.gradle\caches\transforms-4\b4c7aabd95b04ec3944092779d523776\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:5:5-7:19
 MERGED from [com.google.android.gms:play-services-basement:18.4.0] C:\Users\gopic\.gradle\caches\transforms-4\b4c7aabd95b04ec3944092779d523776\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:5:5-7:19
+MERGED from [androidx.room:room-runtime:2.5.0] C:\Users\gopic\.gradle\caches\transforms-4\56170c78ac2cbdb17e88699a96f1d1fe\transformed\room-runtime-2.5.0\AndroidManifest.xml:23:5-29:19
+MERGED from [androidx.room:room-runtime:2.5.0] C:\Users\gopic\.gradle\caches\transforms-4\56170c78ac2cbdb17e88699a96f1d1fe\transformed\room-runtime-2.5.0\AndroidManifest.xml:23:5-29:19
 MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\gopic\.gradle\caches\transforms-4\cb11fe054fb5b14cc30c68d699d3ac42\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:23:5-53:19
 MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\gopic\.gradle\caches\transforms-4\cb11fe054fb5b14cc30c68d699d3ac42\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:23:5-53:19
 MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\gopic\.gradle\caches\transforms-4\0b67bb4e904bd4f4993b279a7a4ca2a5\transformed\jetified-startup-runtime-1.1.1\AndroidManifest.xml:25:5-31:19
@@ -356,18 +356,34 @@ ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\A
 		ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:57:13-37
 	android:name
 		ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:56:13-86
-service#com.amedick.hospitalapp.notification.MyFirebaseMessagingService
-ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:62:9-68:19
+activity#com.amedick.hospitalapp.activities.DoctorDashboardActivity
+ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:62:9-65:58
+	android:windowSoftInputMode
+		ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:65:13-55
 	android:exported
 		ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:64:13-37
 	android:name
-		ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:63:13-68
-intent-filter#action:name:com.google.firebase.MESSAGING_EVENT
-ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:65:13-67:29
-action#com.google.firebase.MESSAGING_EVENT
-ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:66:17-78
+		ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:63:13-86
+activity#com.amedick.hospitalapp.activities.AdminDashboardActivity
+ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:68:9-71:58
+	android:windowSoftInputMode
+		ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:71:13-55
+	android:exported
+		ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:70:13-37
 	android:name
-		ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:66:25-75
+		ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:69:13-85
+service#com.amedick.hospitalapp.notification.MyFirebaseMessagingService
+ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:74:9-80:19
+	android:exported
+		ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:76:13-37
+	android:name
+		ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:75:13-68
+intent-filter#action:name:com.google.firebase.MESSAGING_EVENT
+ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:77:13-79:29
+action#com.google.firebase.MESSAGING_EVENT
+ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:78:17-78
+	android:name
+		ADDED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml:78:25-75
 uses-sdk
 INJECTED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\gopic\Downloads\S81_abhiram_AmedicK-main\gopi_AmedicK-main\AndroidApp\app\src\main\AndroidManifest.xml
@@ -550,10 +566,8 @@ MERGED from [androidx.lifecycle:lifecycle-livedata-ktx:2.8.3] C:\Users\gopic\.gr
 MERGED from [androidx.lifecycle:lifecycle-livedata-ktx:2.8.3] C:\Users\gopic\.gradle\caches\transforms-4\089d592f53b1312b70cfcfb14205edf8\transformed\jetified-lifecycle-livedata-ktx-2.8.3\AndroidManifest.xml:5:5-44
 MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.3] C:\Users\gopic\.gradle\caches\transforms-4\33b431e8430c721930f92f5ced484355\transformed\jetified-lifecycle-viewmodel-ktx-2.8.3\AndroidManifest.xml:5:5-44
 MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.3] C:\Users\gopic\.gradle\caches\transforms-4\33b431e8430c721930f92f5ced484355\transformed\jetified-lifecycle-viewmodel-ktx-2.8.3\AndroidManifest.xml:5:5-44
-MERGED from [androidx.room:room-runtime:2.6.1] C:\Users\gopic\.gradle\caches\transforms-4\6d739c2d930ef1442651b315a6bf6344\transformed\room-runtime-2.6.1\AndroidManifest.xml:21:5-44
-MERGED from [androidx.room:room-runtime:2.6.1] C:\Users\gopic\.gradle\caches\transforms-4\6d739c2d930ef1442651b315a6bf6344\transformed\room-runtime-2.6.1\AndroidManifest.xml:21:5-44
-MERGED from [androidx.room:room-ktx:2.6.1] C:\Users\gopic\.gradle\caches\transforms-4\16f9bc237b688f1019bf911ceca17aa6\transformed\jetified-room-ktx-2.6.1\AndroidManifest.xml:20:5-44
-MERGED from [androidx.room:room-ktx:2.6.1] C:\Users\gopic\.gradle\caches\transforms-4\16f9bc237b688f1019bf911ceca17aa6\transformed\jetified-room-ktx-2.6.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.room:room-ktx:2.5.0] C:\Users\gopic\.gradle\caches\transforms-4\d5d1e813631fa118c83e023e96a74ab8\transformed\jetified-room-ktx-2.5.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.room:room-ktx:2.5.0] C:\Users\gopic\.gradle\caches\transforms-4\d5d1e813631fa118c83e023e96a74ab8\transformed\jetified-room-ktx-2.5.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.privacysandbox.ads:ads-adservices-java:1.0.0-beta05] C:\Users\gopic\.gradle\caches\transforms-4\e4fa1262234d931d49a99884a8be4330\transformed\jetified-ads-adservices-java-1.0.0-beta05\AndroidManifest.xml:5:5-44
 MERGED from [androidx.privacysandbox.ads:ads-adservices-java:1.0.0-beta05] C:\Users\gopic\.gradle\caches\transforms-4\e4fa1262234d931d49a99884a8be4330\transformed\jetified-ads-adservices-java-1.0.0-beta05\AndroidManifest.xml:5:5-44
 MERGED from [androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] C:\Users\gopic\.gradle\caches\transforms-4\b32f65c727ff3f29ae111d2392a9985d\transformed\jetified-ads-adservices-1.0.0-beta05\AndroidManifest.xml:20:5-44
@@ -574,22 +588,20 @@ MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] C:\Users\gop
 MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] C:\Users\gopic\.gradle\caches\transforms-4\266c175d8a379c36b7da1ac5a8b379ab\transformed\jetified-customview-poolingcontainer-1.0.0\AndroidManifest.xml:20:5-21:38
 MERGED from [androidx.core:core-ktx:1.13.1] C:\Users\gopic\.gradle\caches\transforms-4\e7e05eda65e6a8b60da6eb0dfb582bf3\transformed\jetified-core-ktx-1.13.1\AndroidManifest.xml:5:5-44
 MERGED from [androidx.core:core-ktx:1.13.1] C:\Users\gopic\.gradle\caches\transforms-4\e7e05eda65e6a8b60da6eb0dfb582bf3\transformed\jetified-core-ktx-1.13.1\AndroidManifest.xml:5:5-44
-MERGED from [androidx.sqlite:sqlite-framework:2.4.0] C:\Users\gopic\.gradle\caches\transforms-4\e9d565df056b3a6077e5a9ff4dd88eb0\transformed\sqlite-framework-2.4.0\AndroidManifest.xml:20:5-44
-MERGED from [androidx.sqlite:sqlite-framework:2.4.0] C:\Users\gopic\.gradle\caches\transforms-4\e9d565df056b3a6077e5a9ff4dd88eb0\transformed\sqlite-framework-2.4.0\AndroidManifest.xml:20:5-44
-MERGED from [androidx.sqlite:sqlite:2.4.0] C:\Users\gopic\.gradle\caches\transforms-4\c0972bcf562c88874369d24426c27765\transformed\sqlite-2.4.0\AndroidManifest.xml:20:5-44
-MERGED from [androidx.sqlite:sqlite:2.4.0] C:\Users\gopic\.gradle\caches\transforms-4\c0972bcf562c88874369d24426c27765\transformed\sqlite-2.4.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.room:room-runtime:2.5.0] C:\Users\gopic\.gradle\caches\transforms-4\56170c78ac2cbdb17e88699a96f1d1fe\transformed\room-runtime-2.5.0\AndroidManifest.xml:21:5-44
+MERGED from [androidx.room:room-runtime:2.5.0] C:\Users\gopic\.gradle\caches\transforms-4\56170c78ac2cbdb17e88699a96f1d1fe\transformed\room-runtime-2.5.0\AndroidManifest.xml:21:5-44
 MERGED from [com.google.android.libraries.identity.googleid:googleid:1.1.0] C:\Users\gopic\.gradle\caches\transforms-4\1829f4202b5866dc7136f0fb33eae7cd\transformed\jetified-googleid-1.1.0\AndroidManifest.xml:5:5-44
 MERGED from [com.google.android.libraries.identity.googleid:googleid:1.1.0] C:\Users\gopic\.gradle\caches\transforms-4\1829f4202b5866dc7136f0fb33eae7cd\transformed\jetified-googleid-1.1.0\AndroidManifest.xml:5:5-44
 MERGED from [androidx.annotation:annotation-experimental:1.4.1] C:\Users\gopic\.gradle\caches\transforms-4\886fb7bb13b6b54093f34248ed1f93ae\transformed\jetified-annotation-experimental-1.4.1\AndroidManifest.xml:5:5-44
 MERGED from [androidx.annotation:annotation-experimental:1.4.1] C:\Users\gopic\.gradle\caches\transforms-4\886fb7bb13b6b54093f34248ed1f93ae\transformed\jetified-annotation-experimental-1.4.1\AndroidManifest.xml:5:5-44
+MERGED from [androidx.sqlite:sqlite-framework:2.3.0] C:\Users\gopic\.gradle\caches\transforms-4\63ab267fb382f77dffeba7e7e7206506\transformed\sqlite-framework-2.3.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.sqlite:sqlite-framework:2.3.0] C:\Users\gopic\.gradle\caches\transforms-4\63ab267fb382f77dffeba7e7e7206506\transformed\sqlite-framework-2.3.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\gopic\.gradle\caches\transforms-4\dd948991b648b1b94add3c9f7f67edb2\transformed\cardview-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\gopic\.gradle\caches\transforms-4\dd948991b648b1b94add3c9f7f67edb2\transformed\cardview-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\gopic\.gradle\caches\transforms-4\35771ad1d192da5aef00c66a124b9ced\transformed\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\gopic\.gradle\caches\transforms-4\35771ad1d192da5aef00c66a124b9ced\transformed\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\gopic\.gradle\caches\transforms-4\cb11fe054fb5b14cc30c68d699d3ac42\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:21:5-44
 MERGED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\gopic\.gradle\caches\transforms-4\cb11fe054fb5b14cc30c68d699d3ac42\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:21:5-44
-MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\gopic\.gradle\caches\transforms-4\671c3e880be81623dc8ed58d9afeb6a9\transformed\core-runtime-2.2.0\AndroidManifest.xml:20:5-44
-MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\gopic\.gradle\caches\transforms-4\671c3e880be81623dc8ed58d9afeb6a9\transformed\core-runtime-2.2.0\AndroidManifest.xml:20:5-44
 MERGED from [com.github.bumptech.glide:gifdecoder:4.16.0] C:\Users\gopic\.gradle\caches\transforms-4\b2e3fda7acd35952519ee7306be67926\transformed\jetified-gifdecoder-4.16.0\AndroidManifest.xml:5:5-7:41
 MERGED from [com.github.bumptech.glide:gifdecoder:4.16.0] C:\Users\gopic\.gradle\caches\transforms-4\b2e3fda7acd35952519ee7306be67926\transformed\jetified-gifdecoder-4.16.0\AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.exifinterface:exifinterface:1.3.6] C:\Users\gopic\.gradle\caches\transforms-4\5d2a20298d451845d423db72168218ce\transformed\exifinterface-1.3.6\AndroidManifest.xml:20:5-22:41
@@ -604,6 +616,8 @@ MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\gopic\.gradle\ca
 MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\gopic\.gradle\caches\transforms-4\8d738b9c4cedf62fa1733b797dbd57cc\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\gopic\.gradle\caches\transforms-4\65160081a8d88b1fc7abbfd276f27b1e\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\gopic\.gradle\caches\transforms-4\65160081a8d88b1fc7abbfd276f27b1e\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\gopic\.gradle\caches\transforms-4\671c3e880be81623dc8ed58d9afeb6a9\transformed\core-runtime-2.2.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\gopic\.gradle\caches\transforms-4\671c3e880be81623dc8ed58d9afeb6a9\transformed\core-runtime-2.2.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\gopic\.gradle\caches\transforms-4\b89229fa2293930527a326ae8c65a668\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\gopic\.gradle\caches\transforms-4\b89229fa2293930527a326ae8c65a668\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [com.google.firebase:firebase-datatransport:18.2.0] C:\Users\gopic\.gradle\caches\transforms-4\6cd3086daaea8d0f704fd0974c6b24f1\transformed\jetified-firebase-datatransport-18.2.0\AndroidManifest.xml:18:5-44
@@ -620,6 +634,8 @@ MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\gopic\.gradle\ca
 MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\gopic\.gradle\caches\transforms-4\2351f9c8e8ce4dc90196c5ba3857a168\transformed\documentfile-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.print:print:1.0.0] C:\Users\gopic\.gradle\caches\transforms-4\e33ad29ec01a75e8ef61c114a5704114\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.print:print:1.0.0] C:\Users\gopic\.gradle\caches\transforms-4\e33ad29ec01a75e8ef61c114a5704114\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.sqlite:sqlite:2.3.0] C:\Users\gopic\.gradle\caches\transforms-4\589a5cf5833c03a0c171ac93d561256a\transformed\sqlite-2.3.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.sqlite:sqlite:2.3.0] C:\Users\gopic\.gradle\caches\transforms-4\589a5cf5833c03a0c171ac93d561256a\transformed\sqlite-2.3.0\AndroidManifest.xml:20:5-44
 MERGED from [io.grpc:grpc-android:1.57.2] C:\Users\gopic\.gradle\caches\transforms-4\70ce4ee0ba37bdedc7f32384f888b820\transformed\jetified-grpc-android-1.57.2\AndroidManifest.xml:5:5-44
 MERGED from [io.grpc:grpc-android:1.57.2] C:\Users\gopic\.gradle\caches\transforms-4\70ce4ee0ba37bdedc7f32384f888b820\transformed\jetified-grpc-android-1.57.2\AndroidManifest.xml:5:5-44
 MERGED from [com.google.dagger:dagger-lint-aar:2.48] C:\Users\gopic\.gradle\caches\transforms-4\af70c376553bba9407670f7d329bf8c4\transformed\jetified-dagger-lint-aar-2.48\AndroidManifest.xml:18:3-42
@@ -1326,16 +1342,6 @@ ADDED from [androidx.lifecycle:lifecycle-process:2.8.3] C:\Users\gopic\.gradle\c
 		ADDED from [androidx.lifecycle:lifecycle-process:2.8.3] C:\Users\gopic\.gradle\caches\transforms-4\551b4468ce8c985aaa8c02a4629baee7\transformed\jetified-lifecycle-process-2.8.3\AndroidManifest.xml:31:17-49
 	android:name
 		ADDED from [androidx.lifecycle:lifecycle-process:2.8.3] C:\Users\gopic\.gradle\caches\transforms-4\551b4468ce8c985aaa8c02a4629baee7\transformed\jetified-lifecycle-process-2.8.3\AndroidManifest.xml:30:17-78
-service#androidx.room.MultiInstanceInvalidationService
-ADDED from [androidx.room:room-runtime:2.6.1] C:\Users\gopic\.gradle\caches\transforms-4\6d739c2d930ef1442651b315a6bf6344\transformed\room-runtime-2.6.1\AndroidManifest.xml:24:9-28:63
-	android:exported
-		ADDED from [androidx.room:room-runtime:2.6.1] C:\Users\gopic\.gradle\caches\transforms-4\6d739c2d930ef1442651b315a6bf6344\transformed\room-runtime-2.6.1\AndroidManifest.xml:27:13-37
-	tools:ignore
-		ADDED from [androidx.room:room-runtime:2.6.1] C:\Users\gopic\.gradle\caches\transforms-4\6d739c2d930ef1442651b315a6bf6344\transformed\room-runtime-2.6.1\AndroidManifest.xml:28:13-60
-	android:directBootAware
-		ADDED from [androidx.room:room-runtime:2.6.1] C:\Users\gopic\.gradle\caches\transforms-4\6d739c2d930ef1442651b315a6bf6344\transformed\room-runtime-2.6.1\AndroidManifest.xml:26:13-43
-	android:name
-		ADDED from [androidx.room:room-runtime:2.6.1] C:\Users\gopic\.gradle\caches\transforms-4\6d739c2d930ef1442651b315a6bf6344\transformed\room-runtime-2.6.1\AndroidManifest.xml:25:13-74
 uses-library#android.ext.adservices
 ADDED from [androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] C:\Users\gopic\.gradle\caches\transforms-4\b32f65c727ff3f29ae111d2392a9985d\transformed\jetified-ads-adservices-1.0.0-beta05\AndroidManifest.xml:23:9-25:40
 	android:required
@@ -1348,6 +1354,16 @@ ADDED from [com.google.android.gms:play-services-basement:18.4.0] C:\Users\gopic
 		ADDED from [com.google.android.gms:play-services-basement:18.4.0] C:\Users\gopic\.gradle\caches\transforms-4\b4c7aabd95b04ec3944092779d523776\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:66-119
 	android:name
 		ADDED from [com.google.android.gms:play-services-basement:18.4.0] C:\Users\gopic\.gradle\caches\transforms-4\b4c7aabd95b04ec3944092779d523776\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:20-65
+service#androidx.room.MultiInstanceInvalidationService
+ADDED from [androidx.room:room-runtime:2.5.0] C:\Users\gopic\.gradle\caches\transforms-4\56170c78ac2cbdb17e88699a96f1d1fe\transformed\room-runtime-2.5.0\AndroidManifest.xml:24:9-28:63
+	android:exported
+		ADDED from [androidx.room:room-runtime:2.5.0] C:\Users\gopic\.gradle\caches\transforms-4\56170c78ac2cbdb17e88699a96f1d1fe\transformed\room-runtime-2.5.0\AndroidManifest.xml:27:13-37
+	tools:ignore
+		ADDED from [androidx.room:room-runtime:2.5.0] C:\Users\gopic\.gradle\caches\transforms-4\56170c78ac2cbdb17e88699a96f1d1fe\transformed\room-runtime-2.5.0\AndroidManifest.xml:28:13-60
+	android:directBootAware
+		ADDED from [androidx.room:room-runtime:2.5.0] C:\Users\gopic\.gradle\caches\transforms-4\56170c78ac2cbdb17e88699a96f1d1fe\transformed\room-runtime-2.5.0\AndroidManifest.xml:26:13-43
+	android:name
+		ADDED from [androidx.room:room-runtime:2.5.0] C:\Users\gopic\.gradle\caches\transforms-4\56170c78ac2cbdb17e88699a96f1d1fe\transformed\room-runtime-2.5.0\AndroidManifest.xml:25:13-74
 meta-data#androidx.profileinstaller.ProfileInstallerInitializer
 ADDED from [androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\gopic\.gradle\caches\transforms-4\cb11fe054fb5b14cc30c68d699d3ac42\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:29:13-31:52
 	android:value
