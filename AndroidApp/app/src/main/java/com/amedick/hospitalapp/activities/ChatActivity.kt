@@ -53,7 +53,12 @@ class ChatActivity : AppCompatActivity() {
 
         currentUserId = authRepository.getCurrentUserId() ?: return finish()
 
-        appointmentId = intent.getStringExtra(EXTRA_APPOINTMENT_ID) ?: return finish()
+        appointmentId = intent.getStringExtra(EXTRA_APPOINTMENT_ID) ?: ""
+        if (appointmentId.isEmpty()) {
+            Toast.makeText(this, "Unable to open this conversation.", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
         otherUserId = intent.getStringExtra(EXTRA_OTHER_USER_ID) ?: ""
         val otherUserName = intent.getStringExtra(EXTRA_OTHER_USER_NAME) ?: "Chat"
 
@@ -98,7 +103,7 @@ class ChatActivity : AppCompatActivity() {
                         binding.rvMessages.scrollToPosition(messagesList.size - 1)
                     }
                 }.onFailure {
-                    Toast.makeText(this@ChatActivity, "Failed to load messages", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@ChatActivity, "Unable to load messages. Please try again.", Toast.LENGTH_SHORT).show()
                 }
             }
         }

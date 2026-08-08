@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 import java.util.Date
 
 data class User(
-    @DocumentId val uid: String = "",
+    @DocumentId var uid: String = "",
     val name: String = "",
     val email: String = "",
     val phone: String = "",
@@ -38,7 +38,7 @@ data class User(
 
 @Parcelize
 data class Doctor(
-    @DocumentId val doctorId: String = "",
+    @DocumentId var doctorId: String = "",
     val name: String = "",
     val specialization: String = "",
     val hospital: String = "",
@@ -65,7 +65,7 @@ data class Doctor(
 ) : Parcelable
 
 data class Appointment(
-    @DocumentId val appointmentId: String = "",
+    @DocumentId var appointmentId: String = "",
     val patientId: String = "",
     val doctorId: String = "",
     val patientName: String = "",
@@ -89,17 +89,18 @@ object AppointmentStatus {
 }
 
 data class Notification(
-    @DocumentId val notificationId: String = "",
+    @DocumentId var notificationId: String = "",
     val userId: String = "",
     val title: String = "",
     val message: String = "",
     val type: String = "",
+    val relatedId: String = "",
     val isRead: Boolean = false,
     val createdAt: Long = 0L
 )
 
 data class Availability(
-    @DocumentId val doctorId: String = "",
+    @DocumentId var doctorId: String = "",
     // Map of day of week (e.g. "Monday") to list of time slots (e.g. "09:00 AM - 09:30 AM")
     val schedule: Map<String, List<String>> = emptyMap(),
     // List of specific blocked dates (e.g. "2026-08-15")
@@ -109,7 +110,7 @@ data class Availability(
 )
 
 data class ChatMessage(
-    @DocumentId val messageId: String = "",
+    @DocumentId var messageId: String = "",
     val appointmentId: String = "",
     val senderId: String = "",
     val message: String = "",
@@ -118,7 +119,7 @@ data class ChatMessage(
 )
 
 data class Review(
-    @DocumentId val reviewId: String = "",
+    @DocumentId var reviewId: String = "",
     val appointmentId: String = "",
     val patientId: String = "",
     val doctorId: String = "",
@@ -129,7 +130,7 @@ data class Review(
 
 // Phase 5 Models
 data class MedicalProfile(
-    @DocumentId val patientId: String = "",
+    @DocumentId var patientId: String = "",
     val bloodGroup: String = "",
     val allergies: String = "",
     val currentMedications: String = "",
@@ -140,7 +141,7 @@ data class MedicalProfile(
 )
 
 data class MedicalDocument(
-    @DocumentId val documentId: String = "",
+    @DocumentId var documentId: String = "",
     val patientId: String = "",
     val name: String = "",
     val type: String = "", // e.g., "Prescription", "Lab Report"

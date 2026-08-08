@@ -112,6 +112,26 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
+        <!-- Admin Patient List -->
+        <activity
+            android:name="com.amedick.hospitalapp.activities.AdminPatientListActivity"
+            android:exported="false" />
+
+        <!-- Admin Patient Details -->
+        <activity
+            android:name="com.amedick.hospitalapp.activities.AdminPatientDetailsActivity"
+            android:exported="false" />
+
+        <!-- Admin Doctor List -->
+        <activity
+            android:name="com.amedick.hospitalapp.activities.AdminDoctorListActivity"
+            android:exported="false" />
+
+        <!-- Admin Appointment List -->
+        <activity
+            android:name="com.amedick.hospitalapp.activities.AdminAppointmentListActivity"
+            android:exported="false" />
+
         <!-- FCM Service -->
         <service
             android:name=".notification.MyFirebaseMessagingService"

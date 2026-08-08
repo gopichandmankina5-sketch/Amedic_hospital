@@ -1,6 +1,7 @@
 package com.amedick.hospitalapp.activities
 
 import android.os.Bundle
+import android.content.Intent
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -42,10 +43,13 @@ class NotificationsActivity : AppCompatActivity() {
             if (!notification.isRead) {
                 markAsRead(notification.notificationId)
             }
-            // Navigate based on type
-            // E.g. if type == "chat", navigate to ChatActivity.
-            // For now, just show a toast.
-            Toast.makeText(this, "Notification: ${notification.title}", Toast.LENGTH_SHORT).show()
+            if (notification.type == "doctor_verification") {
+                val intent = Intent(this, AdminVerificationActivity::class.java)
+                intent.putExtra("EXTRA_DOCTOR_ID", notification.relatedId)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Notification: ${notification.title}", Toast.LENGTH_SHORT).show()
+            }
         }
         binding.rvNotifications.layoutManager = LinearLayoutManager(this)
         binding.rvNotifications.adapter = adapter

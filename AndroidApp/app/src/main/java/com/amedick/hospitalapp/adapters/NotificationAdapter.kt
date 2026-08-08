@@ -28,10 +28,14 @@ class NotificationAdapter(
             
             if (notification.isRead) {
                 binding.unreadIndicator.visibility = View.INVISIBLE
-                binding.notificationContainer.setBackgroundColor(Color.TRANSPARENT)
+                binding.tvTitle.setTextColor(binding.root.context.getColor(com.amedick.hospitalapp.R.color.color_text_secondary))
+                binding.tvTitle.alpha = 0.8f
+                binding.ivIcon.alpha = 0.6f
             } else {
                 binding.unreadIndicator.visibility = View.VISIBLE
-                binding.notificationContainer.setBackgroundResource(com.amedick.hospitalapp.R.color.color_surface_variant)
+                binding.tvTitle.setTextColor(binding.root.context.getColor(com.amedick.hospitalapp.R.color.color_on_surface))
+                binding.tvTitle.alpha = 1.0f
+                binding.ivIcon.alpha = 1.0f
             }
             
             binding.root.setOnClickListener {

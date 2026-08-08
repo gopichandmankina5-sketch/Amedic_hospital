@@ -30,7 +30,9 @@ class AdminVerificationActivity : AppCompatActivity() {
         binding.backButton.setOnClickListener { finish() }
 
         setupRecyclerView()
-        loadPendingDoctors()
+        
+        val doctorId = intent.getStringExtra("EXTRA_DOCTOR_ID")
+        loadPendingDoctors(doctorId)
     }
 
     private fun setupRecyclerView() {
@@ -43,13 +45,13 @@ class AdminVerificationActivity : AppCompatActivity() {
         binding.rvPendingDoctors.adapter = adapter
     }
 
-    private fun loadPendingDoctors() {
+    private fun loadPendingDoctors(doctorId: String? = null) {
         binding.progressBar.visibility = View.VISIBLE
         binding.rvPendingDoctors.visibility = View.GONE
         binding.emptyStateLayout.visibility = View.GONE
 
         lifecycleScope.launch {
-            val result = firestoreRepository.getPendingDoctors()
+            val result = firestoreRepository.getPendingDoctors(doctorId)
             binding.progressBar.visibility = View.GONE
 
             result.onSuccess { doctors ->
@@ -82,7 +84,8 @@ class AdminVerificationActivity : AppCompatActivity() {
                 )
                 
                 Toast.makeText(this@AdminVerificationActivity, "Doctor $status", Toast.LENGTH_SHORT).show()
-                loadPendingDoctors() // Refresh list
+                val doctorIdFilter = intent.getStringExtra("EXTRA_DOCTOR_ID")
+                loadPendingDoctors(doctorIdFilter) // Refresh list
             }.onFailure {
                 binding.progressBar.visibility = View.GONE
                 Toast.makeText(this@AdminVerificationActivity, "Failed to update status", Toast.LENGTH_SHORT).show()

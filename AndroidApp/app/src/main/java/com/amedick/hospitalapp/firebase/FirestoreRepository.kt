@@ -265,9 +265,9 @@ class FirestoreRepository @Inject constructor(
     suspend fun getNotificationsForUser(userId: String): Result<List<Notification>> = try {
         val snapshot = firestore.collection("Notifications")
             .whereEqualTo("userId", userId)
-            .orderBy("createdAt", Query.Direction.DESCENDING)
             .get().await()
-        Result.success(snapshot.toObjects(Notification::class.java))
+        val list = snapshot.documents.map { it.toNotificationSafe() }.sortedByDescending { it.createdAt }
+        Result.success(list)
     } catch (e: Exception) {
         Result.failure(e)
     }
@@ -280,7 +280,7 @@ class FirestoreRepository @Inject constructor(
         Result.failure(e)
     }
 
-    suspend fun createNotification(userId: String, title: String, message: String, type: String): Result<Boolean> = try {
+    suspend fun createNotification(userId: String, title: String, message: String, type: String, relatedId: String = ""): Result<Boolean> = try {
         val ref = firestore.collection("Notifications").document()
         val notification = Notification(
             notificationId = ref.id,
@@ -288,6 +288,7 @@ class FirestoreRepository @Inject constructor(
             title = title,
             message = message,
             type = type,
+            relatedId = relatedId,
             createdAt = System.currentTimeMillis()
         )
         ref.set(notification).await()
@@ -296,33 +297,99 @@ class FirestoreRepository @Inject constructor(
         Result.failure(e)
     }
 
+    suspend fun createAdminNotification(title: String, message: String, type: String, relatedId: String = "") {
+        try {
+            val adminsSnapshot = firestore.collection("Users").whereEqualTo("role", "admin").get().await()
+            for (adminDoc in adminsSnapshot.documents) {
+                createNotification(adminDoc.id, title, message, type, relatedId)
+            }
+        } catch (e: Exception) {
+            // Log or ignore
+        }
+    }
+
+    fun getAdminNotificationsRealtime(userId: String): Flow<Result<List<Notification>>> = callbackFlow {
+        val listener = firestore.collection("Notifications")
+            .whereEqualTo("userId", userId)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    trySend(Result.failure(error))
+                    return@addSnapshotListener
+                }
+                if (snapshot != null) {
+                    try {
+                        val list = snapshot.documents.map { it.toNotificationSafe() }
+                            .sortedByDescending { it.createdAt }
+                        trySend(Result.success(list))
+                    } catch (e: Exception) {
+                        trySend(Result.failure(e))
+                    }
+                }
+            }
+        awaitClose { listener.remove() }
+    }
+
     // ── Admin Dashboard ────────────────────────────────────────────────────────
+
+    fun getPendingDoctorsCountRealtime(): Flow<Result<Int>> = callbackFlow {
+        val listener = firestore.collection("Users")
+            .whereEqualTo("role", "doctor")
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    trySend(Result.failure(error))
+                    return@addSnapshotListener
+                }
+                if (snapshot != null) {
+                    val count = snapshot.documents.count { doc ->
+                        val status = doc.getString("verificationStatus")
+                        status == null || status == "PENDING"
+                    }
+                    trySend(Result.success(count))
+                }
+            }
+        awaitClose { listener.remove() }
+    }
 
     suspend fun getPlatformStats(): Result<Map<String, Int>> = try {
         // Aggregate queries
         val patientsCount = firestore.collection("Users").whereEqualTo("role", "patient").get().await().size()
-        val doctorsCount = firestore.collection("Users").whereEqualTo("role", "doctor").get().await().size()
-        val verifiedDoctors = firestore.collection("Users").whereEqualTo("role", "doctor").whereEqualTo("verificationStatus", "VERIFIED").get().await().size()
-        val pendingDoctors = firestore.collection("Users").whereEqualTo("role", "doctor").whereEqualTo("verificationStatus", "PENDING").get().await().size()
+        val allDoctorsSnapshot = firestore.collection("Users").whereEqualTo("role", "doctor").get().await()
+        val doctorsCount = allDoctorsSnapshot.size()
+        
+        var verifiedDoctors = 0
+        var pendingDoctors = 0
+        for (doc in allDoctorsSnapshot.documents) {
+            val status = doc.getString("verificationStatus")
+            if (status == "VERIFIED") verifiedDoctors++
+            else if (status == "REJECTED") {} // not pending or verified
+            else pendingDoctors++ // if missing or "PENDING", it's pending
+        }
+        
         val totalAppointments = firestore.collection("Appointments").get().await().size()
+        val completedAppointments = firestore.collection("Appointments").whereEqualTo("status", "completed").get().await().size()
         
         Result.success(mapOf(
             "patients" to patientsCount,
             "doctors" to doctorsCount,
             "verifiedDoctors" to verifiedDoctors,
             "pendingDoctors" to pendingDoctors,
-            "totalAppointments" to totalAppointments
+            "totalAppointments" to totalAppointments,
+            "completedAppointments" to completedAppointments
         ))
     } catch (e: Exception) {
         Result.failure(e)
     }
     
-    suspend fun getPendingDoctors(): Result<List<com.amedick.hospitalapp.models.Doctor>> = try {
-        val snapshot = firestore.collection("Users")
+    suspend fun getPendingDoctors(doctorId: String? = null): Result<List<Doctor>> = try {
+        var query: com.google.firebase.firestore.Query = firestore.collection("Users")
             .whereEqualTo("role", "doctor")
-            .whereEqualTo("verificationStatus", "PENDING")
-            .get().await()
-        Result.success(snapshot.toObjects(com.amedick.hospitalapp.models.Doctor::class.java))
+            
+        if (doctorId != null) {
+            query = query.whereEqualTo(com.google.firebase.firestore.FieldPath.documentId(), doctorId)
+        }
+        val snapshot = query.get().await()
+        val doctors = snapshot.toObjects(Doctor::class.java).filter { it.verificationStatus == "PENDING" }
+        Result.success(doctors)
     } catch (e: Exception) {
         Result.failure(e)
     }
@@ -337,6 +404,75 @@ class FirestoreRepository @Inject constructor(
         Result.success(true)
     } catch (e: Exception) {
         Result.failure(e)
+    }
+
+    // ── Admin Realtime Lists ──────────────────────────────────────────────────
+
+    fun getPatientsRealtime(): Flow<Result<List<User>>> = callbackFlow {
+        val listener = firestore.collection("Users")
+            .whereEqualTo("role", "patient")
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    trySend(Result.failure(error))
+                    return@addSnapshotListener
+                }
+                if (snapshot != null) {
+                    try {
+                        val list = snapshot.toObjects(User::class.java).sortedByDescending { it.createdAt }
+                        trySend(Result.success(list))
+                    } catch (e: Exception) {
+                        trySend(Result.failure(e))
+                    }
+                }
+            }
+        awaitClose { listener.remove() }
+    }
+
+    fun getDoctorsRealtime(filterType: String): Flow<Result<List<Doctor>>> = callbackFlow {
+        val query: Query = firestore.collection("Users").whereEqualTo("role", "doctor")
+        val listener = query.addSnapshotListener { snapshot, error ->
+            if (error != null) {
+                trySend(Result.failure(error))
+                return@addSnapshotListener
+            }
+            if (snapshot != null) {
+                try {
+                    var list = snapshot.toObjects(Doctor::class.java)
+                    if (filterType == "VERIFIED") {
+                        list = list.filter { it.verificationStatus == "VERIFIED" }
+                    } else if (filterType == "PENDING") {
+                        list = list.filter { it.verificationStatus == "PENDING" }
+                    }
+                    list = list.sortedByDescending { it.createdAt }
+                    trySend(Result.success(list))
+                } catch (e: Exception) {
+                    trySend(Result.failure(e))
+                }
+            }
+        }
+        awaitClose { listener.remove() }
+    }
+
+    fun getAppointmentsRealtime(filterType: String): Flow<Result<List<Appointment>>> = callbackFlow {
+        var query: Query = firestore.collection("Appointments")
+        if (filterType == "COMPLETED") {
+            query = query.whereEqualTo("status", AppointmentStatus.COMPLETED)
+        }
+        val listener = query.addSnapshotListener { snapshot, error ->
+            if (error != null) {
+                trySend(Result.failure(error))
+                return@addSnapshotListener
+            }
+            if (snapshot != null) {
+                try {
+                    val list = snapshot.toObjects(Appointment::class.java).sortedByDescending { it.createdAt }
+                    trySend(Result.success(list))
+                } catch (e: Exception) {
+                    trySend(Result.failure(e))
+                }
+            }
+        }
+        awaitClose { listener.remove() }
     }
 
     // ── Medical Profile & Documents ──────────────────────────────────────────
@@ -409,5 +545,26 @@ class FirestoreRepository @Inject constructor(
         Result.success(reference.downloadUrl.await().toString())
     } catch (e: Exception) {
         Result.failure(e)
+    }
+
+    private fun com.google.firebase.firestore.DocumentSnapshot.toNotificationSafe(): Notification {
+        val createdAtObj = this.get("createdAt")
+        val time = when (createdAtObj) {
+            is Long -> createdAtObj
+            is Number -> createdAtObj.toLong()
+            is com.google.firebase.Timestamp -> createdAtObj.toDate().time
+            is java.util.Date -> createdAtObj.time
+            else -> 0L
+        }
+        return Notification(
+            notificationId = this.id,
+            userId = this.getString("userId") ?: "",
+            title = this.getString("title") ?: "",
+            message = this.getString("message") ?: "",
+            type = this.getString("type") ?: "",
+            relatedId = this.getString("relatedId") ?: "",
+            isRead = this.getBoolean("isRead") ?: false,
+            createdAt = time
+        )
     }
 }

@@ -58,6 +58,31 @@ class AuthRepository @Inject constructor(
             val newUser = user.copy(uid = uid)
             firestore.collection("Users").document(uid).set(newUser).await()
             runCatching { saveFcmToken(uid) }
+            
+            if (newUser.role == "doctor") {
+                // Not passing via FirestoreRepository to avoid circular dependency or passing instance.
+                // We'll dispatch a coroutine or just use the local firestore instance
+                try {
+                    val admins = firestore.collection("Users").whereEqualTo("role", "admin").get().await()
+                    for (admin in admins.documents) {
+                        val notifRef = firestore.collection("Notifications").document()
+                        val notification = mapOf(
+                            "notificationId" to notifRef.id,
+                            "userId" to admin.id,
+                            "title" to "New Doctor Verification Request",
+                            "message" to "Dr. ${newUser.name} has submitted a verification request.",
+                            "type" to "doctor_verification",
+                            "relatedId" to uid,
+                            "isRead" to false,
+                            "createdAt" to System.currentTimeMillis()
+                        )
+                        notifRef.set(notification).await()
+                    }
+                } catch (e: Exception) {
+                    // Ignore failure to create notification
+                }
+            }
+            
             result.user?.sendEmailVerification()?.await()
             Result.success(newUser)
         } catch (e: Exception) {

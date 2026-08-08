@@ -15,6 +15,10 @@ service cloud.firestore {
       return get(/databases/$(database)/documents/Users/$(request.auth.uid)).data.role;
     }
     
+    function getUserRoleById(uid) {
+      return get(/databases/$(database)/documents/Users/$(uid)).data.role;
+    }
+    
     function isPatient() {
       return isAuthenticated() && getUserRole() == 'patient';
     }
@@ -119,8 +123,11 @@ service cloud.firestore {
       // Users can only read/write their own notifications
       allow read, write: if isAuthenticated() && resource.data.userId == request.auth.uid;
       
-      // System (Functions) creates notifications, but we allow client creation for now to match current logic
-      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      // Allow user to create for themselves, OR allow doctors to create verification notifications for admins
+      allow create: if isAuthenticated() && (
+        request.resource.data.userId == request.auth.uid ||
+        (isDoctor() && request.resource.data.type == 'doctor_verification' && getUserRoleById(request.resource.data.userId) == 'admin')
+      );
     }
   }
 }
