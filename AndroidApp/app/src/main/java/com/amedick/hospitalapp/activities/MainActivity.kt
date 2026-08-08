@@ -1,5 +1,6 @@
 package com.amedick.hospitalapp.activities
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
@@ -9,8 +10,9 @@ import com.amedick.hospitalapp.fragments.AppointmentHistoryFragment
 import com.amedick.hospitalapp.fragments.DoctorListFragment
 import com.amedick.hospitalapp.fragments.HomeFragment
 import com.amedick.hospitalapp.fragments.ProfileFragment
-import com.amedick.hospitalapp.fragments.SettingsFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -32,7 +34,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.doctorsMenu -> replaceFragment(DoctorListFragment())
                 R.id.appointmentsMenu -> replaceFragment(AppointmentHistoryFragment())
                 R.id.profileMenu -> replaceFragment(ProfileFragment())
-                R.id.settingsMenu -> replaceFragment(SettingsFragment())
             }
             true
         }
@@ -40,7 +41,21 @@ class MainActivity : AppCompatActivity() {
 
     private fun replaceFragment(fragment: androidx.fragment.app.Fragment) {
         supportFragmentManager.commit {
+            setCustomAnimations(
+                android.R.anim.fade_in,
+                android.R.anim.fade_out
+            )
             replace(R.id.mainFragmentContainer, fragment)
         }
+    }
+
+    /** Allow fragments to navigate to the Doctors tab */
+    fun navigateToDoctors() {
+        binding.bottomNavigation.selectedItemId = R.id.doctorsMenu
+    }
+
+    /** Allow fragments to navigate to the Appointments tab */
+    fun navigateToAppointments() {
+        binding.bottomNavigation.selectedItemId = R.id.appointmentsMenu
     }
 }

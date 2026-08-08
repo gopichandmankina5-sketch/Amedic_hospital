@@ -1,50 +1,54 @@
 [
     {
-        "merged": "C:\\Users\\gopic\\.gradle\\daemon\\8.6\\com.amedick.hospitalapp-mergeDebugResources-60:\\layout\\activity_splash.xml",
-        "source": "C:\\Users\\gopic\\.gradle\\daemon\\8.6\\com.amedick.hospitalapp-main-63:\\layout\\activity_splash.xml"
+        "merged": "com.amedick.hospitalapp-mergeDebugResources-70:/layout/activity_splash.xml",
+        "source": "com.amedick.hospitalapp-main-73:/layout/activity_splash.xml"
     },
     {
-        "merged": "C:\\Users\\gopic\\.gradle\\daemon\\8.6\\com.amedick.hospitalapp-mergeDebugResources-60:\\layout\\activity_book_appointment.xml",
-        "source": "C:\\Users\\gopic\\.gradle\\daemon\\8.6\\com.amedick.hospitalapp-main-63:\\layout\\activity_book_appointment.xml"
+        "merged": "com.amedick.hospitalapp-mergeDebugResources-70:/layout/activity_book_appointment.xml",
+        "source": "com.amedick.hospitalapp-main-73:/layout/activity_book_appointment.xml"
     },
     {
-        "merged": "C:\\Users\\gopic\\.gradle\\daemon\\8.6\\com.amedick.hospitalapp-mergeDebugResources-60:\\layout\\item_doctor.xml",
-        "source": "C:\\Users\\gopic\\.gradle\\daemon\\8.6\\com.amedick.hospitalapp-main-63:\\layout\\item_doctor.xml"
+        "merged": "com.amedick.hospitalapp-mergeDebugResources-70:/layout/activity_doctor_details.xml",
+        "source": "com.amedick.hospitalapp-main-73:/layout/activity_doctor_details.xml"
     },
     {
-        "merged": "C:\\Users\\gopic\\.gradle\\daemon\\8.6\\com.amedick.hospitalapp-mergeDebugResources-60:\\layout\\fragment_settings.xml",
-        "source": "C:\\Users\\gopic\\.gradle\\daemon\\8.6\\com.amedick.hospitalapp-main-63:\\layout\\fragment_settings.xml"
+        "merged": "com.amedick.hospitalapp-mergeDebugResources-70:/layout/fragment_appointment_history.xml",
+        "source": "com.amedick.hospitalapp-main-73:/layout/fragment_appointment_history.xml"
     },
     {
-        "merged": "C:\\Users\\gopic\\.gradle\\daemon\\8.6\\com.amedick.hospitalapp-mergeDebugResources-60:\\layout\\fragment_home.xml",
-        "source": "C:\\Users\\gopic\\.gradle\\daemon\\8.6\\com.amedick.hospitalapp-main-63:\\layout\\fragment_home.xml"
+        "merged": "com.amedick.hospitalapp-mergeDebugResources-70:/layout/fragment_doctor_list.xml",
+        "source": "com.amedick.hospitalapp-main-73:/layout/fragment_doctor_list.xml"
     },
     {
-        "merged": "C:\\Users\\gopic\\.gradle\\daemon\\8.6\\com.amedick.hospitalapp-mergeDebugResources-60:\\layout\\activity_main.xml",
-        "source": "C:\\Users\\gopic\\.gradle\\daemon\\8.6\\com.amedick.hospitalapp-main-63:\\layout\\activity_main.xml"
+        "merged": "com.amedick.hospitalapp-mergeDebugResources-70:/layout/activity_register.xml",
+        "source": "com.amedick.hospitalapp-main-73:/layout/activity_register.xml"
     },
     {
-        "merged": "C:\\Users\\gopic\\.gradle\\daemon\\8.6\\com.amedick.hospitalapp-mergeDebugResources-60:\\layout\\activity_register.xml",
-        "source": "C:\\Users\\gopic\\.gradle\\daemon\\8.6\\com.amedick.hospitalapp-main-63:\\layout\\activity_register.xml"
+        "merged": "com.amedick.hospitalapp-mergeDebugResources-70:/layout/fragment_profile.xml",
+        "source": "com.amedick.hospitalapp-main-73:/layout/fragment_profile.xml"
     },
     {
-        "merged": "com.amedick.hospitalapp-mergeDebugResources-60:/layout/activity_doctor_details.xml",
-        "source": "com.amedick.hospitalapp-main-63:/layout/activity_doctor_details.xml"
+        "merged": "com.amedick.hospitalapp-mergeDebugResources-70:/layout/fragment_home.xml",
+        "source": "com.amedick.hospitalapp-main-73:/layout/fragment_home.xml"
     },
     {
-        "merged": "C:\\Users\\gopic\\.gradle\\daemon\\8.6\\com.amedick.hospitalapp-mergeDebugResources-60:\\layout\\activity_login.xml",
-        "source": "C:\\Users\\gopic\\.gradle\\daemon\\8.6\\com.amedick.hospitalapp-main-63:\\layout\\activity_login.xml"
+        "merged": "com.amedick.hospitalapp-mergeDebugResources-70:/layout/activity_main.xml",
+        "source": "com.amedick.hospitalapp-main-73:/layout/activity_main.xml"
     },
     {
-        "merged": "C:\\Users\\gopic\\.gradle\\daemon\\8.6\\com.amedick.hospitalapp-mergeDebugResources-60:\\layout\\fragment_appointment_history.xml",
-        "source": "C:\\Users\\gopic\\.gradle\\daemon\\8.6\\com.amedick.hospitalapp-main-63:\\layout\\fragment_appointment_history.xml"
+        "merged": "com.amedick.hospitalapp-mergeDebugResources-70:/layout/activity_login.xml",
+        "source": "com.amedick.hospitalapp-main-73:/layout/activity_login.xml"
     },
     {
-        "merged": "C:\\Users\\gopic\\.gradle\\daemon\\8.6\\com.amedick.hospitalapp-mergeDebugResources-60:\\layout\\fragment_profile.xml",
-        "source": "C:\\Users\\gopic\\.gradle\\daemon\\8.6\\com.amedick.hospitalapp-main-63:\\layout\\fragment_profile.xml"
+        "merged": "com.amedick.hospitalapp-mergeDebugResources-70:/layout/fragment_settings.xml",
+        "source": "com.amedick.hospitalapp-main-73:/layout/fragment_settings.xml"
     },
     {
-        "merged": "C:\\Users\\gopic\\.gradle\\daemon\\8.6\\com.amedick.hospitalapp-mergeDebugResources-60:\\layout\\fragment_doctor_list.xml",
-        "source": "C:\\Users\\gopic\\.gradle\\daemon\\8.6\\com.amedick.hospitalapp-main-63:\\layout\\fragment_doctor_list.xml"
+        "merged": "com.amedick.hospitalapp-mergeDebugResources-70:/layout/item_appointment.xml",
+        "source": "com.amedick.hospitalapp-main-73:/layout/item_appointment.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-mergeDebugResources-70:/layout/item_doctor.xml",
+        "source": "com.amedick.hospitalapp-main-73:/layout/item_doctor.xml"
     }
 ]

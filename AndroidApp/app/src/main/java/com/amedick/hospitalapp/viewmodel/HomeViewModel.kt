@@ -2,8 +2,11 @@ package com.amedick.hospitalapp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.amedick.hospitalapp.firebase.AuthRepository
+import com.amedick.hospitalapp.firebase.FirestoreRepository
+import com.amedick.hospitalapp.models.Appointment
 import com.amedick.hospitalapp.models.Doctor
-import com.amedick.hospitalapp.repository.HospitalRepository
+import com.amedick.hospitalapp.models.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,27 +16,61 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: HospitalRepository
+    private val authRepository: AuthRepository,
+    private val firestoreRepository: FirestoreRepository
 ) : ViewModel() {
 
     private val _doctorsState = MutableStateFlow<HomeState>(HomeState.Idle)
     val doctorsState: StateFlow<HomeState> = _doctorsState.asStateFlow()
 
+    private val _userState = MutableStateFlow<User?>(null)
+    val userState: StateFlow<User?> = _userState.asStateFlow()
+
+    private val _upcomingAppointment = MutableStateFlow<Appointment?>(null)
+    val upcomingAppointment: StateFlow<Appointment?> = _upcomingAppointment.asStateFlow()
+
+    init {
+        loadUser()
+        loadDoctors()
+        loadUpcomingAppointment()
+    }
+
+    private fun loadUser() {
+        val uid = authRepository.getCurrentUserId() ?: return
+        viewModelScope.launch {
+            firestoreRepository.getUserProfile(uid).onSuccess { user ->
+                _userState.value = user
+            }
+        }
+    }
+
     fun loadDoctors() {
         _doctorsState.value = HomeState.Loading
         viewModelScope.launch {
-            try {
-                val response = repository.getDoctors()
-                if (response.isSuccessful) {
-                    val doctors = response.body() ?: emptyList()
-                    _doctorsState.value = HomeState.DoctorsLoaded(doctors)
-                } else {
-                    _doctorsState.value = HomeState.Error(response.message())
-                }
-            } catch (ex: Exception) {
-                _doctorsState.value = HomeState.Error(ex.localizedMessage ?: "Network error")
+            val result = firestoreRepository.getDoctors()
+            _doctorsState.value = if (result.isSuccess) {
+                HomeState.DoctorsLoaded(result.getOrDefault(emptyList()))
+            } else {
+                HomeState.Error(result.exceptionOrNull()?.message ?: "Unable to load doctors.")
             }
         }
+    }
+
+    private fun loadUpcomingAppointment() {
+        val patientId = authRepository.getCurrentUserId() ?: return
+        viewModelScope.launch {
+            firestoreRepository.getAppointmentsForPatient(patientId).onSuccess { list ->
+                _upcomingAppointment.value = list
+                    .filter { it.status != "CANCELLED" && it.status != "COMPLETED" }
+                    .firstOrNull()
+            }
+        }
+    }
+
+    fun refresh() {
+        loadUser()
+        loadDoctors()
+        loadUpcomingAppointment()
     }
 }
 

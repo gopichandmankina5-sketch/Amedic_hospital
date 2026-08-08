@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "829803020736",
+    "project_id": "amedick-hospital",
+    "storage_bucket": "amedick-hospital.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:829803020736:android:9f57588af17611069d8825",
+        "android_client_info": {
+          "package_name": "com.amedick.hospitalapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCA5hZWNokGIqd1s0x7_w2wZZJgFNTxx5g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:829803020736:android:7fc35b6b72a0ecb09d8825",
+        "android_client_info": {
+          "package_name": "com.company.medic"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCA5hZWNokGIqd1s0x7_w2wZZJgFNTxx5g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

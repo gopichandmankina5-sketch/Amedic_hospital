@@ -1,0 +1,138 @@
+[
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/xml_network_security_config.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/xml/network_security_config.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/layout_fragment_settings.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/layout/fragment_settings.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/drawable_ic_clock.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/drawable/ic_clock.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/layout_activity_main.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/layout_fragment_profile.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/layout/fragment_profile.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/drawable_ic_home.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/drawable/ic_home.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/drawable_bg_gradient_primary.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/drawable/bg_gradient_primary.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/layout_fragment_doctor_list.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/layout/fragment_doctor_list.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/layout_activity_doctor_details.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/layout/activity_doctor_details.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/drawable_ic_appointments.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/drawable/ic_appointments.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/drawable_ic_hospital.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/drawable/ic_hospital.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/layout_activity_login.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/layout/activity_login.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/menu_bottom_nav_menu.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/menu/bottom_nav_menu.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/layout_item_appointment.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/layout/item_appointment.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/drawable_ic_email.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/drawable/ic_email.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/drawable_bg_circle_primary.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/drawable/bg_circle_primary.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/drawable_bg_card_white.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/drawable/bg_card_white.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/drawable_ic_doctor.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/drawable/ic_doctor.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/drawable_ic_calendar.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/drawable/ic_calendar.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/layout_activity_splash.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/layout/activity_splash.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/drawable_ic_star.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/drawable/ic_star.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/layout_item_doctor.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/layout/item_doctor.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/layout_activity_register.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/layout/activity_register.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/drawable_ic_phone.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/drawable/ic_phone.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/layout_fragment_appointment_history.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/layout/fragment_appointment_history.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/drawable_ic_back.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/drawable/ic_back.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/layout_activity_book_appointment.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/layout/activity_book_appointment.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/layout_fragment_home.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/layout/fragment_home.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/drawable_ic_user.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/drawable/ic_user.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/drawable_ic_search.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/drawable/ic_search.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/drawable_ic_profile.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/drawable/ic_profile.xml"
+    },
+    {
+        "merged": "com.amedick.hospitalapp-release-71:/drawable_ic_settings.xml.flat",
+        "source": "com.amedick.hospitalapp-main-72:/drawable/ic_settings.xml"
+    }
+]

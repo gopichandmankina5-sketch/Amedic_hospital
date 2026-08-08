@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.amedick.hospitalapp-mergeDebugResources-59:/values-sw360dp-v13/values-sw360dp-v13.xml",
+            "outputFile": "com.amedick.hospitalapp-mergeDebugResources-69:/values-sw360dp-v13/values-sw360dp-v13.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\gopic\\.gradle\\caches\\transforms-4\\00a6c4a1e046a90c4fe003ac03db822b\\transformed\\preference-1.2.1\\res\\values-sw360dp-v13\\values-sw360dp-v13.xml",
+                    "source": "C:\\Users\\gopic\\.gradle\\caches\\transforms-4\\a2d9a0d0c26920058be7104d0e85bb16\\transformed\\preference-1.2.1\\res\\values-sw360dp-v13\\values-sw360dp-v13.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

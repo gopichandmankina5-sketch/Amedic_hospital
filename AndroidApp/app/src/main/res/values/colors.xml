@@ -1,24 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="md_theme_light_primary">#3366FF</color>
+    <!-- Primary brand colors -->
+    <color name="color_primary">#2563EB</color>
+    <color name="color_primary_dark">#1D4ED8</color>
+    <color name="color_primary_light">#DBEAFE</color>
+    <color name="color_primary_container">#EFF6FF</color>
+    <color name="color_on_primary">#FFFFFF</color>
+
+    <!-- Secondary brand colors -->
+    <color name="color_secondary">#0EA5A4</color>
+    <color name="color_secondary_dark">#0D9090</color>
+    <color name="color_secondary_light">#CCFBF1</color>
+    <color name="color_on_secondary">#FFFFFF</color>
+
+    <!-- Background / Surface -->
+    <color name="color_background">#F8FAFC</color>
+    <color name="color_surface">#FFFFFF</color>
+    <color name="color_surface_variant">#F1F5F9</color>
+
+    <!-- Text colors -->
+    <color name="color_on_background">#0F172A</color>
+    <color name="color_on_surface">#0F172A</color>
+    <color name="color_text_secondary">#64748B</color>
+    <color name="color_text_hint">#94A3B8</color>
+
+    <!-- Status colors -->
+    <color name="color_error">#DC2626</color>
+    <color name="color_error_container">#FEE2E2</color>
+    <color name="color_success">#16A34A</color>
+    <color name="color_success_container">#DCFCE7</color>
+    <color name="color_warning">#D97706</color>
+    <color name="color_warning_container">#FEF3C7</color>
+    <color name="color_info">#2563EB</color>
+    <color name="color_info_container">#DBEAFE</color>
+
+    <!-- Appointment status colors -->
+    <color name="status_pending">#D97706</color>
+    <color name="status_pending_bg">#FEF3C7</color>
+    <color name="status_confirmed">#16A34A</color>
+    <color name="status_confirmed_bg">#DCFCE7</color>
+    <color name="status_completed">#2563EB</color>
+    <color name="status_completed_bg">#DBEAFE</color>
+    <color name="status_cancelled">#DC2626</color>
+    <color name="status_cancelled_bg">#FEE2E2</color>
+    <color name="status_rejected">#7C3AED</color>
+    <color name="status_rejected_bg">#EDE9FE</color>
+
+    <!-- MD theme aliases (kept for existing layout references) -->
+    <color name="md_theme_light_primary">#2563EB</color>
     <color name="md_theme_light_onPrimary">#FFFFFF</color>
-    <color name="md_theme_light_secondary">#00BFA5</color>
+    <color name="md_theme_light_secondary">#0EA5A4</color>
     <color name="md_theme_light_onSecondary">#FFFFFF</color>
-    <color name="md_theme_light_background">#F6F8FF</color>
+    <color name="md_theme_light_background">#F8FAFC</color>
     <color name="md_theme_light_surface">#FFFFFF</color>
-    <color name="md_theme_light_onSurface">#1F2937</color>
-    <color name="md_theme_light_error">#B00020</color>
+    <color name="md_theme_light_onSurface">#0F172A</color>
+    <color name="md_theme_light_error">#DC2626</color>
 
-    <color name="md_theme_dark_primary">#ABC1FF</color>
-    <color name="md_theme_dark_onPrimary">#00317A</color>
-    <color name="md_theme_dark_secondary">#6BF3DC</color>
-    <color name="md_theme_dark_onSecondary">#00382F</color>
-    <color name="md_theme_dark_background">#0F172A</color>
-    <color name="md_theme_dark_surface">#111827</color>
-    <color name="md_theme_dark_onSurface">#E2E8F0</color>
-    <color name="md_theme_dark_error">#CF6679</color>
+    <!-- Divider / Border -->
+    <color name="color_divider">#E2E8F0</color>
+    <color name="color_outline">#CBD5E1</color>
 
-    <color name="purple_500">#6200EE</color>
-    <color name="purple_700">#3700B3</color>
-    <color name="teal_200">#03DAC5</color>
+    <!-- Shadow -->
+    <color name="color_shadow">#1A000000</color>
+
+    <!-- Transparent -->
+    <color name="transparent">#00000000</color>
+    <color name="semi_transparent">#80000000</color>
 </resources>

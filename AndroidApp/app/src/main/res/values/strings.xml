@@ -1,30 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">AmedicK</string>
-    <string name="splash_welcome">Welcome to AmedicK</string>
-    <string name="login_title">Login</string>
-    <string name="register_title">Register</string>
-    <string name="home_title">Dashboard</string>
+    <string name="app_tagline">Smart Healthcare. Simplified.</string>
+
+    <!-- Auth -->
+    <string name="splash_welcome">AmedicK</string>
+    <string name="login_title">Welcome Back</string>
+    <string name="login_subtitle">Login to manage your appointments</string>
+    <string name="register_title">Create Account</string>
+    <string name="register_subtitle">Join AmedicK today</string>
+    <string name="email_hint">Email Address</string>
+    <string name="password_hint">Password</string>
+    <string name="confirm_password_hint">Confirm Password</string>
+    <string name="name_hint">Full Name</string>
+    <string name="phone_hint">Phone Number</string>
+    <string name="login_button">Sign In</string>
+    <string name="register_button">Create Account</string>
+    <string name="logout_button">Log Out</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="no_account">Don\'t have an account? Register</string>
+    <string name="have_account">Already have an account? Sign In</string>
+    <string name="terms_text">I agree to the Terms and Conditions</string>
+    <string name="reset_password_title">Reset Password</string>
+    <string name="reset_password_hint">Enter your registered email</string>
+    <string name="send_reset_button">Send Reset Link</string>
+
+    <!-- Navigation -->
+    <string name="home_title">Home</string>
     <string name="doctors_title">Doctors</string>
     <string name="appointments_title">Appointments</string>
     <string name="profile_title">Profile</string>
     <string name="settings_title">Settings</string>
-    <string name="email_hint">Email</string>
-    <string name="password_hint">Password</string>
-    <string name="name_hint">Name</string>
-    <string name="phone_hint">Phone</string>
-    <string name="specialization_hint">Specialization</string>
-    <string name="login_button">Login</string>
-    <string name="register_button">Register</string>
-    <string name="logout_button">Logout</string>
+
+    <!-- Home -->
+    <string name="greeting_morning">Good morning, %s</string>
+    <string name="greeting_afternoon">Good afternoon, %s</string>
+    <string name="greeting_evening">Good evening, %s</string>
+    <string name="search_hint">Search doctors…</string>
+    <string name="quick_actions_title">Quick Actions</string>
+    <string name="find_doctor">Find Doctor</string>
     <string name="book_appointment">Book Appointment</string>
-    <string name="appointment_history">Appointment History</string>
+    <string name="my_appointments">My Appointments</string>
+    <string name="upcoming_appointment">Upcoming Appointment</string>
+    <string name="recommended_doctors">Recommended Doctors</string>
+    <string name="see_all">See All</string>
+
+    <!-- Doctors -->
+    <string name="specialization_hint">Specialization</string>
+    <string name="view_profile">View Profile</string>
     <string name="no_doctors_message">No doctors found</string>
-    <string name="no_appointments_message">No appointments available</string>
-    <string name="search_hint">Search doctors</string>
-    <string name="favorites_title">Favorite Doctors</string>
-    <string name="dark_mode">Dark Mode</string>
+    <string name="no_doctors_subtitle">Try a different search term or specialization</string>
+    <string name="years_exp">%d yrs exp</string>
+    <string name="available_badge">Available</string>
+    <string name="unavailable_badge">Unavailable</string>
+    <string name="about_doctor">About Doctor</string>
+    <string name="book_appointment_with">Book Appointment with %s</string>
+
+    <!-- Appointment -->
+    <string name="appointment_history">My Appointments</string>
+    <string name="book_appointment_title">Book Appointment</string>
+    <string name="select_date">Select Date</string>
+    <string name="select_time">Select Time</string>
+    <string name="reason_hint">Reason for visit</string>
+    <string name="confirm_appointment">Confirm Appointment</string>
+    <string name="appointment_confirmed_title">Appointment Confirmed!</string>
+    <string name="appointment_confirmed_msg">Your appointment has been successfully booked. We\'ll notify you of any updates.</string>
+    <string name="view_my_appointments">View My Appointments</string>
+    <string name="no_appointments_message">No appointments yet</string>
+    <string name="no_appointments_subtitle">Book an appointment with a doctor to get started.</string>
+    <string name="cancel_appointment">Cancel Appointment</string>
+    <string name="cancel_appointment_confirm">Are you sure you want to cancel this appointment?</string>
+    <string name="status_pending">Pending</string>
+    <string name="status_confirmed">Confirmed</string>
+    <string name="status_completed">Completed</string>
+    <string name="status_cancelled">Cancelled</string>
+    <string name="status_rejected">Rejected</string>
+
+    <!-- Profile -->
     <string name="edit_profile">Edit Profile</string>
+    <string name="change_password">Change Password</string>
+    <string name="notifications_settings">Notifications</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="profile_updated">Profile updated successfully.</string>
+
+    <!-- Errors & Success -->
+    <string name="error_network">No internet connection. Please check your network.</string>
+    <string name="error_generic">Something went wrong. Please try again.</string>
+    <string name="error_fill_fields">Please fill in all required fields.</string>
+    <string name="error_invalid_email">Please enter a valid email address.</string>
+    <string name="error_password_short">Password must be at least 6 characters.</string>
+    <string name="error_passwords_mismatch">Passwords do not match.</string>
+    <string name="error_accept_terms">Please accept the Terms and Conditions.</string>
+    <string name="success_registered">Account created! Please verify your email before logging in.</string>
+    <string name="success_reset_sent">Password reset link sent. Check your email.</string>
+    <string name="success_appointment_booked">Appointment booked successfully!</string>
+    <string name="success_appointment_cancelled">Appointment cancelled.</string>
+
+    <!-- Settings -->
+    <string name="dark_mode">Dark Mode</string>
     <string name="sync_appointments">Sync Appointments</string>
+    <string name="favorites_title">Favorite Doctors</string>
     <string name="request_failed">Request failed. Please try again.</string>
+    <string name="doctor_not_found">Doctor details unavailable</string>
+
+    <!-- Content Descriptions -->
+    <string name="cd_profile_image">Profile picture</string>
+    <string name="cd_doctor_image">Doctor profile picture</string>
+    <string name="cd_back_button">Back</string>
+    <string name="cd_app_logo">AmedicK Logo</string>
 </resources>

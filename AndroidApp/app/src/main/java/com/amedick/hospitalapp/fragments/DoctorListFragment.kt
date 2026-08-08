@@ -4,16 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.amedick.hospitalapp.activities.DoctorDetailsActivity
 import com.amedick.hospitalapp.adapters.DoctorAdapter
 import com.amedick.hospitalapp.databinding.FragmentDoctorListBinding
 import com.amedick.hospitalapp.viewmodel.HomeState
 import com.amedick.hospitalapp.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class DoctorListFragment : Fragment() {
@@ -21,6 +25,7 @@ class DoctorListFragment : Fragment() {
     private var _binding: FragmentDoctorListBinding? = null
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by viewModels()
+    private lateinit var doctorAdapter: DoctorAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,9 +38,27 @@ class DoctorListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.doctorRecycler.layoutManager = LinearLayoutManager(requireContext())
-        binding.doctorRecycler.adapter = DoctorAdapter(emptyList()) { doctor ->
-            Toast.makeText(requireContext(), "Open details for ${doctor.name}", Toast.LENGTH_SHORT).show()
+
+        doctorAdapter = DoctorAdapter(emptyList()) { doctor ->
+            startActivity(DoctorDetailsActivity.newIntent(requireContext(), doctor))
+        }
+        binding.doctorRecycler.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = doctorAdapter
+        }
+
+        // Search
+        binding.searchInput.addTextChangedListener { text ->
+            val query = text.toString().trim()
+            val allDoctors = (viewModel.doctorsState.value as? HomeState.DoctorsLoaded)?.doctors ?: emptyList()
+            val filtered = if (query.isEmpty()) allDoctors
+            else allDoctors.filter {
+                it.name.contains(query, ignoreCase = true) ||
+                it.specialization.contains(query, ignoreCase = true)
+            }
+            doctorAdapter.updateData(filtered)
+            binding.emptyStateLayout.visibility = if (filtered.isEmpty() && query.isNotEmpty()) View.VISIBLE else View.GONE
+            binding.doctorRecycler.visibility = if (filtered.isEmpty() && query.isNotEmpty()) View.GONE else View.VISIBLE
         }
 
         viewModel.loadDoctors()
@@ -43,20 +66,33 @@ class DoctorListFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        lifecycleScope.launchWhenStarted {
-            viewModel.doctorsState.collect { state ->
-                when (state) {
-                    is HomeState.Idle -> binding.progressBar.visibility = View.GONE
-                    is HomeState.Loading -> binding.progressBar.visibility = View.VISIBLE
-                    is HomeState.Error -> {
-                        binding.progressBar.visibility = View.GONE
-                        binding.emptyState.text = state.message
-                        binding.emptyState.visibility = View.VISIBLE
-                    }
-                    is HomeState.DoctorsLoaded -> {
-                        binding.progressBar.visibility = View.GONE
-                        binding.emptyState.visibility = if (state.doctors.isEmpty()) View.VISIBLE else View.GONE
-                        (binding.doctorRecycler.adapter as DoctorAdapter).updateData(state.doctors)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.doctorsState.collect { state ->
+                    when (state) {
+                        is HomeState.Idle -> binding.progressBar.visibility = View.GONE
+                        is HomeState.Loading -> {
+                            binding.progressBar.visibility = View.VISIBLE
+                            binding.emptyStateLayout.visibility = View.GONE
+                            binding.doctorRecycler.visibility = View.GONE
+                        }
+                        is HomeState.Error -> {
+                            binding.progressBar.visibility = View.GONE
+                            binding.emptyState.text = state.message
+                            binding.emptyStateLayout.visibility = View.VISIBLE
+                            binding.doctorRecycler.visibility = View.GONE
+                        }
+                        is HomeState.DoctorsLoaded -> {
+                            binding.progressBar.visibility = View.GONE
+                            if (state.doctors.isEmpty()) {
+                                binding.emptyStateLayout.visibility = View.VISIBLE
+                                binding.doctorRecycler.visibility = View.GONE
+                            } else {
+                                binding.emptyStateLayout.visibility = View.GONE
+                                binding.doctorRecycler.visibility = View.VISIBLE
+                            }
+                            doctorAdapter.updateData(state.doctors)
+                        }
                     }
                 }
             }
