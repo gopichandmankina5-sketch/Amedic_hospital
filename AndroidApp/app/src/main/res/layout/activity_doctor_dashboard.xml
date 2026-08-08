@@ -51,6 +51,16 @@
                     app:tint="@color/color_primary" />
 
                 <ImageView
+                    android:id="@+id/btnProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    app:srcCompat="@drawable/ic_profile"
+                    app:tint="@color/color_primary"
+                    android:contentDescription="Profile" />
+
+                <ImageView
                     android:id="@+id/btnLogout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -58,7 +68,8 @@
                     android:padding="8dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     app:srcCompat="@drawable/ic_logout"
-                    app:tint="@color/color_error" />
+                    app:tint="@color/color_error"
+                    android:contentDescription="Logout" />
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>

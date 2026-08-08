@@ -45,12 +45,12 @@ class AdminDashboardActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
+        binding.btnProfile.setOnClickListener {
+            startActivity(Intent(this, AdminProfileActivity::class.java))
+        }
+
         binding.btnLogout.setOnClickListener {
-            authRepository.logout()
-            startActivity(Intent(this, LoginActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            })
-            finish()
+            com.amedick.hospitalapp.utils.LogoutHelper.showLogoutConfirmation(this)
         }
 
         binding.cardDoctorVerification.setOnClickListener {

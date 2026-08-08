@@ -9,8 +9,7 @@ import com.bumptech.glide.Glide
 
 class PendingDoctorAdapter(
     private var doctors: List<Doctor>,
-    private val onVerifyClick: (Doctor) -> Unit,
-    private val onRejectClick: (Doctor) -> Unit
+    private val onItemClick: (Doctor) -> Unit
 ) : RecyclerView.Adapter<PendingDoctorAdapter.PendingViewHolder>() {
 
     inner class PendingViewHolder(private val binding: ItemPendingDoctorBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -30,12 +29,8 @@ class PendingDoctorAdapter(
                 binding.ivDoctorImage.setImageResource(com.amedick.hospitalapp.R.drawable.ic_doctor)
             }
             
-            binding.btnVerify.setOnClickListener {
-                onVerifyClick(doctor)
-            }
-            
-            binding.btnReject.setOnClickListener {
-                onRejectClick(doctor)
+            binding.root.setOnClickListener {
+                onItemClick(doctor)
             }
         }
     }

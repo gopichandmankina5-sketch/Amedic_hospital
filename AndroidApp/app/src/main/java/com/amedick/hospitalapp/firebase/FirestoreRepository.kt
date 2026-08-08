@@ -740,4 +740,39 @@ class FirestoreRepository @Inject constructor(
     } catch (e: Exception) {
         Result.failure(e)
     }
+
+    /**
+     * Realtime listener for doctor verification documents.
+     * Admin uses this to watch documents appear as the doctor uploads them.
+     */
+    fun getVerificationDocumentsRealtime(doctorId: String): Flow<Result<List<com.amedick.hospitalapp.models.DoctorVerificationDocument>>> = callbackFlow {
+        val listener = firestore.collection("DoctorVerificationDocuments")
+            .whereEqualTo("doctorId", doctorId)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    trySend(Result.failure(error))
+                    return@addSnapshotListener
+                }
+                if (snapshot != null) {
+                    try {
+                        val docs = snapshot.toObjects(com.amedick.hospitalapp.models.DoctorVerificationDocument::class.java)
+                        trySend(Result.success(docs))
+                    } catch (e: Exception) {
+                        trySend(Result.failure(e))
+                    }
+                }
+            }
+        awaitClose { listener.remove() }
+    }
+
+    /**
+     * Update profile image URL in Firestore Users collection.
+     */
+    suspend fun updateUserProfileImage(userId: String, imageUrl: String): Result<Unit> = try {
+        firestore.collection("Users").document(userId)
+            .update("profileImage", imageUrl).await()
+        Result.success(Unit)
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
 }

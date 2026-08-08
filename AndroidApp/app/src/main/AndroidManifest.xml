@@ -143,6 +143,24 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
+        <!-- Admin Verification Detail Activity -->
+        <activity
+            android:name="com.amedick.hospitalapp.activities.AdminVerificationDetailActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Admin Profile Activity -->
+        <activity
+            android:name="com.amedick.hospitalapp.activities.AdminProfileActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Doctor Profile Activity -->
+        <activity
+            android:name="com.amedick.hospitalapp.activities.DoctorProfileActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
         <!-- FCM Service -->
         <service
             android:name=".notification.MyFirebaseMessagingService"

@@ -89,13 +89,25 @@
                 </FrameLayout>
 
                 <ImageView
+                    android:id="@+id/btnProfile"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="4dp"
+                    android:padding="12dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    app:srcCompat="@drawable/ic_profile"
+                    app:tint="@color/color_primary"
+                    android:contentDescription="Admin Profile" />
+
+                <ImageView
                     android:id="@+id/btnLogout"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:padding="12dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     app:srcCompat="@drawable/ic_logout"
-                    app:tint="@color/color_error" />
+                    app:tint="@color/color_error"
+                    android:contentDescription="Logout" />
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>

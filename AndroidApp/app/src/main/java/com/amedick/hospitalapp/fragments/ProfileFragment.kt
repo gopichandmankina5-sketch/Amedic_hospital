@@ -49,17 +49,7 @@ class ProfileFragment : Fragment() {
         }
 
         binding.logoutButton.setOnClickListener {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Log Out")
-                .setMessage("Are you sure you want to log out?")
-                .setPositiveButton("Log Out") { _, _ ->
-                    viewModel.logout()
-                    startActivity(Intent(requireContext(), LoginActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    })
-                }
-                .setNegativeButton("Cancel", null)
-                .show()
+            com.amedick.hospitalapp.utils.LogoutHelper.showLogoutConfirmation(requireActivity() as androidx.appcompat.app.AppCompatActivity)
         }
 
         observeViewModel()
