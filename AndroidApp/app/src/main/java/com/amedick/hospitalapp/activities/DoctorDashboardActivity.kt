@@ -7,6 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import com.amedick.hospitalapp.databinding.ActivityDoctorDashboardBinding
 import com.amedick.hospitalapp.firebase.AuthRepository
+import com.amedick.hospitalapp.utils.AppointmentUtils
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -77,14 +78,22 @@ class DoctorDashboardActivity : AppCompatActivity() {
                 updateAppointmentStatus(appt, com.amedick.hospitalapp.models.AppointmentStatus.REJECTED)
             },
             onMarkCompletedClick = { appt ->
-                androidx.appcompat.app.AlertDialog.Builder(this)
-                    .setTitle("Mark as Completed?")
-                    .setMessage("Mark this appointment as completed?")
-                    .setPositiveButton("Confirm") { _, _ ->
-                        updateAppointmentStatus(appt, com.amedick.hospitalapp.models.AppointmentStatus.COMPLETED)
-                    }
-                    .setNegativeButton("Cancel", null)
-                    .show()
+                if (!AppointmentUtils.isAppointmentStarted(appt)) {
+                    androidx.appcompat.app.AlertDialog.Builder(this)
+                        .setTitle("Meeting Not Started")
+                        .setMessage("This appointment has not started yet. You can mark it as completed after the scheduled time.")
+                        .setPositiveButton("OK", null)
+                        .show()
+                } else {
+                    androidx.appcompat.app.AlertDialog.Builder(this)
+                        .setTitle("Mark as Completed?")
+                        .setMessage("Mark this appointment as completed?")
+                        .setPositiveButton("Confirm") { _, _ ->
+                            updateAppointmentStatus(appt, com.amedick.hospitalapp.models.AppointmentStatus.COMPLETED)
+                        }
+                        .setNegativeButton("Cancel", null)
+                        .show()
+                }
             },
             onOpenChatClick = { appt ->
                 val intent = Intent(this, ChatActivity::class.java).apply {

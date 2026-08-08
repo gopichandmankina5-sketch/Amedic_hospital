@@ -37,6 +37,10 @@ class AdminDashboardActivity : AppCompatActivity() {
         setupListeners()
         setupRecyclerView()
         observeRealtimeData()
+    }
+
+    override fun onResume() {
+        super.onResume()
         loadStaticPlatformStats()
     }
 
@@ -88,9 +92,7 @@ class AdminDashboardActivity : AppCompatActivity() {
         }
 
         binding.cardCompleted.setOnClickListener {
-            val intent = Intent(this, AdminAppointmentListActivity::class.java)
-            intent.putExtra("FILTER_TYPE", "COMPLETED")
-            startActivity(intent)
+            startActivity(Intent(this, AdminCompletedAppointmentsActivity::class.java))
         }
     }
 

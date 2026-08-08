@@ -16,9 +16,10 @@
         android:gravity="center_vertical">
 
         <ImageView
+            android:id="@+id/ivDocumentIcon"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@drawable/ic_hospital"
+            android:src="@drawable/ic_file_document"
             app:tint="@color/color_primary"
             android:background="@drawable/bg_circle_primary_light"
             android:padding="12dp" />
@@ -43,7 +44,7 @@
                 android:id="@+id/tvDocumentType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Lab Report"
+                android:text="PDF • 1.8 MB"
                 android:textSize="14sp"
                 android:textColor="@color/color_text_secondary"
                 android:layout_marginTop="2dp" />
@@ -62,10 +63,20 @@
             android:id="@+id/btnViewDocument"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_logout"
+            android:src="@drawable/ic_search"
             app:tint="@color/color_primary"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="View Document" />
+
+        <ImageButton
+            android:id="@+id/btnDeleteDocument"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/ic_delete"
+            app:tint="@color/color_error"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Delete Document" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -146,5 +146,8 @@ data class MedicalDocument(
     val name: String = "",
     val type: String = "", // e.g., "Prescription", "Lab Report"
     val url: String = "",
+    val size: Long = 0L,
+    val storagePath: String = "",
+    val storageProvider: String = "firebase",
     @ServerTimestamp val uploadedAt: Date? = null
 )

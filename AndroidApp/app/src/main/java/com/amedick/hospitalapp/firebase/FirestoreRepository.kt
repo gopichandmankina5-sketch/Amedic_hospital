@@ -168,8 +168,27 @@ class FirestoreRepository @Inject constructor(
     suspend fun cancelAppointment(appointmentId: String): Result<Boolean> =
         updateAppointmentStatus(appointmentId, AppointmentStatus.CANCELLED)
 
-    suspend fun markAppointmentCompleted(appointmentId: String): Result<Boolean> =
-        updateAppointmentStatus(appointmentId, AppointmentStatus.COMPLETED)
+    suspend fun markAppointmentCompleted(appointmentId: String): Result<Boolean> = try {
+        firestore.runTransaction { transaction ->
+            val ref = firestore.collection("Appointments").document(appointmentId)
+            val snapshot = transaction.get(ref)
+            if (snapshot.exists()) {
+                val currentStatus = snapshot.getString("status")
+                if (currentStatus != AppointmentStatus.ACCEPTED) {
+                    throw Exception("Appointment is not in ACCEPTED state.")
+                }
+                
+                // Note: Complete time validation is handled UI-side with AppointmentUtils 
+                // to prevent differences between server and local timezone, but we enforce the status flow here.
+                transaction.update(ref, "status", AppointmentStatus.COMPLETED)
+            } else {
+                throw Exception("Appointment not found")
+            }
+        }.await()
+        Result.success(true)
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
 
     // ── Chat ─────────────────────────────────────────────────────────────────
 
@@ -222,6 +241,18 @@ class FirestoreRepository @Inject constructor(
         } catch (e2: Exception) {
             Result.failure(e2)
         }
+    }
+
+    suspend fun getReviewForAppointment(appointmentId: String): Result<Review?> = try {
+        val reviewDocId = "${appointmentId}_review"
+        val snapshot = firestore.collection("Reviews").document(reviewDocId).get().await()
+        if (snapshot.exists()) {
+            Result.success(snapshot.toObject(Review::class.java))
+        } else {
+            Result.success(null)
+        }
+    } catch (e: Exception) {
+        Result.failure(e)
     }
 
     suspend fun submitReview(review: Review): Result<Boolean> = try {
@@ -439,9 +470,9 @@ class FirestoreRepository @Inject constructor(
                 try {
                     var list = snapshot.toObjects(Doctor::class.java)
                     if (filterType == "VERIFIED") {
-                        list = list.filter { it.verificationStatus == "VERIFIED" }
+                        list = list.filter { it.verificationStatus == "VERIFIED" || it.isVerified }
                     } else if (filterType == "PENDING") {
-                        list = list.filter { it.verificationStatus == "PENDING" }
+                        list = list.filter { it.verificationStatus == "PENDING" || (it.verificationStatus.isEmpty() && !it.isVerified) }
                     }
                     list = list.sortedByDescending { it.createdAt }
                     trySend(Result.success(list))
@@ -472,6 +503,26 @@ class FirestoreRepository @Inject constructor(
                 }
             }
         }
+        awaitClose { listener.remove() }
+    }
+
+    fun getAppointmentsForPatientRealtime(patientId: String): Flow<Result<List<Appointment>>> = callbackFlow {
+        val listener = firestore.collection("Appointments")
+            .whereEqualTo("patientId", patientId)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    trySend(Result.failure(error))
+                    return@addSnapshotListener
+                }
+                if (snapshot != null) {
+                    try {
+                        val list = snapshot.toObjects(Appointment::class.java).sortedByDescending { it.createdAt }
+                        trySend(Result.success(list))
+                    } catch (e: Exception) {
+                        trySend(Result.failure(e))
+                    }
+                }
+            }
         awaitClose { listener.remove() }
     }
 
@@ -512,9 +563,10 @@ class FirestoreRepository @Inject constructor(
         }
     }
     
-    suspend fun uploadMedicalDocument(patientId: String, name: String, type: String, fileUri: Uri): Result<com.amedick.hospitalapp.models.MedicalDocument> = try {
+    suspend fun uploadMedicalDocument(patientId: String, name: String, type: String, size: Long, fileUri: Uri): Result<com.amedick.hospitalapp.models.MedicalDocument> = try {
         val docRef = firestore.collection("MedicalDocuments").document()
-        val storageRef = storage.reference.child("patients/$patientId/documents/${docRef.id}")
+        val storagePath = "patients/$patientId/documents/${docRef.id}_${name.replace("[^A-Za-z0-9_.-]".toRegex(), "_")}"
+        val storageRef = storage.reference.child(storagePath)
         storageRef.putFile(fileUri).await()
         val downloadUrl = storageRef.downloadUrl.await().toString()
         
@@ -523,10 +575,36 @@ class FirestoreRepository @Inject constructor(
             patientId = patientId,
             name = name,
             type = type,
-            url = downloadUrl
+            url = downloadUrl,
+            size = size,
+            storagePath = storagePath
         )
         docRef.set(document).await()
         Result.success(document)
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+
+    suspend fun saveMedicalDocumentMetadata(document: com.amedick.hospitalapp.models.MedicalDocument): Result<Boolean> = try {
+        val docRef = firestore.collection("MedicalDocuments").document()
+        val finalDoc = document.copy(documentId = docRef.id)
+        docRef.set(finalDoc).await()
+        Result.success(true)
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+
+    suspend fun deleteMedicalDocument(document: com.amedick.hospitalapp.models.MedicalDocument): Result<Boolean> = try {
+        if (document.storageProvider == "firebase" && document.storagePath.isNotEmpty()) {
+            try {
+                val storageRef = storage.reference.child(document.storagePath)
+                storageRef.delete().await()
+            } catch (e: Exception) {
+                // Ignore if storage file is already deleted or not found
+            }
+        }
+        firestore.collection("MedicalDocuments").document(document.documentId).delete().await()
+        Result.success(true)
     } catch (e: Exception) {
         Result.failure(e)
     }

@@ -132,6 +132,11 @@
             android:name="com.amedick.hospitalapp.activities.AdminAppointmentListActivity"
             android:exported="false" />
 
+        <!-- Admin Completed Appointments Activity -->
+        <activity
+            android:name="com.amedick.hospitalapp.activities.AdminCompletedAppointmentsActivity"
+            android:exported="false" />
+
         <!-- FCM Service -->
         <service
             android:name=".notification.MyFirebaseMessagingService"

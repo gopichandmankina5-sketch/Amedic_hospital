@@ -7,6 +7,7 @@ import com.amedick.hospitalapp.firebase.FirestoreRepository
 import com.amedick.hospitalapp.models.Appointment
 import com.amedick.hospitalapp.models.Doctor
 import com.amedick.hospitalapp.models.User
+import com.amedick.hospitalapp.utils.AppointmentUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -47,11 +48,12 @@ class HomeViewModel @Inject constructor(
     fun loadDoctors() {
         _doctorsState.value = HomeState.Loading
         viewModelScope.launch {
-            val result = firestoreRepository.getDoctors()
-            _doctorsState.value = if (result.isSuccess) {
-                HomeState.DoctorsLoaded(result.getOrDefault(emptyList()))
-            } else {
-                HomeState.Error(result.exceptionOrNull()?.message ?: "Unable to load doctors.")
+            firestoreRepository.getDoctorsRealtime("VERIFIED").collect { result ->
+                _doctorsState.value = if (result.isSuccess) {
+                    HomeState.DoctorsLoaded(result.getOrDefault(emptyList()))
+                } else {
+                    HomeState.Error(result.exceptionOrNull()?.message ?: "Unable to load doctors.")
+                }
             }
         }
     }
@@ -59,10 +61,18 @@ class HomeViewModel @Inject constructor(
     private fun loadUpcomingAppointment() {
         val patientId = authRepository.getCurrentUserId() ?: return
         viewModelScope.launch {
-            firestoreRepository.getAppointmentsForPatient(patientId).onSuccess { list ->
-                _upcomingAppointment.value = list
-                    .filter { it.status != "CANCELLED" && it.status != "COMPLETED" }
-                    .firstOrNull()
+            firestoreRepository.getAppointmentsForPatientRealtime(patientId).collect { result ->
+                if (result.isSuccess) {
+                    val list = result.getOrDefault(emptyList())
+                    // Filter using centralized logic
+                    val upcomingAppointments = list.filter { AppointmentUtils.isAppointmentUpcoming(it) }
+                    
+                    // Sort to find the nearest upcoming appointment
+                    val nearestAppointment = upcomingAppointments.minByOrNull {
+                        AppointmentUtils.getAppointmentDateTime(it)?.time ?: Long.MAX_VALUE
+                    }
+                    _upcomingAppointment.value = nearestAppointment
+                }
             }
         }
     }
