@@ -37,7 +37,7 @@ class AppointmentAdapter(
             // Status chip styling
             val (bgRes, textRes, label) = when (appointment.status) {
                 AppointmentStatus.PENDING -> Triple(R.color.status_pending_bg, R.color.status_pending, "Pending")
-                AppointmentStatus.CONFIRMED -> Triple(R.color.status_confirmed_bg, R.color.status_confirmed, "Confirmed")
+                AppointmentStatus.ACCEPTED -> Triple(R.color.status_confirmed_bg, R.color.status_confirmed, "Accepted")
                 AppointmentStatus.COMPLETED -> Triple(R.color.status_completed_bg, R.color.status_completed, "Completed")
                 AppointmentStatus.CANCELLED -> Triple(R.color.status_cancelled_bg, R.color.status_cancelled, "Cancelled")
                 AppointmentStatus.REJECTED -> Triple(R.color.status_rejected_bg, R.color.status_rejected, "Rejected")
@@ -50,7 +50,7 @@ class AppointmentAdapter(
 
             // Show cancel button only for cancellable statuses
             val canCancel = appointment.status == AppointmentStatus.PENDING ||
-                    appointment.status == AppointmentStatus.CONFIRMED
+                    appointment.status == AppointmentStatus.ACCEPTED
             binding.cancelButton.visibility = if (canCancel) View.VISIBLE else View.GONE
             binding.cancelButton.setOnClickListener { onCancelClick(appointment) }
         }

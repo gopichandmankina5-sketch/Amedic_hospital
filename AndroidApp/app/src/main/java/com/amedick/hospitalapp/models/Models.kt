@@ -14,6 +14,18 @@ data class User(
     val role: String? = null, // "patient", "doctor", "admin"
     val profileImage: String = "",
     val fcmToken: String = "",
+    
+    // Doctor specific fields
+    val specialization: String = "",
+    val hospital: String = "",
+    val qualification: String = "",
+    val experience: Int = 0,
+    val consultationFee: Double = 0.0,
+    val location: String = "",
+    val about: String = "",
+    val rating: Float = 0f,
+    val available: Boolean = true,
+    
     @ServerTimestamp val createdAt: Date? = null
 )
 
@@ -26,11 +38,14 @@ data class Doctor(
     val qualification: String = "",
     val about: String = "",
     val experience: Int = 0,
+    val consultationFee: Double = 0.0,
+    val location: String = "",
     val rating: Float = 0f,
     val image: String = "",
     val email: String = "",
     val phone: String = "",
     val available: Boolean = true,
+    val role: String = "doctor",
     @ServerTimestamp val createdAt: Date? = null
 ) : Parcelable
 
@@ -44,15 +59,17 @@ data class Appointment(
     val time: String = "",
     val reason: String = "",
     val status: String = AppointmentStatus.PENDING,
+    val patientMessage: String = "",
+    val rejectionReason: String = "",
     @ServerTimestamp val createdAt: Date? = null
 )
 
 object AppointmentStatus {
-    const val PENDING = "PENDING"
-    const val CONFIRMED = "CONFIRMED"
-    const val COMPLETED = "COMPLETED"
-    const val CANCELLED = "CANCELLED"
-    const val REJECTED = "REJECTED"
+    const val PENDING = "pending"
+    const val ACCEPTED = "accepted"
+    const val REJECTED = "rejected"
+    const val COMPLETED = "completed"
+    const val CANCELLED = "cancelled"
 }
 
 data class Notification(

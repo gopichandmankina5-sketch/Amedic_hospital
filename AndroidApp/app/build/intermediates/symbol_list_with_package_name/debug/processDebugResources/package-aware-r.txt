@@ -3349,6 +3349,7 @@ id TOP_END
 id TOP_START
 id above
 id accelerate
+id acceptButton
 id accessibility_action_clickable_span
 id accessibility_custom_action_0
 id accessibility_custom_action_1
@@ -3382,6 +3383,7 @@ id accessibility_custom_action_6
 id accessibility_custom_action_7
 id accessibility_custom_action_8
 id accessibility_custom_action_9
+id actionButtonsContainer
 id actionDown
 id actionDownUp
 id actionUp
@@ -3456,6 +3458,8 @@ id cache_measures
 id callMeasure
 id cancelButton
 id cancel_button
+id cardDoctor
+id cardPatient
 id carryVelocity
 id center
 id centerCrop
@@ -3524,6 +3528,7 @@ id disjoint
 id doctorAbout
 id doctorEmail
 id doctorExperience
+id doctorFieldsContainer
 id doctorHospital
 id doctorImage
 id doctorName
@@ -3566,7 +3571,11 @@ id escape
 id exitUntilCollapsed
 id expand_activities_button
 id expanded_menu
+id experienceInput
+id experienceInputLayout
 id fade
+id feeInput
+id feeInputLayout
 id fill
 id fill_horizontal
 id fill_vertical
@@ -3604,6 +3613,8 @@ id homeMenu
 id honorRequest
 id horizontal
 id horizontal_only
+id hospitalInput
+id hospitalInputLayout
 id icon
 id icon_frame
 id icon_group
@@ -3635,6 +3646,8 @@ id linear
 id listMode
 id list_item
 id locale
+id locationInput
+id locationInputLayout
 id loginButton
 id loginRedirect
 id logoutButton
@@ -3755,6 +3768,7 @@ id passwordInputLayout
 id password_toggle
 id path
 id pathRelative
+id patientNameText
 id peekHeight
 id percent
 id phoneInput
@@ -3774,6 +3788,8 @@ id profileMenu
 id progressBar
 id progress_circular
 id progress_horizontal
+id qualificationInput
+id qualificationInputLayout
 id radio
 id ratio
 id reasonInput
@@ -3783,6 +3799,7 @@ id rectangles
 id recycler_view
 id registerButton
 id registerRedirect
+id rejectButton
 id report_drawn
 id reverseSawtooth
 id right
@@ -3792,6 +3809,7 @@ id right_side
 id rounded
 id row_index_key
 id rtl
+id rvAppointments
 id save_non_transition_alpha
 id save_overlay_view
 id sawtooth
@@ -3839,6 +3857,8 @@ id snapMargins
 id south
 id spacer
 id special_effects_controller_view_tag
+id specializationInput
+id specializationInputLayout
 id specializationText
 id spinner
 id splashContent
@@ -3922,6 +3942,11 @@ id transition_position
 id transition_scene_layoutid_cache
 id transition_transform
 id triangle
+id tvAcceptedAppointments
+id tvDate
+id tvEmptyState
+id tvPendingAppointments
+id tvTotalAppointments
 id tvWelcomeMessage
 id unchecked
 id uniform
@@ -4110,6 +4135,7 @@ layout ime_base_split_test_activity
 layout ime_secondary_split_test_activity
 layout item_appointment
 layout item_doctor
+layout item_doctor_appointment
 layout m3_alert_dialog
 layout m3_alert_dialog_actions
 layout m3_alert_dialog_title

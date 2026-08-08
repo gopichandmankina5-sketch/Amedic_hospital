@@ -43,7 +43,7 @@ class AppointmentHistoryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         appointmentAdapter = AppointmentAdapter(emptyList()) { appointment ->
-            if (appointment.status == AppointmentStatus.PENDING || appointment.status == AppointmentStatus.CONFIRMED) {
+            if (appointment.status == AppointmentStatus.PENDING || appointment.status == AppointmentStatus.ACCEPTED) {
                 showCancelDialog(appointment.appointmentId)
             }
         }

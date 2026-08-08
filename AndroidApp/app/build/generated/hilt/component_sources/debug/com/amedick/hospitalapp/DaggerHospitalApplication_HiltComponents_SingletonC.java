@@ -483,6 +483,7 @@ public final class DaggerHospitalApplication_HiltComponents_SingletonC {
     private DoctorDashboardActivity injectDoctorDashboardActivity2(
         DoctorDashboardActivity instance) {
       DoctorDashboardActivity_MembersInjector.injectAuthRepository(instance, singletonCImpl.authRepositoryProvider.get());
+      DoctorDashboardActivity_MembersInjector.injectFirestoreRepository(instance, singletonCImpl.firestoreRepositoryProvider.get());
       return instance;
     }
   }

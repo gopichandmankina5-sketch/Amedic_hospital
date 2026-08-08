@@ -1,11 +1,15 @@
 [
     {
+        "merged": "com.amedick.hospitalapp-mergeDebugResources-70:/layout/activity_book_appointment.xml",
+        "source": "com.amedick.hospitalapp-main-73:/layout/activity_book_appointment.xml"
+    },
+    {
         "merged": "com.amedick.hospitalapp-mergeDebugResources-70:/layout/activity_splash.xml",
         "source": "com.amedick.hospitalapp-main-73:/layout/activity_splash.xml"
     },
     {
-        "merged": "com.amedick.hospitalapp-mergeDebugResources-70:/layout/activity_book_appointment.xml",
-        "source": "com.amedick.hospitalapp-main-73:/layout/activity_book_appointment.xml"
+        "merged": "com.amedick.hospitalapp-mergeDebugResources-70:/layout/item_doctor_appointment.xml",
+        "source": "com.amedick.hospitalapp-main-73:/layout/item_doctor_appointment.xml"
     },
     {
         "merged": "com.amedick.hospitalapp-mergeDebugResources-70:/layout/activity_doctor_details.xml",

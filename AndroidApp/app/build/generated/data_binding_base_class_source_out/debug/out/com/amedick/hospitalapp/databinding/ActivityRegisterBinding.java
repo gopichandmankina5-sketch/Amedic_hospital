@@ -4,6 +4,7 @@ package com.amedick.hospitalapp.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.amedick.hospitalapp.R;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -25,16 +27,49 @@ public final class ActivityRegisterBinding implements ViewBinding {
   private final ScrollView rootView;
 
   @NonNull
+  public final MaterialCardView cardDoctor;
+
+  @NonNull
+  public final MaterialCardView cardPatient;
+
+  @NonNull
   public final TextInputEditText confirmPasswordInput;
 
   @NonNull
   public final TextInputLayout confirmPasswordInputLayout;
 
   @NonNull
+  public final LinearLayout doctorFieldsContainer;
+
+  @NonNull
   public final TextInputEditText emailInput;
 
   @NonNull
   public final TextInputLayout emailInputLayout;
+
+  @NonNull
+  public final TextInputEditText experienceInput;
+
+  @NonNull
+  public final TextInputLayout experienceInputLayout;
+
+  @NonNull
+  public final TextInputEditText feeInput;
+
+  @NonNull
+  public final TextInputLayout feeInputLayout;
+
+  @NonNull
+  public final TextInputEditText hospitalInput;
+
+  @NonNull
+  public final TextInputLayout hospitalInputLayout;
+
+  @NonNull
+  public final TextInputEditText locationInput;
+
+  @NonNull
+  public final TextInputLayout locationInputLayout;
 
   @NonNull
   public final TextView loginRedirect;
@@ -61,25 +96,56 @@ public final class ActivityRegisterBinding implements ViewBinding {
   public final ProgressBar progressBar;
 
   @NonNull
+  public final TextInputEditText qualificationInput;
+
+  @NonNull
+  public final TextInputLayout qualificationInputLayout;
+
+  @NonNull
   public final MaterialButton registerButton;
+
+  @NonNull
+  public final TextInputEditText specializationInput;
+
+  @NonNull
+  public final TextInputLayout specializationInputLayout;
 
   @NonNull
   public final MaterialCheckBox termsCheckbox;
 
   private ActivityRegisterBinding(@NonNull ScrollView rootView,
+      @NonNull MaterialCardView cardDoctor, @NonNull MaterialCardView cardPatient,
       @NonNull TextInputEditText confirmPasswordInput,
-      @NonNull TextInputLayout confirmPasswordInputLayout, @NonNull TextInputEditText emailInput,
-      @NonNull TextInputLayout emailInputLayout, @NonNull TextView loginRedirect,
+      @NonNull TextInputLayout confirmPasswordInputLayout,
+      @NonNull LinearLayout doctorFieldsContainer, @NonNull TextInputEditText emailInput,
+      @NonNull TextInputLayout emailInputLayout, @NonNull TextInputEditText experienceInput,
+      @NonNull TextInputLayout experienceInputLayout, @NonNull TextInputEditText feeInput,
+      @NonNull TextInputLayout feeInputLayout, @NonNull TextInputEditText hospitalInput,
+      @NonNull TextInputLayout hospitalInputLayout, @NonNull TextInputEditText locationInput,
+      @NonNull TextInputLayout locationInputLayout, @NonNull TextView loginRedirect,
       @NonNull TextInputEditText nameInput, @NonNull TextInputLayout nameInputLayout,
       @NonNull TextInputEditText passwordInput, @NonNull TextInputLayout passwordInputLayout,
       @NonNull TextInputEditText phoneInput, @NonNull TextInputLayout phoneInputLayout,
-      @NonNull ProgressBar progressBar, @NonNull MaterialButton registerButton,
-      @NonNull MaterialCheckBox termsCheckbox) {
+      @NonNull ProgressBar progressBar, @NonNull TextInputEditText qualificationInput,
+      @NonNull TextInputLayout qualificationInputLayout, @NonNull MaterialButton registerButton,
+      @NonNull TextInputEditText specializationInput,
+      @NonNull TextInputLayout specializationInputLayout, @NonNull MaterialCheckBox termsCheckbox) {
     this.rootView = rootView;
+    this.cardDoctor = cardDoctor;
+    this.cardPatient = cardPatient;
     this.confirmPasswordInput = confirmPasswordInput;
     this.confirmPasswordInputLayout = confirmPasswordInputLayout;
+    this.doctorFieldsContainer = doctorFieldsContainer;
     this.emailInput = emailInput;
     this.emailInputLayout = emailInputLayout;
+    this.experienceInput = experienceInput;
+    this.experienceInputLayout = experienceInputLayout;
+    this.feeInput = feeInput;
+    this.feeInputLayout = feeInputLayout;
+    this.hospitalInput = hospitalInput;
+    this.hospitalInputLayout = hospitalInputLayout;
+    this.locationInput = locationInput;
+    this.locationInputLayout = locationInputLayout;
     this.loginRedirect = loginRedirect;
     this.nameInput = nameInput;
     this.nameInputLayout = nameInputLayout;
@@ -88,7 +154,11 @@ public final class ActivityRegisterBinding implements ViewBinding {
     this.phoneInput = phoneInput;
     this.phoneInputLayout = phoneInputLayout;
     this.progressBar = progressBar;
+    this.qualificationInput = qualificationInput;
+    this.qualificationInputLayout = qualificationInputLayout;
     this.registerButton = registerButton;
+    this.specializationInput = specializationInput;
+    this.specializationInputLayout = specializationInputLayout;
     this.termsCheckbox = termsCheckbox;
   }
 
@@ -119,6 +189,18 @@ public final class ActivityRegisterBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.cardDoctor;
+      MaterialCardView cardDoctor = ViewBindings.findChildViewById(rootView, id);
+      if (cardDoctor == null) {
+        break missingId;
+      }
+
+      id = R.id.cardPatient;
+      MaterialCardView cardPatient = ViewBindings.findChildViewById(rootView, id);
+      if (cardPatient == null) {
+        break missingId;
+      }
+
       id = R.id.confirmPasswordInput;
       TextInputEditText confirmPasswordInput = ViewBindings.findChildViewById(rootView, id);
       if (confirmPasswordInput == null) {
@@ -131,6 +213,12 @@ public final class ActivityRegisterBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.doctorFieldsContainer;
+      LinearLayout doctorFieldsContainer = ViewBindings.findChildViewById(rootView, id);
+      if (doctorFieldsContainer == null) {
+        break missingId;
+      }
+
       id = R.id.emailInput;
       TextInputEditText emailInput = ViewBindings.findChildViewById(rootView, id);
       if (emailInput == null) {
@@ -140,6 +228,54 @@ public final class ActivityRegisterBinding implements ViewBinding {
       id = R.id.emailInputLayout;
       TextInputLayout emailInputLayout = ViewBindings.findChildViewById(rootView, id);
       if (emailInputLayout == null) {
+        break missingId;
+      }
+
+      id = R.id.experienceInput;
+      TextInputEditText experienceInput = ViewBindings.findChildViewById(rootView, id);
+      if (experienceInput == null) {
+        break missingId;
+      }
+
+      id = R.id.experienceInputLayout;
+      TextInputLayout experienceInputLayout = ViewBindings.findChildViewById(rootView, id);
+      if (experienceInputLayout == null) {
+        break missingId;
+      }
+
+      id = R.id.feeInput;
+      TextInputEditText feeInput = ViewBindings.findChildViewById(rootView, id);
+      if (feeInput == null) {
+        break missingId;
+      }
+
+      id = R.id.feeInputLayout;
+      TextInputLayout feeInputLayout = ViewBindings.findChildViewById(rootView, id);
+      if (feeInputLayout == null) {
+        break missingId;
+      }
+
+      id = R.id.hospitalInput;
+      TextInputEditText hospitalInput = ViewBindings.findChildViewById(rootView, id);
+      if (hospitalInput == null) {
+        break missingId;
+      }
+
+      id = R.id.hospitalInputLayout;
+      TextInputLayout hospitalInputLayout = ViewBindings.findChildViewById(rootView, id);
+      if (hospitalInputLayout == null) {
+        break missingId;
+      }
+
+      id = R.id.locationInput;
+      TextInputEditText locationInput = ViewBindings.findChildViewById(rootView, id);
+      if (locationInput == null) {
+        break missingId;
+      }
+
+      id = R.id.locationInputLayout;
+      TextInputLayout locationInputLayout = ViewBindings.findChildViewById(rootView, id);
+      if (locationInputLayout == null) {
         break missingId;
       }
 
@@ -191,9 +327,33 @@ public final class ActivityRegisterBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.qualificationInput;
+      TextInputEditText qualificationInput = ViewBindings.findChildViewById(rootView, id);
+      if (qualificationInput == null) {
+        break missingId;
+      }
+
+      id = R.id.qualificationInputLayout;
+      TextInputLayout qualificationInputLayout = ViewBindings.findChildViewById(rootView, id);
+      if (qualificationInputLayout == null) {
+        break missingId;
+      }
+
       id = R.id.registerButton;
       MaterialButton registerButton = ViewBindings.findChildViewById(rootView, id);
       if (registerButton == null) {
+        break missingId;
+      }
+
+      id = R.id.specializationInput;
+      TextInputEditText specializationInput = ViewBindings.findChildViewById(rootView, id);
+      if (specializationInput == null) {
+        break missingId;
+      }
+
+      id = R.id.specializationInputLayout;
+      TextInputLayout specializationInputLayout = ViewBindings.findChildViewById(rootView, id);
+      if (specializationInputLayout == null) {
         break missingId;
       }
 
@@ -203,10 +363,13 @@ public final class ActivityRegisterBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityRegisterBinding((ScrollView) rootView, confirmPasswordInput,
-          confirmPasswordInputLayout, emailInput, emailInputLayout, loginRedirect, nameInput,
-          nameInputLayout, passwordInput, passwordInputLayout, phoneInput, phoneInputLayout,
-          progressBar, registerButton, termsCheckbox);
+      return new ActivityRegisterBinding((ScrollView) rootView, cardDoctor, cardPatient,
+          confirmPasswordInput, confirmPasswordInputLayout, doctorFieldsContainer, emailInput,
+          emailInputLayout, experienceInput, experienceInputLayout, feeInput, feeInputLayout,
+          hospitalInput, hospitalInputLayout, locationInput, locationInputLayout, loginRedirect,
+          nameInput, nameInputLayout, passwordInput, passwordInputLayout, phoneInput,
+          phoneInputLayout, progressBar, qualificationInput, qualificationInputLayout,
+          registerButton, specializationInput, specializationInputLayout, termsCheckbox);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

@@ -24,26 +24,18 @@ class FirestoreRepository @Inject constructor(
     // ── Doctors ──────────────────────────────────────────────────────────────
 
     suspend fun getDoctors(): Result<List<Doctor>> = try {
-        val snapshot = firestore.collection("Doctors").get().await()
+        val snapshot = firestore.collection("Users")
+            .whereEqualTo("role", "doctor")
+            .get().await()
         Result.success(snapshot.toObjects(Doctor::class.java))
     } catch (e: Exception) {
         Result.failure(e)
     }
 
     suspend fun getDoctorById(doctorId: String): Result<Doctor> = try {
-        val doc = firestore.collection("Doctors").document(doctorId).get().await()
+        val doc = firestore.collection("Users").document(doctorId).get().await()
         val doctor = doc.toObject(Doctor::class.java) ?: throw Exception("Doctor not found")
         Result.success(doctor)
-    } catch (e: Exception) {
-        Result.failure(e)
-    }
-
-    suspend fun saveDoctor(doctor: Doctor): Result<Doctor> = try {
-        val reference = if (doctor.doctorId.isBlank()) firestore.collection("Doctors").document()
-        else firestore.collection("Doctors").document(doctor.doctorId)
-        val savedDoctor = doctor.copy(doctorId = reference.id)
-        reference.set(savedDoctor).await()
-        Result.success(savedDoctor)
     } catch (e: Exception) {
         Result.failure(e)
     }

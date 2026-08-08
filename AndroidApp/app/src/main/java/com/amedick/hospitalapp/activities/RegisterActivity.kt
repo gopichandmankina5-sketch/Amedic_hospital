@@ -20,20 +20,33 @@ class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
     private val viewModel: RegisterViewModel by viewModels()
+    private var selectedRole = "patient"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        
+        setupRoleSelector()
 
         binding.registerButton.setOnClickListener {
             if (validateInputs()) {
                 setLoading(true)
+                val exp = binding.experienceInput.text.toString().toIntOrNull() ?: 0
+                val fee = binding.feeInput.text.toString().toDoubleOrNull() ?: 0.0
+                
                 viewModel.register(
                     name = binding.nameInput.text.toString().trim(),
                     email = binding.emailInput.text.toString().trim(),
                     phone = binding.phoneInput.text.toString().trim(),
-                    password = binding.passwordInput.text.toString()
+                    password = binding.passwordInput.text.toString(),
+                    role = selectedRole,
+                    specialization = binding.specializationInput.text.toString().trim(),
+                    qualification = binding.qualificationInput.text.toString().trim(),
+                    experience = exp,
+                    consultationFee = fee,
+                    hospital = binding.hospitalInput.text.toString().trim(),
+                    location = binding.locationInput.text.toString().trim()
                 )
             }
         }
@@ -69,6 +82,47 @@ class RegisterActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+    }
+    
+    private fun setupRoleSelector() {
+        binding.cardPatient.setOnClickListener {
+            selectedRole = "patient"
+            updateRoleUI()
+        }
+        binding.cardDoctor.setOnClickListener {
+            selectedRole = "doctor"
+            updateRoleUI()
+        }
+        updateRoleUI()
+    }
+    
+    private fun updateRoleUI() {
+        val primaryColor = getColor(com.amedick.hospitalapp.R.color.color_primary)
+        val outlineColor = getColor(com.amedick.hospitalapp.R.color.color_outline)
+        val surfaceColor = getColor(com.amedick.hospitalapp.R.color.color_surface)
+        val primaryLightColor = getColor(com.amedick.hospitalapp.R.color.color_primary_light)
+
+        if (selectedRole == "patient") {
+            binding.cardPatient.strokeWidth = 4
+            binding.cardPatient.strokeColor = primaryColor
+            binding.cardPatient.setCardBackgroundColor(primaryLightColor)
+            
+            binding.cardDoctor.strokeWidth = 2
+            binding.cardDoctor.strokeColor = outlineColor
+            binding.cardDoctor.setCardBackgroundColor(surfaceColor)
+            
+            binding.doctorFieldsContainer.visibility = View.GONE
+        } else {
+            binding.cardDoctor.strokeWidth = 4
+            binding.cardDoctor.strokeColor = primaryColor
+            binding.cardDoctor.setCardBackgroundColor(primaryLightColor)
+            
+            binding.cardPatient.strokeWidth = 2
+            binding.cardPatient.strokeColor = outlineColor
+            binding.cardPatient.setCardBackgroundColor(surfaceColor)
+            
+            binding.doctorFieldsContainer.visibility = View.VISIBLE
         }
     }
 
@@ -122,6 +176,45 @@ class RegisterActivity : AppCompatActivity() {
         if (!termsAccepted) {
             Toast.makeText(this, "Please accept the Terms and Conditions to continue.", Toast.LENGTH_SHORT).show()
             valid = false
+        }
+        
+        if (selectedRole == "doctor") {
+            if (binding.specializationInput.text.toString().trim().isEmpty()) {
+                binding.specializationInputLayout.error = "Required"
+                valid = false
+            } else {
+                binding.specializationInputLayout.error = null
+            }
+            if (binding.qualificationInput.text.toString().trim().isEmpty()) {
+                binding.qualificationInputLayout.error = "Required"
+                valid = false
+            } else {
+                binding.qualificationInputLayout.error = null
+            }
+            if (binding.experienceInput.text.toString().trim().isEmpty()) {
+                binding.experienceInputLayout.error = "Required"
+                valid = false
+            } else {
+                binding.experienceInputLayout.error = null
+            }
+            if (binding.hospitalInput.text.toString().trim().isEmpty()) {
+                binding.hospitalInputLayout.error = "Required"
+                valid = false
+            } else {
+                binding.hospitalInputLayout.error = null
+            }
+            if (binding.locationInput.text.toString().trim().isEmpty()) {
+                binding.locationInputLayout.error = "Required"
+                valid = false
+            } else {
+                binding.locationInputLayout.error = null
+            }
+            if (binding.feeInput.text.toString().trim().isEmpty()) {
+                binding.feeInputLayout.error = "Required"
+                valid = false
+            } else {
+                binding.feeInputLayout.error = null
+            }
         }
 
         return valid

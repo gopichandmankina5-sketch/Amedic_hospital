@@ -159,7 +159,7 @@ class HomeFragment : Fragment() {
         binding.upcomingStatus.text = appt.status.lowercase().replaceFirstChar { it.uppercase() }
 
         val (chipBgRes, chipTextRes) = when (appt.status) {
-            AppointmentStatus.CONFIRMED -> Pair(
+            AppointmentStatus.ACCEPTED -> Pair(
                 com.amedick.hospitalapp.R.color.status_confirmed_bg,
                 com.amedick.hospitalapp.R.color.status_confirmed
             )

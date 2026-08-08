@@ -73,6 +73,94 @@
                 android:orientation="vertical"
                 android:padding="24dp">
 
+                <!-- Role Selector -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Register as"
+                    android:textColor="@color/color_text_secondary"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="8dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="24dp">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardPatient"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:strokeWidth="2dp"
+                        app:strokeColor="@color/color_primary"
+                        app:cardBackgroundColor="@color/color_primary_light"
+                        app:cardElevation="2dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="16dp">
+
+                            <ImageView
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:src="@drawable/ic_user"
+                                app:tint="@color/color_primary" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Patient"
+                                android:textStyle="bold"
+                                android:textColor="@color/color_primary"
+                                android:layout_marginTop="8dp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardDoctor"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="@color/color_outline"
+                        app:cardBackgroundColor="@color/color_surface"
+                        app:cardElevation="0dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="16dp">
+
+                            <ImageView
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:src="@drawable/ic_hospital"
+                                app:tint="@color/color_text_secondary" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Doctor"
+                                android:textStyle="bold"
+                                android:textColor="@color/color_text_secondary"
+                                android:layout_marginTop="8dp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+
                 <!-- Full Name -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/nameInputLayout"
@@ -159,8 +247,118 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPassword"
-                        android:imeOptions="actionDone" />
+                        android:imeOptions="actionNext" />
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Doctor Specific Fields Container -->
+                <LinearLayout
+                    android:id="@+id/doctorFieldsContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Professional Details"
+                        android:textColor="@color/color_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginBottom="8dp" />
+
+                    <!-- Specialization -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/specializationInputLayout"
+                        style="@style/Widget.AmedicK.TextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Specialization (e.g. Cardiologist)">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/specializationInput"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Qualification -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/qualificationInputLayout"
+                        style="@style/Widget.AmedicK.TextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:hint="Qualification (e.g. MBBS, MD)">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/qualificationInput"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Experience -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/experienceInputLayout"
+                        style="@style/Widget.AmedicK.TextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:hint="Years of Experience">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/experienceInput"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                    
+                    <!-- Consultation Fee -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/feeInputLayout"
+                        style="@style/Widget.AmedicK.TextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:hint="Consultation Fee (₹)">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/feeInput"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Hospital -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/hospitalInputLayout"
+                        style="@style/Widget.AmedicK.TextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:hint="Hospital / Clinic Name">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/hospitalInput"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Location -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/locationInputLayout"
+                        style="@style/Widget.AmedicK.TextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:hint="City / Location">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/locationInput"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:imeOptions="actionDone" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
 
                 <!-- Terms checkbox -->
                 <com.google.android.material.checkbox.MaterialCheckBox
