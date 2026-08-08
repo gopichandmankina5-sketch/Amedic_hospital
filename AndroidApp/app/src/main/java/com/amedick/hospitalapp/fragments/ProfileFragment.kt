@@ -69,7 +69,6 @@ class ProfileFragment : Fragment() {
         val currentState = viewModel.profileState.value
         val user = (currentState as? ProfileState.Loaded)?.user ?: return
 
-        val layout = layoutInflater.inflate(android.R.layout.simple_list_item_1, null)
         val container = android.widget.LinearLayout(requireContext()).apply {
             orientation = android.widget.LinearLayout.VERTICAL
             setPadding(48, 16, 48, 8)

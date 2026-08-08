@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="@color/color_surface">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_hospital"
+            app:tint="@color/color_primary"
+            android:background="@drawable/bg_circle_primary_light"
+            android:padding="12dp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="16dp">
+
+            <TextView
+                android:id="@+id/tvDocumentName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Blood Test Report"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/color_on_surface" />
+
+            <TextView
+                android:id="@+id/tvDocumentType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lab Report"
+                android:textSize="14sp"
+                android:textColor="@color/color_text_secondary"
+                android:layout_marginTop="2dp" />
+                
+            <TextView
+                android:id="@+id/tvUploadDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Uploaded: Aug 15, 2026"
+                android:textSize="12sp"
+                android:textColor="@color/color_text_secondary"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btnViewDocument"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_logout"
+            app:tint="@color/color_primary"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="View Document" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

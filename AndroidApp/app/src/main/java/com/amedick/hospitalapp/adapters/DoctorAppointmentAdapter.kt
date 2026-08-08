@@ -13,7 +13,9 @@ import com.amedick.hospitalapp.models.AppointmentStatus
 class DoctorAppointmentAdapter(
     private var appointments: List<Appointment>,
     private val onAcceptClick: (Appointment) -> Unit,
-    private val onRejectClick: (Appointment) -> Unit
+    private val onRejectClick: (Appointment) -> Unit,
+    private val onMarkCompletedClick: (Appointment) -> Unit,
+    private val onOpenChatClick: (Appointment) -> Unit
 ) : RecyclerView.Adapter<DoctorAppointmentAdapter.AppointmentViewHolder>() {
 
     inner class AppointmentViewHolder(private val binding: ItemDoctorAppointmentBinding) :
@@ -48,13 +50,22 @@ class DoctorAppointmentAdapter(
             binding.statusChip.setChipBackgroundColorResource(bgRes)
             binding.statusChip.setTextColor(ctx.getColor(textRes))
 
-            // Show action buttons only for pending appointments
+            // Show action buttons based on status
             if (appointment.status == AppointmentStatus.PENDING) {
                 binding.actionButtonsContainer.visibility = View.VISIBLE
+                binding.acceptedActionButtonsContainer.visibility = View.GONE
+                
                 binding.acceptButton.setOnClickListener { onAcceptClick(appointment) }
                 binding.rejectButton.setOnClickListener { onRejectClick(appointment) }
+            } else if (appointment.status == AppointmentStatus.ACCEPTED) {
+                binding.actionButtonsContainer.visibility = View.GONE
+                binding.acceptedActionButtonsContainer.visibility = View.VISIBLE
+                
+                binding.markCompletedButton.setOnClickListener { onMarkCompletedClick(appointment) }
+                binding.openChatButton.setOnClickListener { onOpenChatClick(appointment) }
             } else {
                 binding.actionButtonsContainer.visibility = View.GONE
+                binding.acceptedActionButtonsContainer.visibility = View.GONE
             }
         }
     }

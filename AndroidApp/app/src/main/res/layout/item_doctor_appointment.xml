@@ -121,7 +121,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="12dp"
-            android:gravity="end">
+            android:gravity="end"
+            android:visibility="gone">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/rejectButton"
@@ -140,6 +141,33 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Accept"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/acceptedActionButtonsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp"
+            android:gravity="end"
+            android:visibility="gone">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/openChatButton"
+                style="@style/Widget.AmedicK.Button.Outlined"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Open Chat"
+                android:layout_marginEnd="8dp"
+                android:textSize="13sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/markCompletedButton"
+                style="@style/Widget.AmedicK.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mark Completed"
                 android:textSize="13sp" />
         </LinearLayout>
     </LinearLayout>

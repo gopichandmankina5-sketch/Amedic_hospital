@@ -21,6 +21,10 @@ import kotlinx.coroutines.launch
 class DoctorDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDoctorDetailsBinding
+    private lateinit var reviewAdapter: com.amedick.hospitalapp.adapters.DoctorReviewAdapter
+
+    @javax.inject.Inject
+    lateinit var firestoreRepository: com.amedick.hospitalapp.firebase.FirestoreRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +56,34 @@ class DoctorDetailsActivity : AppCompatActivity() {
             Toast.makeText(this, "Doctor details unavailable", Toast.LENGTH_SHORT).show()
             finish()
         }
+
+        setupReviewsRecyclerView()
+        doctor?.doctorId?.let { loadReviews(it) }
+    }
+
+    private fun setupReviewsRecyclerView() {
+        reviewAdapter = com.amedick.hospitalapp.adapters.DoctorReviewAdapter(emptyList())
+        binding.rvReviews.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
+        binding.rvReviews.adapter = reviewAdapter
+    }
+
+    private fun loadReviews(doctorId: String) {
+        lifecycleScope.launch {
+            val result = firestoreRepository.getDoctorReviews(doctorId)
+            result.onSuccess { reviews ->
+                if (reviews.isEmpty()) {
+                    binding.tvNoReviews.visibility = View.VISIBLE
+                    binding.rvReviews.visibility = View.GONE
+                } else {
+                    binding.tvNoReviews.visibility = View.GONE
+                    binding.rvReviews.visibility = View.VISIBLE
+                    reviewAdapter.updateData(reviews)
+                }
+            }.onFailure {
+                binding.tvNoReviews.visibility = View.VISIBLE
+                binding.tvNoReviews.text = "Failed to load reviews."
+            }
+        }
     }
 
     private fun bindDoctor(doctor: Doctor) {
@@ -63,6 +95,13 @@ class DoctorDetailsActivity : AppCompatActivity() {
         binding.doctorEmail.text = doctor.email.ifEmpty { "Email not available" }
         binding.doctorQualification.text = doctor.qualification.ifEmpty { "Qualification not specified" }
         binding.doctorAbout.text = doctor.about.ifEmpty { "No additional information available." }
+
+        // Verification Badge
+        if (doctor.isVerified) {
+            binding.ivVerifiedBadge.visibility = View.VISIBLE
+        } else {
+            binding.ivVerifiedBadge.visibility = View.GONE
+        }
 
         // Availability chip
         if (doctor.available) {

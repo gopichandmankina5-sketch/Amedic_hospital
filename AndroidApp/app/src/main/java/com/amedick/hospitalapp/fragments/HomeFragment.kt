@@ -1,5 +1,6 @@
 package com.amedick.hospitalapp.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,9 +21,11 @@ import com.amedick.hospitalapp.models.Appointment
 import com.amedick.hospitalapp.models.AppointmentStatus
 import com.amedick.hospitalapp.viewmodel.HomeState
 import com.amedick.hospitalapp.viewmodel.HomeViewModel
+import com.amedick.hospitalapp.utils.HealthProblemMapping
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Calendar
+import android.widget.ArrayAdapter
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -48,7 +51,36 @@ class HomeFragment : Fragment() {
         setupRecyclerView()
         setupQuickActions()
         setupSearch()
+        setupHealthProblemDropdown()
         observeViewModel()
+    }
+
+    private fun setupHealthProblemDropdown() {
+        val problems = HealthProblemMapping.problemsList
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, problems)
+        binding.healthProblemDropdown.setAdapter(adapter)
+
+        binding.healthProblemDropdown.setOnItemClickListener { _, _, position, _ ->
+            val selectedProblem = problems[position]
+            val recommendedSpecialty = HealthProblemMapping.getRecommendedSpecialty(selectedProblem)
+            
+            binding.recommendedDoctorsTitle.text = "Recommended: $recommendedSpecialty"
+            
+            // Filter doctors by recommended specialty
+            val currentDoctors = (viewModel.doctorsState.value as? HomeState.DoctorsLoaded)?.doctors ?: emptyList()
+            val filtered = currentDoctors.filter { 
+                it.specialization.contains(recommendedSpecialty, ignoreCase = true)
+            }
+            
+            doctorAdapter.updateData(filtered)
+            
+            if (filtered.isEmpty()) {
+                binding.emptyState.visibility = View.VISIBLE
+                binding.emptyState.text = "No $recommendedSpecialty available currently"
+            } else {
+                binding.emptyState.visibility = View.GONE
+            }
+        }
     }
 
     private fun setupGreeting() {
@@ -83,6 +115,17 @@ class HomeFragment : Fragment() {
         }
         binding.seeAllDoctors.setOnClickListener {
             (activity as? MainActivity)?.navigateToDoctors()
+        }
+        binding.medicalProfileCard.setOnClickListener {
+            startActivity(Intent(requireContext(), com.amedick.hospitalapp.activities.MedicalProfileActivity::class.java))
+        }
+        
+        binding.documentsCard.setOnClickListener {
+            startActivity(Intent(requireContext(), com.amedick.hospitalapp.activities.MedicalDocumentsActivity::class.java))
+        }
+        
+        binding.notificationsCard.setOnClickListener {
+            startActivity(Intent(requireContext(), com.amedick.hospitalapp.activities.NotificationsActivity::class.java))
         }
     }
 

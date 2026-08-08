@@ -27,8 +27,13 @@ class DoctorDashboardActivity : AppCompatActivity() {
         binding = ActivityDoctorDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupRecyclerView()
-        loadDashboardData()
+        binding.btnAvailability.setOnClickListener {
+            startActivity(Intent(this, DoctorAvailabilityActivity::class.java))
+        }
+        
+        binding.btnNotifications.setOnClickListener {
+            startActivity(Intent(this, NotificationsActivity::class.java))
+        }
 
         binding.btnLogout.setOnClickListener {
             authRepository.logout()
@@ -36,6 +41,29 @@ class DoctorDashboardActivity : AppCompatActivity() {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             })
             finish()
+        }
+
+        setupRecyclerView()
+        loadDoctorDetails()
+        loadDashboardData()
+    }
+
+    private fun loadDoctorDetails() {
+        val doctorId = authRepository.getCurrentUserId() ?: return
+        lifecycleScope.launch {
+            val result = firestoreRepository.getDoctorDetails(doctorId)
+            result.onSuccess { doctor ->
+                binding.tvWelcomeMessage.text = "Welcome, Dr. ${doctor.name}"
+                
+                if (!doctor.isVerified) {
+                    binding.verificationBanner.visibility = android.view.View.VISIBLE
+                    if (doctor.verificationStatus == "REJECTED") {
+                        binding.tvVerificationStatus.text = "Your verification was rejected."
+                    }
+                } else {
+                    binding.verificationBanner.visibility = android.view.View.GONE
+                }
+            }
         }
     }
 
@@ -47,6 +75,24 @@ class DoctorDashboardActivity : AppCompatActivity() {
             },
             onRejectClick = { appt ->
                 updateAppointmentStatus(appt, com.amedick.hospitalapp.models.AppointmentStatus.REJECTED)
+            },
+            onMarkCompletedClick = { appt ->
+                androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle("Mark as Completed?")
+                    .setMessage("Mark this appointment as completed?")
+                    .setPositiveButton("Confirm") { _, _ ->
+                        updateAppointmentStatus(appt, com.amedick.hospitalapp.models.AppointmentStatus.COMPLETED)
+                    }
+                    .setNegativeButton("Cancel", null)
+                    .show()
+            },
+            onOpenChatClick = { appt ->
+                val intent = Intent(this, ChatActivity::class.java).apply {
+                    putExtra(ChatActivity.EXTRA_APPOINTMENT_ID, appt.appointmentId)
+                    putExtra(ChatActivity.EXTRA_OTHER_USER_ID, appt.patientId)
+                    putExtra(ChatActivity.EXTRA_OTHER_USER_NAME, appt.patientName)
+                }
+                startActivity(intent)
             }
         )
         binding.rvAppointments.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)

@@ -12,7 +12,9 @@ import com.amedick.hospitalapp.models.AppointmentStatus
 
 class AppointmentAdapter(
     private var appointments: List<Appointment>,
-    private val onCancelClick: (Appointment) -> Unit
+    private val onCancelClick: (Appointment) -> Unit,
+    private val onOpenChatClick: (Appointment) -> Unit,
+    private val onRateClick: (Appointment) -> Unit
 ) : RecyclerView.Adapter<AppointmentAdapter.AppointmentViewHolder>() {
 
     inner class AppointmentViewHolder(private val binding: ItemAppointmentBinding) :
@@ -48,11 +50,17 @@ class AppointmentAdapter(
             binding.statusChip.setChipBackgroundColorResource(bgRes)
             binding.statusChip.setTextColor(ctx.getColor(textRes))
 
-            // Show cancel button only for cancellable statuses
+            // Action Buttons
             val canCancel = appointment.status == AppointmentStatus.PENDING ||
                     appointment.status == AppointmentStatus.ACCEPTED
             binding.cancelButton.visibility = if (canCancel) View.VISIBLE else View.GONE
             binding.cancelButton.setOnClickListener { onCancelClick(appointment) }
+
+            binding.openChatButton.visibility = if (appointment.status == AppointmentStatus.ACCEPTED) View.VISIBLE else View.GONE
+            binding.openChatButton.setOnClickListener { onOpenChatClick(appointment) }
+
+            binding.rateButton.visibility = if (appointment.status == AppointmentStatus.COMPLETED) View.VISIBLE else View.GONE
+            binding.rateButton.setOnClickListener { onRateClick(appointment) }
         }
     }
 

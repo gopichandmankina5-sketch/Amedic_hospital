@@ -64,9 +64,51 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
+        <!-- Doctor Availability -->
+        <activity
+            android:name="com.amedick.hospitalapp.activities.DoctorAvailabilityActivity"
+            android:exported="false"
+            android:parentActivityName="com.amedick.hospitalapp.activities.DoctorDashboardActivity" />
+
+        <!-- Chat Activity -->
+        <activity
+            android:name="com.amedick.hospitalapp.activities.ChatActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Review Activity -->
+        <activity
+            android:name="com.amedick.hospitalapp.activities.ReviewActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
         <!-- Admin Dashboard -->
         <activity
             android:name="com.amedick.hospitalapp.activities.AdminDashboardActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Admin Verification Activity -->
+        <activity
+            android:name="com.amedick.hospitalapp.activities.AdminVerificationActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Medical Profile Activity -->
+        <activity
+            android:name="com.amedick.hospitalapp.activities.MedicalProfileActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Medical Documents Activity -->
+        <activity
+            android:name="com.amedick.hospitalapp.activities.MedicalDocumentsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Notifications Activity -->
+        <activity
+            android:name="com.amedick.hospitalapp.activities.NotificationsActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 

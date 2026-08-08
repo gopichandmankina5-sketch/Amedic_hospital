@@ -47,22 +47,30 @@ class DoctorListFragment : Fragment() {
             adapter = doctorAdapter
         }
 
-        // Search
-        binding.searchInput.addTextChangedListener { text ->
-            val query = text.toString().trim()
-            val allDoctors = (viewModel.doctorsState.value as? HomeState.DoctorsLoaded)?.doctors ?: emptyList()
-            val filtered = if (query.isEmpty()) allDoctors
-            else allDoctors.filter {
-                it.name.contains(query, ignoreCase = true) ||
-                it.specialization.contains(query, ignoreCase = true)
-            }
-            doctorAdapter.updateData(filtered)
-            binding.emptyStateLayout.visibility = if (filtered.isEmpty() && query.isNotEmpty()) View.VISIBLE else View.GONE
-            binding.doctorRecycler.visibility = if (filtered.isEmpty() && query.isNotEmpty()) View.GONE else View.VISIBLE
-        }
+        binding.searchInput.addTextChangedListener { applyFilters() }
+        binding.chipVerified.setOnCheckedChangeListener { _, _ -> applyFilters() }
 
         viewModel.loadDoctors()
         observeViewModel()
+    }
+
+    private fun applyFilters() {
+        val query = binding.searchInput.text.toString().trim()
+        val isVerifiedOnly = binding.chipVerified.isChecked
+        val allDoctors = (viewModel.doctorsState.value as? HomeState.DoctorsLoaded)?.doctors ?: emptyList()
+        
+        val filtered = allDoctors.filter { doctor ->
+            val matchesQuery = if (query.isEmpty()) true else {
+                doctor.name.contains(query, ignoreCase = true) ||
+                doctor.specialization.contains(query, ignoreCase = true)
+            }
+            val matchesVerified = if (isVerifiedOnly) doctor.isVerified else true
+            matchesQuery && matchesVerified
+        }
+        
+        doctorAdapter.updateData(filtered)
+        binding.emptyStateLayout.visibility = if (filtered.isEmpty()) View.VISIBLE else View.GONE
+        binding.doctorRecycler.visibility = if (filtered.isEmpty()) View.GONE else View.VISIBLE
     }
 
     private fun observeViewModel() {
@@ -84,14 +92,7 @@ class DoctorListFragment : Fragment() {
                         }
                         is HomeState.DoctorsLoaded -> {
                             binding.progressBar.visibility = View.GONE
-                            if (state.doctors.isEmpty()) {
-                                binding.emptyStateLayout.visibility = View.VISIBLE
-                                binding.doctorRecycler.visibility = View.GONE
-                            } else {
-                                binding.emptyStateLayout.visibility = View.GONE
-                                binding.doctorRecycler.visibility = View.VISIBLE
-                            }
-                            doctorAdapter.updateData(state.doctors)
+                            applyFilters()
                         }
                     }
                 }

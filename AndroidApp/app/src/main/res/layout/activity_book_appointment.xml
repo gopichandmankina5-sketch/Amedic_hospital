@@ -151,25 +151,31 @@
                             android:inputType="none" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Time picker -->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/timeInputLayout"
-                        style="@style/Widget.AmedicK.TextInputLayout"
+                    <!-- Time Slots -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Available Time Slots"
+                        android:textStyle="bold"
+                        android:textColor="@color/color_on_surface"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="8dp"/>
+                        
+                    <TextView
+                        android:id="@+id/tvNoSlots"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:hint="@string/select_time"
-                        app:startIconDrawable="@drawable/ic_clock"
-                        app:endIconMode="custom"
-                        app:endIconDrawable="@drawable/ic_clock">
+                        android:text="Please select a date first"
+                        android:textColor="@color/color_text_secondary"
+                        android:gravity="center"
+                        android:padding="16dp" />
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/timeInput"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:focusable="false"
-                            android:inputType="none" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvTimeSlots"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"
+                        android:visibility="gone"/>
 
                     <!-- Reason -->
                     <com.google.android.material.textfield.TextInputLayout

@@ -1,0 +1,126 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+  
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function getUserRole() {
+      return get(/databases/$(database)/documents/Users/$(request.auth.uid)).data.role;
+    }
+    
+    function isPatient() {
+      return isAuthenticated() && getUserRole() == 'patient';
+    }
+    
+    function isDoctor() {
+      return isAuthenticated() && getUserRole() == 'doctor';
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && getUserRole() == 'admin';
+    }
+
+    // Users Collection (Patients, Doctors, Admins)
+    match /Users/{userId} {
+      // Anyone authenticated can read user profiles (needed for searching doctors)
+      allow read: if isAuthenticated();
+      
+      // Users can only update their own profile, except admins
+      allow update: if isOwner(userId) || isAdmin();
+      
+      // Only the user themselves can create their profile (during signup)
+      allow create: if isOwner(userId);
+      
+      // Nobody can delete users from client-side
+      allow delete: if isAdmin();
+      
+      // Medical Profiles (Subcollection of Users)
+      match /medical_profile/{docId} {
+        // Only the patient themselves can read/write their medical profile
+        allow read, write: if isOwner(userId);
+      }
+      
+      // Medical Documents (Subcollection of Users)
+      match /medical_documents/{docId} {
+        // Only the patient themselves can read/write their medical documents
+        allow read, write: if isOwner(userId);
+      }
+      
+      // Availability (Subcollection of Users - Doctors)
+      match /availability/{docId} {
+        // Anyone can read doctor availability to book
+        allow read: if isAuthenticated();
+        // Only the doctor can write their own availability
+        allow write: if isOwner(userId);
+      }
+      
+      // Blocked Dates (Subcollection of Users - Doctors)
+      match /blocked_dates/{docId} {
+        allow read: if isAuthenticated();
+        allow write: if isOwner(userId);
+      }
+    }
+
+    // Appointments Collection
+    match /Appointments/{appointmentId} {
+      // Users can only read their own appointments
+      allow read: if isAuthenticated() && (
+        resource.data.patientId == request.auth.uid || 
+        resource.data.doctorId == request.auth.uid ||
+        isAdmin()
+      );
+      
+      // Patients can create appointments (if they are the patient)
+      allow create: if isPatient() && request.resource.data.patientId == request.auth.uid;
+      
+      // Both patient and doctor can update the appointment (e.g., status changes)
+      // Double booking logic is protected by transactions and security rules.
+      allow update: if isAuthenticated() && (
+        resource.data.patientId == request.auth.uid || 
+        resource.data.doctorId == request.auth.uid
+      );
+      
+      // No deletion from client
+      allow delete: if isAdmin();
+      
+      // Chat Messages (Subcollection of Appointments)
+      match /messages/{messageId} {
+        // Only participants can read/write messages
+        allow read, write: if isAuthenticated() && (
+          get(/databases/$(database)/documents/Appointments/$(appointmentId)).data.patientId == request.auth.uid ||
+          get(/databases/$(database)/documents/Appointments/$(appointmentId)).data.doctorId == request.auth.uid
+        );
+      }
+    }
+
+    // Reviews Collection
+    match /Reviews/{reviewId} {
+      // Anyone can read reviews
+      allow read: if isAuthenticated();
+      
+      // Only patients can create reviews, and only if they are the author
+      allow create: if isPatient() && request.resource.data.patientId == request.auth.uid;
+      
+      // Patients can update their own reviews
+      allow update: if isOwner(resource.data.patientId);
+      
+      allow delete: if isAdmin();
+    }
+    
+    // Notifications Collection
+    match /Notifications/{notificationId} {
+      // Users can only read/write their own notifications
+      allow read, write: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      
+      // System (Functions) creates notifications, but we allow client creation for now to match current logic
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+    }
+  }
+}

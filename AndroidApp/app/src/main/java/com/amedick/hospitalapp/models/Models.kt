@@ -24,7 +24,14 @@ data class User(
     val location: String = "",
     val about: String = "",
     val rating: Float = 0f,
+    val reviewsCount: Int = 0,
+    val isVerified: Boolean = false,
     val available: Boolean = true,
+    
+    // Phase 5 Additions
+    val medicalRegistrationNumber: String = "",
+    val verificationStatus: String = "PENDING", // PENDING, VERIFIED, REJECTED
+    val verificationDate: Long = 0L,
     
     @ServerTimestamp val createdAt: Date? = null
 )
@@ -41,11 +48,19 @@ data class Doctor(
     val consultationFee: Double = 0.0,
     val location: String = "",
     val rating: Float = 0f,
+    val reviewsCount: Int = 0,
     val image: String = "",
     val email: String = "",
     val phone: String = "",
     val available: Boolean = true,
+    val isVerified: Boolean = false,
     val role: String = "doctor",
+    
+    // Phase 5 Additions
+    val medicalRegistrationNumber: String = "",
+    val verificationStatus: String = "PENDING",
+    val verificationDate: Long = 0L,
+    
     @ServerTimestamp val createdAt: Date? = null
 ) : Parcelable
 
@@ -61,6 +76,7 @@ data class Appointment(
     val status: String = AppointmentStatus.PENDING,
     val patientMessage: String = "",
     val rejectionReason: String = "",
+    val documents: List<String> = emptyList(),
     @ServerTimestamp val createdAt: Date? = null
 )
 
@@ -80,4 +96,54 @@ data class Notification(
     val type: String = "",
     val isRead: Boolean = false,
     val createdAt: Long = 0L
+)
+
+data class Availability(
+    @DocumentId val doctorId: String = "",
+    // Map of day of week (e.g. "Monday") to list of time slots (e.g. "09:00 AM - 09:30 AM")
+    val schedule: Map<String, List<String>> = emptyMap(),
+    // List of specific blocked dates (e.g. "2026-08-15")
+    val blockedDates: List<String> = emptyList(),
+    // Configurable slot duration in minutes
+    val slotDuration: Int = 30
+)
+
+data class ChatMessage(
+    @DocumentId val messageId: String = "",
+    val appointmentId: String = "",
+    val senderId: String = "",
+    val message: String = "",
+    val isRead: Boolean = false,
+    @ServerTimestamp val timestamp: Date? = null
+)
+
+data class Review(
+    @DocumentId val reviewId: String = "",
+    val appointmentId: String = "",
+    val patientId: String = "",
+    val doctorId: String = "",
+    val rating: Float = 0f,
+    val feedback: String = "",
+    @ServerTimestamp val createdAt: Date? = null
+)
+
+// Phase 5 Models
+data class MedicalProfile(
+    @DocumentId val patientId: String = "",
+    val bloodGroup: String = "",
+    val allergies: String = "",
+    val currentMedications: String = "",
+    val medicalHistory: String = "",
+    val emergencyContactName: String = "",
+    val emergencyContactPhone: String = "",
+    @ServerTimestamp val updatedAt: Date? = null
+)
+
+data class MedicalDocument(
+    @DocumentId val documentId: String = "",
+    val patientId: String = "",
+    val name: String = "",
+    val type: String = "", // e.g., "Prescription", "Lab Report"
+    val url: String = "",
+    @ServerTimestamp val uploadedAt: Date? = null
 )

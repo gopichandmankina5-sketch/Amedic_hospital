@@ -42,11 +42,29 @@ class AppointmentHistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        appointmentAdapter = AppointmentAdapter(emptyList()) { appointment ->
-            if (appointment.status == AppointmentStatus.PENDING || appointment.status == AppointmentStatus.ACCEPTED) {
-                showCancelDialog(appointment.appointmentId)
+        appointmentAdapter = AppointmentAdapter(
+            appointments = emptyList(),
+            onCancelClick = { appointment ->
+                if (appointment.status == AppointmentStatus.PENDING || appointment.status == AppointmentStatus.ACCEPTED) {
+                    showCancelDialog(appointment.appointmentId)
+                }
+            },
+            onOpenChatClick = { appointment ->
+                val intent = android.content.Intent(requireContext(), com.amedick.hospitalapp.activities.ChatActivity::class.java).apply {
+                    putExtra(com.amedick.hospitalapp.activities.ChatActivity.EXTRA_APPOINTMENT_ID, appointment.appointmentId)
+                    putExtra(com.amedick.hospitalapp.activities.ChatActivity.EXTRA_OTHER_USER_ID, appointment.doctorId)
+                    putExtra(com.amedick.hospitalapp.activities.ChatActivity.EXTRA_OTHER_USER_NAME, "Dr. ${appointment.doctorName}")
+                }
+                startActivity(intent)
+            },
+            onRateClick = { appointment ->
+                val intent = android.content.Intent(requireContext(), com.amedick.hospitalapp.activities.ReviewActivity::class.java).apply {
+                    putExtra("appointmentId", appointment.appointmentId)
+                    putExtra("doctorId", appointment.doctorId)
+                }
+                startActivity(intent)
             }
-        }
+        )
 
         binding.appointmentRecycler.apply {
             layoutManager = LinearLayoutManager(requireContext())
