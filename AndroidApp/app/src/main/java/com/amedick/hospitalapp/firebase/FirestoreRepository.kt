@@ -425,13 +425,40 @@ class FirestoreRepository @Inject constructor(
         Result.failure(e)
     }
     
-    suspend fun verifyDoctor(doctorId: String, isVerified: Boolean, status: String): Result<Boolean> = try {
-        val updates = mapOf(
+    suspend fun verifyDoctor(doctorId: String, isVerified: Boolean, status: String, rejectionReason: String = ""): Result<Boolean> = try {
+        val updates = mutableMapOf<String, Any>(
             "isVerified" to isVerified,
             "verificationStatus" to status,
             "verificationDate" to System.currentTimeMillis()
         )
+        if (!isVerified && rejectionReason.isNotEmpty()) {
+            updates["verificationRejectedReason"] = rejectionReason
+        } else {
+            updates["verificationRejectedReason"] = ""
+        }
         firestore.collection("Users").document(doctorId).update(updates).await()
+        Result.success(true)
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+
+    /**
+     * Doctor submits verification request.
+     * Sets verificationStatus to PENDING and notifies all admins.
+     */
+    suspend fun submitVerificationRequest(doctorId: String, doctorName: String): Result<Boolean> = try {
+        val updates = mapOf(
+            "verificationStatus" to "PENDING",
+            "verificationSubmittedAt" to System.currentTimeMillis()
+        )
+        firestore.collection("Users").document(doctorId).update(updates).await()
+        // Notify admins
+        createAdminNotification(
+            title = "New Verification Request",
+            message = "Dr. $doctorName has submitted documents for professional verification.",
+            type = "doctor_verification",
+            relatedId = doctorId
+        )
         Result.success(true)
     } catch (e: Exception) {
         Result.failure(e)
@@ -470,9 +497,16 @@ class FirestoreRepository @Inject constructor(
                 try {
                     var list = snapshot.toObjects(Doctor::class.java)
                     if (filterType == "VERIFIED") {
-                        list = list.filter { it.verificationStatus == "VERIFIED" || it.isVerified }
+                        // Single source of truth: verificationStatus. Legacy fallback: isVerified==true with missing status.
+                        list = list.filter { doctor ->
+                            doctor.verificationStatus == "VERIFIED" ||
+                            (doctor.verificationStatus.isEmpty() && doctor.isVerified)
+                        }
                     } else if (filterType == "PENDING") {
-                        list = list.filter { it.verificationStatus == "PENDING" || (it.verificationStatus.isEmpty() && !it.isVerified) }
+                        list = list.filter { doctor ->
+                            doctor.verificationStatus == "PENDING" ||
+                            (doctor.verificationStatus.isEmpty() && !doctor.isVerified)
+                        }
                     }
                     list = list.sortedByDescending { it.createdAt }
                     trySend(Result.success(list))
@@ -481,6 +515,40 @@ class FirestoreRepository @Inject constructor(
                 }
             }
         }
+        awaitClose { listener.remove() }
+    }
+
+    /**
+     * Realtime listener for a single doctor's profile.
+     * This is the canonical way to observe verificationStatus changes.
+     */
+    fun getDoctorProfileRealtime(doctorId: String): Flow<Result<User>> = callbackFlow {
+        val listener = firestore.collection("Users").document(doctorId)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    trySend(Result.failure(error))
+                    return@addSnapshotListener
+                }
+                if (snapshot != null && snapshot.exists()) {
+                    try {
+                        val user = snapshot.toObject(User::class.java)
+                        if (user != null) {
+                            // Legacy handling: if verificationStatus is missing but isVerified=true, treat as VERIFIED
+                            val effectiveStatus = when {
+                                user.verificationStatus == "VERIFIED" -> user
+                                user.verificationStatus.isEmpty() && user.isVerified -> user.copy(verificationStatus = "VERIFIED")
+                                user.verificationStatus.isEmpty() -> user.copy(verificationStatus = "PENDING")
+                                else -> user
+                            }
+                            trySend(Result.success(effectiveStatus))
+                        } else {
+                            trySend(Result.failure(Exception("User not found")))
+                        }
+                    } catch (e: Exception) {
+                        trySend(Result.failure(e))
+                    }
+                }
+            }
         awaitClose { listener.remove() }
     }
 
@@ -644,5 +712,32 @@ class FirestoreRepository @Inject constructor(
             isRead = this.getBoolean("isRead") ?: false,
             createdAt = time
         )
+    }
+
+    // ── Doctor Verification Documents ─────────────────────────────────────────
+
+    suspend fun saveVerificationDocument(document: com.amedick.hospitalapp.models.DoctorVerificationDocument): Result<Boolean> = try {
+        val docRef = firestore.collection("DoctorVerificationDocuments").document()
+        val finalDoc = document.copy(documentId = docRef.id)
+        docRef.set(finalDoc).await()
+        Result.success(true)
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+
+    suspend fun getVerificationDocuments(doctorId: String): Result<List<com.amedick.hospitalapp.models.DoctorVerificationDocument>> = try {
+        val snapshot = firestore.collection("DoctorVerificationDocuments")
+            .whereEqualTo("doctorId", doctorId)
+            .get().await()
+        Result.success(snapshot.toObjects(com.amedick.hospitalapp.models.DoctorVerificationDocument::class.java))
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+
+    suspend fun deleteVerificationDocument(documentId: String): Result<Boolean> = try {
+        firestore.collection("DoctorVerificationDocuments").document(documentId).delete().await()
+        Result.success(true)
+    } catch (e: Exception) {
+        Result.failure(e)
     }
 }

@@ -32,6 +32,8 @@ data class User(
     val medicalRegistrationNumber: String = "",
     val verificationStatus: String = "PENDING", // PENDING, VERIFIED, REJECTED
     val verificationDate: Long = 0L,
+    val verificationRejectedReason: String = "",
+    val verificationSubmittedAt: Long = 0L,
     
     @ServerTimestamp val createdAt: Date? = null
 )
@@ -60,9 +62,26 @@ data class Doctor(
     val medicalRegistrationNumber: String = "",
     val verificationStatus: String = "PENDING",
     val verificationDate: Long = 0L,
+    val verificationRejectedReason: String = "",
     
     @ServerTimestamp val createdAt: Date? = null
 ) : Parcelable
+
+/**
+ * A document uploaded by a doctor for professional verification.
+ * Stored in: Firestore collection "DoctorVerificationDocuments"
+ * documentType: MEDICAL_REGISTRATION | MEDICAL_DEGREE | GOVERNMENT_ID | EXPERIENCE_CERTIFICATE
+ */
+data class DoctorVerificationDocument(
+    @DocumentId var documentId: String = "",
+    val doctorId: String = "",
+    val documentType: String = "",
+    val fileName: String = "",
+    val fileUrl: String = "",
+    val fileType: String = "",
+    val size: Long = 0L,
+    @ServerTimestamp val uploadedAt: Date? = null
+)
 
 data class Appointment(
     @DocumentId var appointmentId: String = "",

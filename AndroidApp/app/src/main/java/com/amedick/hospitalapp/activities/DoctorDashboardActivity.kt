@@ -2,8 +2,11 @@ package com.amedick.hospitalapp.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.launch
 import com.amedick.hospitalapp.databinding.ActivityDoctorDashboardBinding
 import com.amedick.hospitalapp.firebase.AuthRepository
@@ -45,27 +48,56 @@ class DoctorDashboardActivity : AppCompatActivity() {
         }
 
         setupRecyclerView()
-        loadDoctorDetails()
+        observeDoctorVerificationStatus()  // Realtime listener — fixes the verification status bug
         loadDashboardData()
     }
 
-    private fun loadDoctorDetails() {
+    private fun observeDoctorVerificationStatus() {
         val doctorId = authRepository.getCurrentUserId() ?: return
         lifecycleScope.launch {
-            val result = firestoreRepository.getDoctorDetails(doctorId)
-            result.onSuccess { doctor ->
-                binding.tvWelcomeMessage.text = "Welcome, Dr. ${doctor.name}"
-                
-                if (!doctor.isVerified) {
-                    binding.verificationBanner.visibility = android.view.View.VISIBLE
-                    if (doctor.verificationStatus == "REJECTED") {
-                        binding.tvVerificationStatus.text = "Your verification was rejected."
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                firestoreRepository.getDoctorProfileRealtime(doctorId).collect { result ->
+                    result.onSuccess { user ->
+                        binding.tvWelcomeMessage.text = "Welcome, Dr. ${user.name.ifEmpty { user.email.substringBefore("@") }}"
+                        applyVerificationState(user.verificationStatus, user.verificationRejectedReason)
+                    }.onFailure {
+                        // Silently ignore — profile might not be loaded yet
                     }
-                } else {
-                    binding.verificationBanner.visibility = android.view.View.GONE
                 }
             }
         }
+    }
+
+    private fun applyVerificationState(status: String, rejectionReason: String) {
+        // Hide all banners first
+        binding.pendingBanner.visibility = View.GONE
+        binding.verifiedBanner.visibility = View.GONE
+        binding.rejectedBanner.visibility = View.GONE
+
+        when (status) {
+            "VERIFIED" -> {
+                binding.verifiedBanner.visibility = View.VISIBLE
+            }
+            "REJECTED" -> {
+                binding.rejectedBanner.visibility = View.VISIBLE
+                val reason = if (rejectionReason.isNotEmpty()) "Reason: $rejectionReason" else "Reason: Please contact the administrator."
+                binding.tvRejectionReason.text = reason
+                binding.btnUpdateDocs.setOnClickListener {
+                    startActivity(Intent(this, DoctorVerificationActivity::class.java))
+                }
+            }
+            else -> { // PENDING or empty
+                binding.pendingBanner.visibility = View.VISIBLE
+                binding.btnUploadDocs.setOnClickListener {
+                    startActivity(Intent(this, DoctorVerificationActivity::class.java))
+                }
+            }
+        }
+    }
+
+    @Deprecated("Replaced by observeDoctorVerificationStatus() for realtime updates")
+    private fun loadDoctorDetails() {
+        // This is now a no-op — kept for reference only
     }
 
     private fun setupRecyclerView() {

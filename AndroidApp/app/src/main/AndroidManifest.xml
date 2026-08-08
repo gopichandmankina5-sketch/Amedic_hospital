@@ -137,6 +137,12 @@
             android:name="com.amedick.hospitalapp.activities.AdminCompletedAppointmentsActivity"
             android:exported="false" />
 
+        <!-- Doctor Verification Activity -->
+        <activity
+            android:name="com.amedick.hospitalapp.activities.DoctorVerificationActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
         <!-- FCM Service -->
         <service
             android:name=".notification.MyFirebaseMessagingService"
