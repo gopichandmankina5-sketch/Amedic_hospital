@@ -17,6 +17,12 @@ class SplashActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySplashBinding
 
+    @javax.inject.Inject
+    lateinit var authRepository: com.amedick.hospitalapp.firebase.AuthRepository
+
+    @javax.inject.Inject
+    lateinit var firestoreRepository: com.amedick.hospitalapp.firebase.FirestoreRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.inflate(layoutInflater)
@@ -32,13 +38,32 @@ class SplashActivity : AppCompatActivity() {
 
             delay(1800)
 
-            // Use FirebaseAuth directly — most reliable auth check
-            val isLoggedIn = FirebaseAuth.getInstance().currentUser != null
-            val nextScreen = if (isLoggedIn) MainActivity::class.java else LoginActivity::class.java
-            startActivity(Intent(this@SplashActivity, nextScreen).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            })
-            finish()
+            val uid = authRepository.getCurrentUserId()
+            if (uid != null) {
+                // User is logged in, fetch role
+                val result = firestoreRepository.getUserProfile(uid)
+                result.onSuccess { user ->
+                    val intent = when (user.role?.lowercase()) {
+                        "admin" -> Intent(this@SplashActivity, AdminDashboardActivity::class.java)
+                        "doctor" -> Intent(this@SplashActivity, DoctorDashboardActivity::class.java)
+                        else -> Intent(this@SplashActivity, MainActivity::class.java)
+                    }
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    finish()
+                }.onFailure {
+                    // Fallback to login if profile fetch fails
+                    startActivity(Intent(this@SplashActivity, LoginActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    })
+                    finish()
+                }
+            } else {
+                startActivity(Intent(this@SplashActivity, LoginActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                })
+                finish()
+            }
         }
     }
 }
