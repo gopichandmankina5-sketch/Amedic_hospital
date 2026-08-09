@@ -14,7 +14,11 @@ class AppointmentAdapter(
     private var appointments: List<Appointment>,
     private val onCancelClick: (Appointment) -> Unit,
     private val onOpenChatClick: (Appointment) -> Unit,
-    private val onRateClick: (Appointment) -> Unit
+    private val onRateClick: (Appointment) -> Unit,
+    private val onJoinMeetClick: (Appointment) -> Unit,
+    private val onRescheduleClick: (Appointment) -> Unit,
+    private val onVerifyCompletionClick: (Appointment, Boolean) -> Unit,
+    private val onItemClick: ((Appointment) -> Unit)? = null
 ) : RecyclerView.Adapter<AppointmentAdapter.AppointmentViewHolder>() {
 
     inner class AppointmentViewHolder(private val binding: ItemAppointmentBinding) :
@@ -50,6 +54,18 @@ class AppointmentAdapter(
             binding.statusChip.setChipBackgroundColorResource(bgRes)
             binding.statusChip.setTextColor(ctx.getColor(textRes))
 
+            // Consultation type display
+            val isOnline = appointment.consultationType == "ONLINE"
+            if (isOnline) {
+                binding.tvConsultationIcon.text = "📹"
+                binding.tvConsultationType.text = "Online Consultation"
+                binding.tvConsultationType.setTextColor(ctx.getColor(R.color.color_primary))
+            } else {
+                binding.tvConsultationIcon.text = "🏥"
+                binding.tvConsultationType.text = "Hospital Visit"
+                binding.tvConsultationType.setTextColor(ctx.getColor(R.color.color_text_secondary))
+            }
+
             // Action Buttons
             val canCancel = appointment.status == AppointmentStatus.PENDING ||
                     appointment.status == AppointmentStatus.ACCEPTED
@@ -59,8 +75,70 @@ class AppointmentAdapter(
             binding.openChatButton.visibility = if (appointment.status == AppointmentStatus.ACCEPTED) View.VISIBLE else View.GONE
             binding.openChatButton.setOnClickListener { onOpenChatClick(appointment) }
 
-            binding.rateButton.visibility = if (appointment.status == AppointmentStatus.COMPLETED) View.VISIBLE else View.GONE
-            binding.rateButton.setOnClickListener { onRateClick(appointment) }
+            if (isOnline && appointment.status == AppointmentStatus.ACCEPTED) {
+                binding.btnJoinGoogleMeet.visibility = View.VISIBLE
+                binding.btnJoinGoogleMeet.setOnClickListener {
+                    onJoinMeetClick(appointment)
+                }
+            } else {
+                binding.btnJoinGoogleMeet.visibility = View.GONE
+            }
+
+            if (appointment.status == AppointmentStatus.COMPLETED) {
+                binding.rateButton.visibility = View.VISIBLE
+                if (appointment.isRated) {
+                    binding.rateButton.text = "Feedback Given"
+                    binding.rateButton.isEnabled = false
+                } else {
+                    binding.rateButton.text = "Rate Experience"
+                    binding.rateButton.isEnabled = true
+                    binding.rateButton.setOnClickListener { onRateClick(appointment) }
+                }
+            } else {
+                binding.rateButton.visibility = View.GONE
+            }
+
+            // Reschedule logic explicitly reset
+            binding.btnReschedule.visibility = View.GONE
+            binding.btnRescheduleRequested.visibility = View.GONE
+
+            // Verification Request UI explicitly reset
+            binding.layoutVerificationRequest.visibility = View.GONE
+            binding.btnVerifyYes.setOnClickListener(null)
+            binding.btnVerifyNo.setOnClickListener(null)
+
+            if (appointment.status == AppointmentStatus.ACCEPTED) {
+                if (appointment.completionVerificationStatus == "requested") {
+                    binding.layoutVerificationRequest.visibility = View.VISIBLE
+                    binding.tvVerificationMsg.text = "Doctor requested consultation completion confirmation."
+                    if (appointment.earlyCompletionReason.isNotEmpty()) {
+                        binding.tvVerificationMsg.text = "Doctor requested early completion confirmation.\nReason: ${appointment.earlyCompletionReason}"
+                    }
+                    binding.tvVerificationMsg.setTextColor(ctx.getColor(R.color.color_warning))
+
+                    binding.btnVerifyYes.setOnClickListener { onVerifyCompletionClick(appointment, true) }
+                    binding.btnVerifyNo.setOnClickListener { onVerifyCompletionClick(appointment, false) }
+                } else if (appointment.completionVerificationStatus == "rejected") {
+                    binding.layoutVerificationRequest.visibility = View.VISIBLE
+                    binding.tvVerificationMsg.text = "You did not confirm consultation completion."
+                    binding.tvVerificationMsg.setTextColor(ctx.getColor(R.color.color_error))
+                    // Hide the yes/no buttons when rejected
+                    binding.btnVerifyYes.visibility = View.GONE
+                    binding.btnVerifyNo.visibility = View.GONE
+                } else {
+                    // Not requested/rejected verification, show reschedule logic
+                    if (appointment.rescheduleStatus == "none") {
+                        binding.btnReschedule.visibility = View.VISIBLE
+                        binding.btnReschedule.setOnClickListener { onRescheduleClick(appointment) }
+                    } else if (appointment.rescheduleStatus == "requested") {
+                        binding.btnRescheduleRequested.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+            binding.root.setOnClickListener {
+                onItemClick?.invoke(appointment)
+            }
         }
     }
 

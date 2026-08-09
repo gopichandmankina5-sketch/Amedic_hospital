@@ -12,6 +12,7 @@ import com.amedick.hospitalapp.adapters.AppointmentAdapter
 import com.amedick.hospitalapp.databinding.ActivityAdminAppointmentListBinding
 import com.amedick.hospitalapp.firebase.FirestoreRepository
 import com.amedick.hospitalapp.models.Appointment
+import com.amedick.hospitalapp.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -49,7 +50,13 @@ class AdminAppointmentListActivity : AppCompatActivity() {
             appointments = emptyList(),
             onCancelClick = {},
             onOpenChatClick = {},
-            onRateClick = {}
+            onRateClick = {},
+            onJoinMeetClick = {},
+            onRescheduleClick = {},
+            onVerifyCompletionClick = { _, _ -> },
+            onItemClick = { appointment ->
+                showAppointmentDetailDialog(appointment)
+            }
         )
         binding.rvAppointments.layoutManager = LinearLayoutManager(this)
         binding.rvAppointments.adapter = adapter
@@ -84,5 +91,63 @@ class AdminAppointmentListActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun showAppointmentDetailDialog(appointment: Appointment) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_admin_appointment_details, null)
+        val tvDoctor = dialogView.findViewById<android.widget.TextView>(R.id.tvDetailDoctor)!!
+        val tvPatient = dialogView.findViewById<android.widget.TextView>(R.id.tvDetailPatient)!!
+        val tvDate = dialogView.findViewById<android.widget.TextView>(R.id.tvDetailDate)!!
+        val tvTime = dialogView.findViewById<android.widget.TextView>(R.id.tvDetailTime)!!
+        val tvReason = dialogView.findViewById<android.widget.TextView>(R.id.tvDetailReason)!!
+        val tvStatus = dialogView.findViewById<android.widget.TextView>(R.id.tvDetailStatus)!!
+        val tvConsultationType = dialogView.findViewById<android.widget.TextView>(R.id.tvDetailConsultationType)!!
+        val layoutOnline = dialogView.findViewById<android.view.View>(R.id.layoutOnlineDetails)!!
+        val tvMeetingProvider = dialogView.findViewById<android.widget.TextView>(R.id.tvDetailMeetingProvider)!!
+        val tvMeetingStatus = dialogView.findViewById<android.widget.TextView>(R.id.tvDetailMeetingStatus)!!
+        val tvMeetingLink = dialogView.findViewById<android.widget.TextView>(R.id.tvDetailMeetingLink)!!
+
+        val dialog = com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+            .setView(dialogView as android.view.View)
+            .setPositiveButton("Close", null)
+            .create()
+
+        val job = lifecycleScope.launch {
+            firestoreRepository.getAppointmentDetailsRealtime(appointment.appointmentId).collect { result ->
+                result.onSuccess { appt ->
+                    tvDoctor.text = "Dr. ${appt.doctorName}"
+                    tvPatient.text = appt.patientName
+                    tvDate.text = appt.date
+                    tvTime.text = appt.time
+                    tvReason.text = appt.reason.ifEmpty { "—" }
+                    tvStatus.text = appt.status.uppercase()
+                    tvStatus.setTextColor(when (appt.status) {
+                        "accepted" -> getColor(R.color.color_success)
+                        "rejected" -> getColor(R.color.color_error)
+                        "completed" -> getColor(R.color.color_primary)
+                        else -> getColor(R.color.status_pending)
+                    })
+
+                    tvConsultationType.text = appt.consultationType
+                    if (appt.consultationType == "ONLINE") {
+                        tvConsultationType.setTextColor(getColor(R.color.color_primary))
+                        layoutOnline.visibility = android.view.View.VISIBLE
+                        
+                        tvMeetingProvider.text = "Provider: ${if (appt.meetingProvider.isNotEmpty()) appt.meetingProvider else "Google Meet"}"
+                        tvMeetingStatus.text = "Meeting Status: ${appt.meetingStatus}"
+                        tvMeetingLink.text = "Link: ${if (appt.meetingUri.isNotEmpty()) appt.meetingUri else "Not available yet"}"
+                    } else {
+                        tvConsultationType.setTextColor(getColor(R.color.color_text_secondary))
+                        layoutOnline.visibility = android.view.View.GONE
+                    }
+                }
+            }
+        }
+
+        dialog.setOnDismissListener {
+            job.cancel()
+        }
+
+        dialog.show()
     }
 }

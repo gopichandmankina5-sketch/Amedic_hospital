@@ -99,6 +99,7 @@ class DoctorProfileActivity : AppCompatActivity() {
         binding.tvQualification.text = user.qualification.ifEmpty { "Not set" }
         binding.tvExperience.text = if (user.experience > 0) "${user.experience} Years" else "Not set"
         binding.tvRegNumber.text = user.medicalRegistrationNumber.ifEmpty { "Not set" }
+        binding.tvGoogleMeetLink.text = user.googleMeetLink.ifEmpty { "Not set" }
 
         // Verification Status
         when (user.verificationStatus) {
@@ -184,12 +185,23 @@ class DoctorProfileActivity : AppCompatActivity() {
         val regField = TextInputEditText(this).apply { setText(user.medicalRegistrationNumber) }
         regLayout.addView(regField)
 
+        val meetLayout = TextInputLayout(this).apply {
+            hint = "Personal Google Meet Link"
+            setPadding(0, 8, 0, 0)
+        }
+        val meetField = TextInputEditText(this).apply {
+            setText(user.googleMeetLink)
+            inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_URI
+        }
+        meetLayout.addView(meetField)
+
         container.addView(nameLayout)
         container.addView(phoneLayout)
         container.addView(specLayout)
         container.addView(qualLayout)
         container.addView(expLayout)
         container.addView(regLayout)
+        container.addView(meetLayout)
 
         MaterialAlertDialogBuilder(this)
             .setTitle("Edit Profile")
@@ -201,6 +213,7 @@ class DoctorProfileActivity : AppCompatActivity() {
                 val newQual = qualField.text.toString().trim()
                 val newExp = expField.text.toString().toIntOrNull() ?: 0
                 val newReg = regField.text.toString().trim()
+                val newMeet = meetField.text.toString().trim()
 
                 if (newName.isNotEmpty()) {
                     // Update only allowed fields, role and verificationStatus must NEVER change here
@@ -211,7 +224,8 @@ class DoctorProfileActivity : AppCompatActivity() {
                             specialization = newSpec,
                             qualification = newQual,
                             experience = newExp,
-                            medicalRegistrationNumber = newReg
+                            medicalRegistrationNumber = newReg,
+                            googleMeetLink = newMeet
                         )
                     )
                 } else {
@@ -232,7 +246,8 @@ class DoctorProfileActivity : AppCompatActivity() {
                 "specialization" to updatedUser.specialization,
                 "qualification" to updatedUser.qualification,
                 "experience" to updatedUser.experience,
-                "medicalRegistrationNumber" to updatedUser.medicalRegistrationNumber
+                "medicalRegistrationNumber" to updatedUser.medicalRegistrationNumber,
+                "googleMeetLink" to updatedUser.googleMeetLink
             )
             val resultExtra = runCatching {
                 com.google.firebase.firestore.FirebaseFirestore.getInstance()

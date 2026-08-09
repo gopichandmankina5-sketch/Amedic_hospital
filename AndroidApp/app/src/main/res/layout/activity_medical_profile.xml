@@ -179,12 +179,21 @@
                 android:layout_weight="1" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnViewDocuments"
+                style="@style/Widget.AmedicK.Button.Outlined"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="View Medical Documents"
+                android:layout_marginTop="16dp"
+                android:visibility="gone" />
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSaveProfile"
                 style="@style/Widget.AmedicK.Button"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:text="Save Profile"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp" />
         </LinearLayout>
     </ScrollView>

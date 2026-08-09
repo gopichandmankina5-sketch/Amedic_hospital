@@ -130,40 +130,169 @@
             android:layout_marginTop="8dp"
             android:visibility="gone" />
 
+        <!-- Consultation Type Row -->
+        <LinearLayout
+            android:id="@+id/consultationTypeRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/tvConsultationIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🏥"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvConsultationType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:text="Hospital Visit"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="@color/color_primary" />
+        </LinearLayout>
+
         <LinearLayout
             android:id="@+id/patientActionButtonsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="12dp"
-            android:gravity="end">
+            android:orientation="vertical"
+            android:layout_marginTop="12dp">
+
+            <!-- Row 1: Join Google Meet (ONLINE only) -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnJoinGoogleMeet"
+                style="@style/Widget.AmedicK.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Join Google Meet"
+                android:layout_marginBottom="8dp"
+                android:textSize="13sp"
+                android:maxLines="1"
+                app:autoSizeTextType="uniform"
+                android:visibility="gone" />
+
+            <!-- Row 2: Cancel & Open Chat (shared for both) -->
+            <LinearLayout
+                android:id="@+id/layoutCancelAndChat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/cancelButton"
+                    style="@style/Widget.AmedicK.Button.Outlined"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Cancel"
+                    android:textColor="@color/color_error"
+                    app:strokeColor="@color/color_error"
+                    android:textSize="13sp"
+                    android:layout_marginEnd="8dp"
+                    android:visibility="gone" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/openChatButton"
+                    style="@style/Widget.AmedicK.Button.Outlined"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Open Chat"
+                    android:textSize="13sp"
+                    android:layout_marginStart="8dp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <!-- Verification Request UI -->
+            <LinearLayout
+                android:id="@+id/layoutVerificationRequest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_rounded_warning"
+                android:padding="8dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tvVerificationMsg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Doctor requested consultation completion confirmation."
+                    android:textStyle="bold"
+                    android:textColor="@color/color_warning"
+                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:layout_marginBottom="8dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnVerifyYes"
+                        style="@style/Widget.AmedicK.Button"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Yes, Completed"
+                        android:textSize="11sp"
+                        android:layout_marginEnd="4dp"
+                        app:backgroundTint="@color/status_completed" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnVerifyNo"
+                        style="@style/Widget.AmedicK.Button.Outlined"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="No, Not Completed"
+                        android:textSize="11sp"
+                        android:layout_marginStart="4dp"
+                        app:strokeColor="@color/color_error"
+                        android:textColor="@color/color_error" />
+                </LinearLayout>
+            </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/cancelButton"
+                android:id="@+id/btnRescheduleRequested"
                 style="@style/Widget.AmedicK.Button.Outlined"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Cancel"
-                android:textColor="@color/color_error"
-                app:strokeColor="@color/color_error"
-                android:layout_marginEnd="8dp"
+                android:text="Reschedule Requested"
+                android:textColor="@color/color_text_secondary"
+                app:strokeColor="@color/color_text_secondary"
                 android:textSize="13sp"
+                android:enabled="false"
+                android:layout_marginBottom="8dp"
                 android:visibility="gone" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/openChatButton"
+                android:id="@+id/btnReschedule"
                 style="@style/Widget.AmedicK.Button.Outlined"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Open Chat"
-                android:layout_marginEnd="8dp"
+                android:text="Reschedule Appointment"
+                android:textColor="@color/color_primary"
+                app:strokeColor="@color/color_primary"
                 android:textSize="13sp"
+                android:layout_marginBottom="8dp"
                 android:visibility="gone" />
 
+            <!-- Row 3: Rate Experience (completed only) -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/rateButton"
                 style="@style/Widget.AmedicK.Button"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Rate Experience"
                 android:textSize="13sp"

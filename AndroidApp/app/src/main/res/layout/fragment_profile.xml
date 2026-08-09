@@ -99,7 +99,8 @@
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:src="@drawable/ic_phone" />
+                            android:src="@drawable/ic_phone"
+                            app:tint="@color/color_primary" />
                         <TextView
                             android:id="@+id/phoneText"
                             android:layout_width="wrap_content"
@@ -107,6 +108,52 @@
                             android:text="Not set"
                             android:textSize="14sp"
                             android:textColor="@color/color_text_secondary"
+                            android:layout_marginStart="12dp" />
+                    </LinearLayout>
+
+                    <!-- Role row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="14dp"
+                        android:gravity="center_vertical">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_user"
+                            app:tint="@color/color_primary" />
+                        <TextView
+                            android:id="@+id/roleText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Role: Patient"
+                            android:textSize="14sp"
+                            android:textColor="@color/color_text_secondary"
+                            android:layout_marginStart="12dp" />
+                    </LinearLayout>
+
+                    <!-- Status row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="14dp"
+                        android:gravity="center_vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Status"
+                            android:textSize="14sp"
+                            android:textColor="@color/color_text_secondary" />
+                        <TextView
+                            android:id="@+id/statusText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="● Active"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_success"
                             android:layout_marginStart="12dp" />
                     </LinearLayout>
                 </LinearLayout>

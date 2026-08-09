@@ -40,10 +40,18 @@ class MedicalProfileActivity : AppCompatActivity() {
             return
         }
 
-        // If a doctor is viewing, disable saving
+        // If a doctor is viewing, disable saving and show view documents button
         if (patientId != authRepository.getCurrentUserId()) {
             binding.btnSaveProfile.visibility = View.GONE
+            binding.btnViewDocuments.visibility = View.VISIBLE
             disableEditing()
+        }
+        
+        binding.btnViewDocuments.setOnClickListener {
+            val intent = android.content.Intent(this, MedicalDocumentsActivity::class.java).apply {
+                putExtra("EXTRA_PATIENT_ID", patientId)
+            }
+            startActivity(intent)
         }
 
         binding.btnSaveProfile.setOnClickListener { saveProfile() }

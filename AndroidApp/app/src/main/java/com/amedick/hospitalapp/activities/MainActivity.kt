@@ -58,4 +58,9 @@ class MainActivity : AppCompatActivity() {
     fun navigateToAppointments() {
         binding.bottomNavigation.selectedItemId = R.id.appointmentsMenu
     }
+
+    /** Allow fragments to navigate to the Profile tab */
+    fun navigateToProfile() {
+        binding.bottomNavigation.selectedItemId = R.id.profileMenu
+    }
 }

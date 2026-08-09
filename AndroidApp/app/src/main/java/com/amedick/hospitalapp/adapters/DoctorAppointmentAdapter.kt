@@ -15,7 +15,11 @@ class DoctorAppointmentAdapter(
     private val onAcceptClick: (Appointment) -> Unit,
     private val onRejectClick: (Appointment) -> Unit,
     private val onMarkCompletedClick: (Appointment) -> Unit,
-    private val onOpenChatClick: (Appointment) -> Unit
+    private val onOpenChatClick: (Appointment) -> Unit,
+    private val onJoinMeetClick: (Appointment) -> Unit,
+    private val onCancelMeetClick: (Appointment) -> Unit,
+    private val onRescheduleMeetClick: (Appointment) -> Unit,
+    private val onItemClick: ((Appointment) -> Unit)? = null
 ) : RecyclerView.Adapter<DoctorAppointmentAdapter.AppointmentViewHolder>() {
 
     inner class AppointmentViewHolder(private val binding: ItemDoctorAppointmentBinding) :
@@ -38,7 +42,13 @@ class DoctorAppointmentAdapter(
 
             // Status chip styling
             val (bgRes, textRes, label) = when (appointment.status) {
-                AppointmentStatus.PENDING -> Triple(R.color.status_pending_bg, R.color.status_pending, "Pending")
+                AppointmentStatus.PENDING -> {
+                    if (appointment.rescheduleStatus == "requested") {
+                        Triple(R.color.status_pending_bg, R.color.status_pending, "Reschedule Request")
+                    } else {
+                        Triple(R.color.status_pending_bg, R.color.status_pending, "Pending")
+                    }
+                }
                 AppointmentStatus.ACCEPTED -> Triple(R.color.status_confirmed_bg, R.color.status_confirmed, "Accepted")
                 AppointmentStatus.COMPLETED -> Triple(R.color.status_completed_bg, R.color.status_completed, "Completed")
                 AppointmentStatus.CANCELLED -> Triple(R.color.status_cancelled_bg, R.color.status_cancelled, "Cancelled")
@@ -50,22 +60,61 @@ class DoctorAppointmentAdapter(
             binding.statusChip.setChipBackgroundColorResource(bgRes)
             binding.statusChip.setTextColor(ctx.getColor(textRes))
 
+            // Consultation type display
+            val isOnline = appointment.consultationType == "ONLINE"
+            if (isOnline) {
+                binding.tvConsultationIcon.text = "📹"
+                binding.tvConsultationType.text = "Online Consultation"
+                binding.tvConsultationType.setTextColor(ctx.getColor(R.color.color_primary))
+            } else {
+                binding.tvConsultationIcon.text = "🏥"
+                binding.tvConsultationType.text = "Offline Consultation"
+                binding.tvConsultationType.setTextColor(ctx.getColor(R.color.color_text_secondary))
+            }
+
+            // Reset default visibilities
+            binding.actionButtonsContainer.visibility = View.GONE
+            binding.acceptedActionButtonsContainer.visibility = View.GONE
+            binding.btnJoinGoogleMeet.visibility = View.GONE
+            binding.markCompletedButton.visibility = View.VISIBLE
+            binding.tvVerificationStatus.visibility = View.GONE
+
             // Show action buttons based on status
             if (appointment.status == AppointmentStatus.PENDING) {
                 binding.actionButtonsContainer.visibility = View.VISIBLE
-                binding.acceptedActionButtonsContainer.visibility = View.GONE
                 
                 binding.acceptButton.setOnClickListener { onAcceptClick(appointment) }
                 binding.rejectButton.setOnClickListener { onRejectClick(appointment) }
             } else if (appointment.status == AppointmentStatus.ACCEPTED) {
-                binding.actionButtonsContainer.visibility = View.GONE
                 binding.acceptedActionButtonsContainer.visibility = View.VISIBLE
                 
                 binding.markCompletedButton.setOnClickListener { onMarkCompletedClick(appointment) }
                 binding.openChatButton.setOnClickListener { onOpenChatClick(appointment) }
-            } else {
-                binding.actionButtonsContainer.visibility = View.GONE
-                binding.acceptedActionButtonsContainer.visibility = View.GONE
+                binding.btnCancelMeet.setOnClickListener { onCancelMeetClick(appointment) }
+                binding.btnRescheduleMeet.setOnClickListener { onRescheduleMeetClick(appointment) }
+
+                if (isOnline) {
+                    binding.btnJoinGoogleMeet.visibility = View.VISIBLE
+                    binding.btnJoinGoogleMeet.setOnClickListener {
+                        onJoinMeetClick(appointment)
+                    }
+                }
+
+                // Handle completion verification status
+                if (appointment.completionVerificationStatus == "requested") {
+                    binding.markCompletedButton.visibility = View.GONE
+                    binding.tvVerificationStatus.visibility = View.VISIBLE
+                    binding.tvVerificationStatus.text = "Awaiting Patient Confirmation"
+                    binding.tvVerificationStatus.setTextColor(ctx.getColor(R.color.color_warning))
+                } else if (appointment.completionVerificationStatus == "rejected") {
+                    binding.tvVerificationStatus.visibility = View.VISIBLE
+                    binding.tvVerificationStatus.text = "Patient did not confirm"
+                    binding.tvVerificationStatus.setTextColor(ctx.getColor(R.color.color_error))
+                }
+            }
+
+            binding.root.setOnClickListener {
+                onItemClick?.invoke(appointment)
             }
         }
     }

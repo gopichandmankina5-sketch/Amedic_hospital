@@ -2,6 +2,7 @@ package com.amedick.hospitalapp.models
 
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.ServerTimestamp
+import com.google.firebase.firestore.PropertyName
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import java.util.Date
@@ -27,6 +28,7 @@ data class User(
     val reviewsCount: Int = 0,
     val isVerified: Boolean = false,
     val available: Boolean = true,
+    val googleMeetLink: String = "",
     
     // Phase 5 Additions
     val medicalRegistrationNumber: String = "",
@@ -56,6 +58,7 @@ data class Doctor(
     val phone: String = "",
     val available: Boolean = true,
     val isVerified: Boolean = false,
+    val googleMeetLink: String = "",
     val role: String = "doctor",
     
     // Phase 5 Additions
@@ -96,6 +99,38 @@ data class Appointment(
     val patientMessage: String = "",
     val rejectionReason: String = "",
     val documents: List<String> = emptyList(),
+    
+    // Video consultation additions
+    val consultationType: String = "OFFLINE", // ONLINE, OFFLINE
+    val videoRoomId: String = "",
+    val videoRoomUrl: String = "",
+    val onlineMeetingStarted: Boolean = false,
+    val meetingStartedAt: Long = 0L,
+    val meetingEndedAt: Long = 0L,
+
+    // Google Meet additions
+    val meetingProvider: String = "",
+    val meetingUri: String = "",
+    val meetingCode: String = "",
+    val meetingCreatedAt: Long = 0L,
+    val meetingStatus: String = "Not Created",
+
+    // Ratings
+    @get:PropertyName("isRated")
+    @set:PropertyName("isRated")
+    var isRated: Boolean = false,
+    
+    // Rescheduling state (none, requested, completed)
+    val rescheduleStatus: String = "none",
+
+    // Completion Verification Workflow
+    val completionVerificationStatus: String = "none",
+    val earlyCompletionReason: String = "",
+    val completionVerificationRequestedAt: Long = 0L,
+    val completionVerificationAt: Long = 0L,
+    val completionVerifiedBy: String = "",
+    val completedAt: Long = 0L,
+    val completedBy: String = "",
     @ServerTimestamp val createdAt: Date? = null
 )
 
@@ -105,6 +140,7 @@ object AppointmentStatus {
     const val REJECTED = "rejected"
     const val COMPLETED = "completed"
     const val CANCELLED = "cancelled"
+    const val RESCHEDULE_REQUESTED = "reschedule_requested"
 }
 
 data class Notification(

@@ -82,6 +82,8 @@ class FirestoreRepository @Inject constructor(
         Result.failure(e)
     }
 
+    fun getCurrentUserId(): String? = auth.currentUser?.uid
+
     // ── User Profile ──────────────────────────────────────────────────────────
 
     suspend fun getUserProfile(userId: String): Result<User> = try {
@@ -125,6 +127,21 @@ class FirestoreRepository @Inject constructor(
             val newAppt = appointment.copy(appointmentId = slotDocId)
             transaction.set(slotRef, newAppt)
         }.await()
+
+        // Success -> trigger notifications
+        val typeLabel = if (appointment.consultationType == "ONLINE") "Online Consultation" else "Offline Appointment"
+        val docTitle = "New $typeLabel Request"
+        val docMessage = "${appointment.patientName.ifEmpty { "A patient" }} requested an appointment on ${appointment.date} at ${appointment.time}."
+        createNotification(appointment.doctorId, docTitle, docMessage, "new_appointment", slotDocId)
+
+        val adminTitle = "New Appointment"
+        val adminMessage = if (appointment.consultationType == "ONLINE") {
+            "${appointment.patientName.ifEmpty { "A patient" }} booked an ONLINE consultation with Dr. ${appointment.doctorName}."
+        } else {
+            "${appointment.patientName.ifEmpty { "A patient" }} booked an OFFLINE appointment with Dr. ${appointment.doctorName}."
+        }
+        createAdminNotification(adminTitle, adminMessage, "new_appointment_admin", slotDocId)
+
         Result.success(true)
     } catch (e: Exception) {
         Result.failure(e)
@@ -158,8 +175,51 @@ class FirestoreRepository @Inject constructor(
     }
 
     suspend fun updateAppointmentStatus(appointmentId: String, status: String): Result<Boolean> = try {
+        firestore.runTransaction { transaction ->
+            val ref = firestore.collection("Appointments").document(appointmentId)
+            val snapshot = transaction.get(ref)
+            if (snapshot.exists()) {
+                transaction.update(ref, "status", status)
+                // If accepting an appointment that requested a reschedule, complete the reschedule.
+                if (status == AppointmentStatus.ACCEPTED && snapshot.getString("rescheduleStatus") == "requested") {
+                    transaction.update(ref, "rescheduleStatus", "completed")
+                }
+            }
+        }.await()
+        Result.success(true)
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+    
+    suspend fun requestReschedule(
+        appointmentId: String,
+        newDate: String,
+        newTime: String,
+        consultationType: String
+    ): Result<Boolean> = try {
+        val updates = mapOf(
+            "date" to newDate,
+            "time" to newTime,
+            "consultationType" to consultationType,
+            "status" to AppointmentStatus.PENDING,
+            "rescheduleStatus" to "requested"
+        )
         firestore.collection("Appointments").document(appointmentId)
-            .update("status", status).await()
+            .update(updates).await()
+        Result.success(true)
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+
+    suspend fun updateMeetingLink(appointmentId: String, meetingUri: String): Result<Boolean> = try {
+        val updates = mapOf(
+            "meetingUri" to meetingUri,
+            "meetingStatus" to "Ready",
+            "meetingProvider" to "GOOGLE_MEET",
+            "meetingCreatedAt" to System.currentTimeMillis()
+        )
+        firestore.collection("Appointments").document(appointmentId)
+            .update(updates).await()
         Result.success(true)
     } catch (e: Exception) {
         Result.failure(e)
@@ -185,6 +245,14 @@ class FirestoreRepository @Inject constructor(
                 throw Exception("Appointment not found")
             }
         }.await()
+        Result.success(true)
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+
+    suspend fun updateAppointmentRatedStatus(appointmentId: String, isRated: Boolean): Result<Boolean> = try {
+        firestore.collection("Appointments").document(appointmentId)
+            .update("isRated", isRated).await()
         Result.success(true)
     } catch (e: Exception) {
         Result.failure(e)
@@ -772,6 +840,131 @@ class FirestoreRepository @Inject constructor(
         firestore.collection("Users").document(userId)
             .update("profileImage", imageUrl).await()
         Result.success(Unit)
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+
+    suspend fun getAppointmentDetails(appointmentId: String): Result<Appointment> = try {
+        val snapshot = firestore.collection("Appointments").document(appointmentId).get().await()
+        val appt = snapshot.toObject(Appointment::class.java)
+        if (appt != null) {
+            Result.success(appt)
+        } else {
+            Result.failure(Exception("Appointment not found"))
+        }
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+
+    suspend fun startOnlineMeeting(appointmentId: String): Result<Boolean> = try {
+        firestore.collection("Appointments").document(appointmentId)
+            .update(
+                mapOf(
+                    "onlineMeetingStarted" to true,
+                    "meetingStartedAt" to System.currentTimeMillis()
+                )
+            ).await()
+        Result.success(true)
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+
+    fun getAppointmentDetailsRealtime(appointmentId: String): Flow<Result<Appointment>> = callbackFlow {
+        val listener = firestore.collection("Appointments").document(appointmentId)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    trySend(Result.failure(error))
+                    return@addSnapshotListener
+                }
+                if (snapshot != null && snapshot.exists()) {
+                    try {
+                        val appt = snapshot.toObject(Appointment::class.java)
+                        if (appt != null) {
+                            trySend(Result.success(appt))
+                        } else {
+                            trySend(Result.failure(Exception("Appointment not found")))
+                        }
+                    } catch (e: Exception) {
+                        trySend(Result.failure(e))
+                    }
+                }
+            }
+        awaitClose { listener.remove() }
+    }
+
+    fun getAppointmentsRealtime(): Flow<Result<List<Appointment>>> = callbackFlow {
+        val listener = firestore.collection("Appointments")
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    trySend(Result.failure(error))
+                    return@addSnapshotListener
+                }
+                if (snapshot != null) {
+                    try {
+                        val appts = snapshot.toObjects(Appointment::class.java)
+                        trySend(Result.success(appts))
+                    } catch (e: Exception) {
+                        trySend(Result.failure(e))
+                    }
+                }
+            }
+        awaitClose { listener.remove() }
+    }
+
+    fun getAppointmentsForDoctorRealtime(doctorId: String): Flow<Result<List<Appointment>>> = callbackFlow {
+        val listener = firestore.collection("Appointments")
+            .whereEqualTo("doctorId", doctorId)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    trySend(Result.failure(error))
+                    return@addSnapshotListener
+                }
+                if (snapshot != null) {
+                    try {
+                        val appts = snapshot.toObjects(Appointment::class.java)
+                        trySend(Result.success(appts))
+                    } catch (e: Exception) {
+                        trySend(Result.failure(e))
+                    }
+                }
+            }
+        awaitClose { listener.remove() }
+    }
+
+    suspend fun requestCompletionVerification(appointmentId: String, reason: String = ""): Result<Boolean> = try {
+        val updates = mapOf(
+            "completionVerificationStatus" to "requested",
+            "earlyCompletionReason" to reason,
+            "completionVerificationRequestedAt" to System.currentTimeMillis()
+        )
+        firestore.collection("Appointments").document(appointmentId)
+            .update(updates)
+            .await()
+        Result.success(true)
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+
+    suspend fun respondCompletionVerification(appointmentId: String, isConfirmed: Boolean, patientId: String): Result<Boolean> = try {
+        val updates = mutableMapOf<String, Any>(
+            "completionVerificationAt" to System.currentTimeMillis(),
+            "completionVerifiedBy" to patientId
+        )
+
+        if (isConfirmed) {
+            updates["completionVerificationStatus"] = "confirmed"
+            updates["status"] = com.amedick.hospitalapp.models.AppointmentStatus.COMPLETED
+            updates["completedAt"] = System.currentTimeMillis()
+            updates["completedBy"] = patientId
+        } else {
+            updates["completionVerificationStatus"] = "rejected"
+            // Keep status as ACCEPTED
+        }
+
+        firestore.collection("Appointments").document(appointmentId)
+            .update(updates)
+            .await()
+        Result.success(true)
     } catch (e: Exception) {
         Result.failure(e)
     }

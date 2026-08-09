@@ -19,6 +19,7 @@ class DoctorDashboardActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDoctorDashboardBinding
     private lateinit var adapter: com.amedick.hospitalapp.adapters.DoctorAppointmentAdapter
+    private var appointmentsJob: kotlinx.coroutines.Job? = null
 
     @Inject
     lateinit var authRepository: AuthRepository
@@ -111,17 +112,44 @@ class DoctorDashboardActivity : AppCompatActivity() {
             },
             onMarkCompletedClick = { appt ->
                 if (!AppointmentUtils.isAppointmentStarted(appt)) {
+                    val input = android.widget.EditText(this)
+                    input.hint = "Reason for early completion"
+                    val lp = android.widget.LinearLayout.LayoutParams(
+                        android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                        android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
+                    )
+                    input.layoutParams = lp
+
                     androidx.appcompat.app.AlertDialog.Builder(this)
-                        .setTitle("Meeting Not Started")
-                        .setMessage("This appointment has not started yet. You can mark it as completed after the scheduled time.")
-                        .setPositiveButton("OK", null)
+                        .setTitle("Early Completion")
+                        .setMessage("This appointment hasn't started yet. Please provide a reason for early completion to request patient verification.")
+                        .setView(input)
+                        .setPositiveButton("Request Verification") { _, _ ->
+                            val reason = input.text.toString().trim()
+                            lifecycleScope.launch {
+                                val result = firestoreRepository.requestCompletionVerification(appt.appointmentId, reason)
+                                if (result.isSuccess) {
+                                    android.widget.Toast.makeText(this@DoctorDashboardActivity, "Verification requested", android.widget.Toast.LENGTH_SHORT).show()
+                                } else {
+                                    android.widget.Toast.makeText(this@DoctorDashboardActivity, "Failed to request verification", android.widget.Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                        .setNegativeButton("Cancel", null)
                         .show()
                 } else {
                     androidx.appcompat.app.AlertDialog.Builder(this)
-                        .setTitle("Mark as Completed?")
-                        .setMessage("Mark this appointment as completed?")
-                        .setPositiveButton("Confirm") { _, _ ->
-                            updateAppointmentStatus(appt, com.amedick.hospitalapp.models.AppointmentStatus.COMPLETED)
+                        .setTitle("Complete Consultation?")
+                        .setMessage("Please confirm that the consultation has actually been completed. We will ask the patient to verify.")
+                        .setPositiveButton("Request Patient Verification") { _, _ ->
+                            lifecycleScope.launch {
+                                val result = firestoreRepository.requestCompletionVerification(appt.appointmentId, "")
+                                if (result.isSuccess) {
+                                    android.widget.Toast.makeText(this@DoctorDashboardActivity, "Verification requested", android.widget.Toast.LENGTH_SHORT).show()
+                                } else {
+                                    android.widget.Toast.makeText(this@DoctorDashboardActivity, "Failed to request verification", android.widget.Toast.LENGTH_SHORT).show()
+                                }
+                            }
                         }
                         .setNegativeButton("Cancel", null)
                         .show()
@@ -134,42 +162,87 @@ class DoctorDashboardActivity : AppCompatActivity() {
                     putExtra(ChatActivity.EXTRA_OTHER_USER_NAME, appt.patientName)
                 }
                 startActivity(intent)
+            },
+            onJoinMeetClick = { appt ->
+                joinGoogleMeet(appt.doctorId)
+            },
+            onCancelMeetClick = { appt ->
+                androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle("Cancel Appointment")
+                    .setMessage("Are you sure you want to cancel this appointment?")
+                    .setPositiveButton("Yes") { _, _ ->
+                        updateAppointmentStatus(appt, com.amedick.hospitalapp.models.AppointmentStatus.CANCELLED)
+                    }
+                    .setNegativeButton("No", null)
+                    .show()
+            },
+            onRescheduleMeetClick = { appt ->
+                updateAppointmentStatus(appt, com.amedick.hospitalapp.models.AppointmentStatus.RESCHEDULE_REQUESTED)
+            },
+            onItemClick = { appt ->
+                val intent = Intent(this, com.amedick.hospitalapp.activities.MedicalProfileActivity::class.java).apply {
+                    putExtra("EXTRA_PATIENT_ID", appt.patientId)
+                }
+                startActivity(intent)
             }
         )
         binding.rvAppointments.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         binding.rvAppointments.adapter = adapter
     }
 
+    private fun joinGoogleMeet(doctorId: String) {
+        lifecycleScope.launch {
+            val result = firestoreRepository.getUserProfile(doctorId)
+            result.onSuccess { doctorProfile ->
+                val link = doctorProfile.googleMeetLink
+                if (link.isNotEmpty() && link.startsWith("https://meet.google.com/")) {
+                    val intent = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(link))
+                    startActivity(intent)
+                } else {
+                    android.widget.Toast.makeText(this@DoctorDashboardActivity, "Please set your Google Meet link in your Profile first.", android.widget.Toast.LENGTH_LONG).show()
+                }
+            }.onFailure {
+                android.widget.Toast.makeText(this@DoctorDashboardActivity, "Failed to load profile. Try again.", android.widget.Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     private fun loadDashboardData() {
         val uid = authRepository.getCurrentUserId() ?: return
         val userEmail = authRepository.getCurrentUserEmail() ?: "Doctor"
         
-        binding.tvWelcomeMessage.text = "Welcome, Dr. ${userEmail.split("@").first().capitalize()}"
+        binding.tvWelcomeMessage.text = "Welcome, Dr. ${userEmail.split("@").first().replaceFirstChar { if (it.isLowerCase()) it.titlecase(java.util.Locale.getDefault()) else it.toString() }}"
         binding.tvDate.text = java.text.SimpleDateFormat("EEEE, MMM dd, yyyy", java.util.Locale.getDefault()).format(java.util.Date())
 
         binding.progressBar.visibility = android.view.View.VISIBLE
-        
-        lifecycleScope.launch {
-            val result = firestoreRepository.getAppointmentsForDoctor(uid)
-            binding.progressBar.visibility = android.view.View.GONE
-            
-            result.onSuccess { appointments ->
-                val sorted = appointments.sortedByDescending { it.createdAt }
-                adapter.updateData(sorted)
-                
-                binding.tvEmptyState.visibility = if (sorted.isEmpty()) android.view.View.VISIBLE else android.view.View.GONE
-                
-                // Calculate stats
-                val total = sorted.size
-                val pending = sorted.count { it.status == com.amedick.hospitalapp.models.AppointmentStatus.PENDING }
-                val accepted = sorted.count { it.status == com.amedick.hospitalapp.models.AppointmentStatus.ACCEPTED }
-                
-                binding.tvTotalAppointments.text = total.toString()
-                binding.tvPendingAppointments.text = pending.toString()
-                binding.tvAcceptedAppointments.text = accepted.toString()
-            }.onFailure {
-                android.widget.Toast.makeText(this@DoctorDashboardActivity, "Failed to load appointments", android.widget.Toast.LENGTH_SHORT).show()
-                binding.tvEmptyState.visibility = android.view.View.VISIBLE
+        observeAppointmentsRealtime(uid)
+    }
+
+    private fun observeAppointmentsRealtime(uid: String) {
+        appointmentsJob?.cancel()
+        appointmentsJob = lifecycleScope.launch {
+            repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
+                firestoreRepository.getAppointmentsForDoctorRealtime(uid).collect { result ->
+                    binding.progressBar.visibility = android.view.View.GONE
+                    result.onSuccess { appointments ->
+                        val sorted = appointments.sortedByDescending { it.createdAt }
+                        adapter.updateData(sorted)
+                        
+                        binding.tvEmptyState.visibility = if (sorted.isEmpty()) android.view.View.VISIBLE else android.view.View.GONE
+                        
+                        // Calculate stats
+                        val total = sorted.size
+                        val pending = sorted.count { it.status == com.amedick.hospitalapp.models.AppointmentStatus.PENDING }
+                        val accepted = sorted.count { it.status == com.amedick.hospitalapp.models.AppointmentStatus.ACCEPTED }
+                        
+                        binding.tvTotalAppointments.text = total.toString()
+                        binding.tvPendingAppointments.text = pending.toString()
+                        binding.tvAcceptedAppointments.text = accepted.toString()
+                    }.onFailure {
+                        android.widget.Toast.makeText(this@DoctorDashboardActivity, "Failed to load appointments", android.widget.Toast.LENGTH_SHORT).show()
+                        binding.tvEmptyState.visibility = android.view.View.VISIBLE
+                    }
+                }
             }
         }
     }
@@ -179,7 +252,21 @@ class DoctorDashboardActivity : AppCompatActivity() {
             val result = firestoreRepository.updateAppointmentStatus(appointment.appointmentId, status)
             result.onSuccess {
                 android.widget.Toast.makeText(this@DoctorDashboardActivity, "Appointment updated", android.widget.Toast.LENGTH_SHORT).show()
-                loadDashboardData() // Reload
+                
+                if (status == com.amedick.hospitalapp.models.AppointmentStatus.ACCEPTED) {
+                    val notifMessage = if (appointment.consultationType == "ONLINE") {
+                        "Your video consultation with Dr. ${appointment.doctorName} is scheduled on ${appointment.date} at ${appointment.time}."
+                    } else {
+                        "Your offline appointment with Dr. ${appointment.doctorName} is confirmed on ${appointment.date} at ${appointment.time}."
+                    }
+                    firestoreRepository.createNotification(
+                        userId = appointment.patientId,
+                        title = "Appointment Accepted",
+                        message = notifMessage,
+                        type = "appointment_accepted",
+                        relatedId = appointment.appointmentId
+                    )
+                }
             }.onFailure {
                 android.widget.Toast.makeText(this@DoctorDashboardActivity, "Failed to update", android.widget.Toast.LENGTH_SHORT).show()
             }

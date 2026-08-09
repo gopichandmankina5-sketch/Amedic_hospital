@@ -1,25 +1,42 @@
 package com.amedick.hospitalapp.fragments
 
+import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.OpenableColumns
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.amedick.hospitalapp.activities.LoginActivity
+import com.amedick.hospitalapp.config.CloudinaryConfig
 import com.amedick.hospitalapp.databinding.FragmentProfileBinding
+import com.amedick.hospitalapp.firebase.FirestoreRepository
 import com.amedick.hospitalapp.viewmodel.ProfileState
 import com.amedick.hospitalapp.viewmodel.ProfileViewModel
+import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
@@ -27,6 +44,25 @@ class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ProfileViewModel by viewModels()
+
+    @Inject
+    lateinit var firestoreRepository: FirestoreRepository
+
+    private val imagePickerLauncher = registerForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            try {
+                requireContext().contentResolver.takePersistableUriPermission(
+                    uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+            } catch (e: SecurityException) {
+                Log.w("ProfileFragment", "Could not take persistable permission", e)
+            }
+            uploadProfilePhoto(uri)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,7 +88,81 @@ class ProfileFragment : Fragment() {
             com.amedick.hospitalapp.utils.LogoutHelper.showLogoutConfirmation(requireActivity() as androidx.appcompat.app.AppCompatActivity)
         }
 
+        binding.profileImageCard.setOnClickListener {
+            pickImage()
+        }
+        binding.profileImage.setOnClickListener {
+            pickImage()
+        }
+
         observeViewModel()
+    }
+
+    private fun pickImage() {
+        imagePickerLauncher.launch(arrayOf("image/*"))
+    }
+
+    private fun uploadProfilePhoto(uri: Uri) {
+        val uid = viewModel.getCurrentUserId() ?: return
+        binding.progressBar.visibility = View.VISIBLE
+
+        var fileName = "profile_image.jpg"
+        try {
+            requireContext().contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+                if (cursor.moveToFirst()) {
+                    val nameIdx = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                    if (nameIdx != -1) fileName = cursor.getString(nameIdx)
+                }
+            }
+        } catch (_: Exception) {}
+
+        val mimeType = requireContext().contentResolver.getType(uri) ?: "image/jpeg"
+
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val inputStream = requireContext().contentResolver.openInputStream(uri)
+                val bytes = inputStream?.readBytes()
+                inputStream?.close()
+
+                if (bytes == null) throw Exception("Failed to read file bytes")
+
+                val requestBody = MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("upload_preset", CloudinaryConfig.UPLOAD_PRESET)
+                    .addFormDataPart("file", fileName, bytes.toRequestBody(mimeType.toMediaTypeOrNull()))
+                    .build()
+
+                val request = Request.Builder()
+                    .url("https://api.cloudinary.com/v1_1/${CloudinaryConfig.CLOUD_NAME}/auto/upload")
+                    .post(requestBody)
+                    .build()
+
+                val response = OkHttpClient().newCall(request).execute()
+                if (!response.isSuccessful) {
+                    throw Exception("Cloudinary server error: ${response.code}")
+                }
+
+                val responseBody = response.body?.string() ?: throw Exception("Empty response")
+                val secureUrl = JSONObject(responseBody).getString("secure_url")
+
+                val updateResult = firestoreRepository.updateUserProfileImage(uid, secureUrl)
+                if (updateResult.isFailure) {
+                    throw updateResult.exceptionOrNull() ?: Exception("Firestore profile update failed")
+                }
+
+                withContext(Dispatchers.Main) {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(requireContext(), "Profile photo updated successfully", Toast.LENGTH_SHORT).show()
+                    viewModel.loadProfile()
+                }
+            } catch (e: Exception) {
+                Log.e("ProfileFragment", "Failed to upload photo", e)
+                withContext(Dispatchers.Main) {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(requireContext(), "Failed to update profile photo", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     private fun showEditProfileDialog() {
@@ -145,6 +255,19 @@ class ProfileFragment : Fragment() {
                             binding.nameText.text = state.user.name.ifEmpty { "Your Name" }
                             binding.emailText.text = state.user.email
                             binding.phoneText.text = state.user.phone.ifEmpty { "Not set" }
+
+                            // Load profile image using Glide
+                            if (state.user.profileImage.isNotEmpty()) {
+                                Glide.with(this@ProfileFragment)
+                                    .load(state.user.profileImage)
+                                    .placeholder(com.amedick.hospitalapp.R.drawable.ic_user)
+                                    .circleCrop()
+                                    .into(binding.profileImage)
+                                binding.profileImage.setPadding(0, 0, 0, 0)
+                            } else {
+                                binding.profileImage.setImageResource(com.amedick.hospitalapp.R.drawable.ic_user)
+                                binding.profileImage.setPadding(16, 16, 16, 16)
+                            }
                         }
                         is ProfileState.Error -> {
                             binding.progressBar.visibility = View.GONE

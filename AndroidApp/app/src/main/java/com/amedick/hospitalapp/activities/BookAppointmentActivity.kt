@@ -48,6 +48,8 @@ class BookAppointmentActivity : AppCompatActivity() {
     private var selectedDateStr: String = ""
     private var selectedTimeStr: String = ""
     private var bookedSlotsForDate: List<String> = emptyList()
+    private var selectedConsultationType: String? = null
+    private var patientName: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,20 +98,56 @@ class BookAppointmentActivity : AppCompatActivity() {
 
         loadDoctorAvailability(doctorId)
 
+        // Fetch patient profile for name
+        lifecycleScope.launch {
+            val uid = firestoreRepository.getCurrentUserId() ?: return@launch
+            firestoreRepository.getUserProfile(uid).onSuccess { user ->
+                patientName = user.name
+            }
+        }
+
+        // Setup consultation card selection
+        binding.cardOffline.setOnClickListener {
+            selectedConsultationType = "OFFLINE"
+            binding.cardOffline.setStrokeColor(android.content.res.ColorStateList.valueOf(getColor(com.amedick.hospitalapp.R.color.color_primary)))
+            binding.cardOffline.setCardBackgroundColor(getColor(com.amedick.hospitalapp.R.color.color_primary_light))
+            binding.cardOnline.setStrokeColor(android.content.res.ColorStateList.valueOf(getColor(com.amedick.hospitalapp.R.color.color_outline)))
+            binding.cardOnline.setCardBackgroundColor(getColor(com.amedick.hospitalapp.R.color.color_surface))
+        }
+
+        binding.cardOnline.setOnClickListener {
+            selectedConsultationType = "ONLINE"
+            binding.cardOnline.setStrokeColor(android.content.res.ColorStateList.valueOf(getColor(com.amedick.hospitalapp.R.color.color_primary)))
+            binding.cardOnline.setCardBackgroundColor(getColor(com.amedick.hospitalapp.R.color.color_primary_light))
+            binding.cardOffline.setStrokeColor(android.content.res.ColorStateList.valueOf(getColor(com.amedick.hospitalapp.R.color.color_outline)))
+            binding.cardOffline.setCardBackgroundColor(getColor(com.amedick.hospitalapp.R.color.color_surface))
+        }
+
         // Remove the time picker block entirely since we use dynamic slots
+
+        val rescheduleAppointmentId = intent.getStringExtra("EXTRA_RESCHEDULE_APPOINTMENT_ID")
 
         binding.bookButton.setOnClickListener {
             if (validateInputs(doctorId)) {
                 setLoading(true)
-                // Use the atomic book method via the viewmodel if it uses the repository, 
-                // assuming ViewModel passes it directly to repository
-                viewModel.bookAppointment(
-                    doctorId = doctorId,
-                    doctorName = doctorName,
-                    date = selectedDateStr,
-                    time = selectedTimeStr,
-                    reason = binding.reasonInput.text.toString().trim()
-                )
+                if (rescheduleAppointmentId != null) {
+                    viewModel.rescheduleAppointment(
+                        appointmentId = rescheduleAppointmentId,
+                        date = selectedDateStr,
+                        time = selectedTimeStr,
+                        consultationType = selectedConsultationType!!
+                    )
+                } else {
+                    viewModel.bookAppointment(
+                        doctorId = doctorId,
+                        doctorName = doctorName,
+                        date = selectedDateStr,
+                        time = selectedTimeStr,
+                        reason = binding.reasonInput.text.toString().trim(),
+                        patientName = patientName,
+                        consultationType = selectedConsultationType!!
+                    )
+                }
             }
         }
 
@@ -232,6 +270,10 @@ class BookAppointmentActivity : AppCompatActivity() {
         }
         if (selectedTimeStr.isBlank()) {
             Toast.makeText(this, "Please select a time slot", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        if (selectedConsultationType == null) {
+            Toast.makeText(this, "Please select how you would like to consult the doctor.", Toast.LENGTH_SHORT).show()
             return false
         }
         return true

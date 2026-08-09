@@ -34,7 +34,8 @@ class AppointmentViewModel @Inject constructor(
         date: String,
         time: String,
         reason: String,
-        patientName: String = ""
+        patientName: String = "",
+        consultationType: String = "OFFLINE"
     ) {
         val patientId = authRepository.getCurrentUserId()
         if (patientId == null) {
@@ -43,7 +44,12 @@ class AppointmentViewModel @Inject constructor(
         }
         _bookingState.value = AppointmentState.Loading
         viewModelScope.launch {
+            val safeDate = date.replace("/", "").replace("-", "")
+            val safeTime = time.replace(":", "").replace(" ", "")
+            val slotDocId = "${doctorId}_${safeDate}_${safeTime}"
+
             val appointment = Appointment(
+                appointmentId = slotDocId,
                 patientId = patientId,
                 doctorId = doctorId,
                 patientName = patientName,
@@ -51,13 +57,33 @@ class AppointmentViewModel @Inject constructor(
                 date = date,
                 time = time,
                 reason = reason,
-                status = AppointmentStatus.PENDING
+                status = AppointmentStatus.PENDING,
+                consultationType = consultationType,
+                videoRoomId = if (consultationType == "ONLINE") "amedick-$slotDocId" else "",
+                videoRoomUrl = if (consultationType == "ONLINE") "https://meet.jit.si/amedick-$slotDocId" else ""
             )
             val result = firestoreRepository.bookAppointment(appointment)
             _bookingState.value = result.fold(
                 onSuccess = { AppointmentState.Success },
                 onFailure = { AppointmentState.Error(it.message ?: "Unable to book appointment.") }
             )
+        }
+    }
+
+    fun rescheduleAppointment(
+        appointmentId: String,
+        date: String,
+        time: String,
+        consultationType: String
+    ) {
+        _bookingState.value = AppointmentState.Loading
+        viewModelScope.launch {
+            val result = firestoreRepository.requestReschedule(appointmentId, date, time, consultationType)
+            result.onSuccess {
+                _bookingState.value = AppointmentState.Success
+            }.onFailure { e ->
+                _bookingState.value = AppointmentState.Error(e.message ?: "Failed to reschedule appointment")
+            }
         }
     }
 
@@ -81,6 +107,18 @@ class AppointmentViewModel @Inject constructor(
                 onSuccess = { CancelState.Success },
                 onFailure = { CancelState.Error(it.message ?: "Failed to cancel appointment.") }
             )
+        }
+    }
+
+    fun respondToCompletionVerification(appointmentId: String, isConfirmed: Boolean) {
+        val patientId = authRepository.getCurrentUserId() ?: return
+        viewModelScope.launch {
+            val result = firestoreRepository.respondCompletionVerification(appointmentId, isConfirmed, patientId)
+            if (result.isSuccess) {
+                loadMyAppointments()
+            } else {
+                _bookingState.value = AppointmentState.Error(result.exceptionOrNull()?.message ?: "Failed to verify consultation")
+            }
         }
     }
 

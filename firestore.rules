@@ -86,9 +86,20 @@ service cloud.firestore {
       
       // Both patient and doctor can update the appointment (e.g., status changes)
       // Double booking logic is protected by transactions and security rules.
+      // Patients cannot modify meeting details. Doctors can modify meeting details for their own accepted online appointments.
       allow update: if isAuthenticated() && (
         resource.data.patientId == request.auth.uid || 
         resource.data.doctorId == request.auth.uid
+      ) && (
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['meetingUri', 'meetingCode', 'meetingProvider', 'meetingStatus', 'meetingCreatedAt']) ||
+        (resource.data.doctorId == request.auth.uid && resource.data.status == 'accepted' && resource.data.consultationType == 'ONLINE')
+      ) && (
+        !(request.resource.data.status == 'completed' && resource.data.status != 'completed') || 
+        (
+          request.resource.data.status == 'completed' && 
+          request.resource.data.completionVerificationStatus == 'confirmed' &&
+          request.auth.uid == resource.data.patientId
+        )
       );
       
       // No deletion from client
@@ -121,12 +132,16 @@ service cloud.firestore {
     // Notifications Collection
     match /Notifications/{notificationId} {
       // Users can only read/write their own notifications
-      allow read, write: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow read, update, delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
       
-      // Allow user to create for themselves, OR allow doctors to create verification notifications for admins
+      // Allow creation of notifications securely based on roles and event types
       allow create: if isAuthenticated() && (
         request.resource.data.userId == request.auth.uid ||
-        (isDoctor() && request.resource.data.type == 'doctor_verification' && getUserRoleById(request.resource.data.userId) == 'admin')
+        isAdmin() ||
+        (isDoctor() && request.resource.data.type == 'doctor_verification' && getUserRoleById(request.resource.data.userId) == 'admin') ||
+        (isPatient() && request.resource.data.type == 'new_appointment') ||
+        (isPatient() && request.resource.data.type == 'new_appointment_admin') ||
+        (isDoctor() && request.resource.data.type == 'appointment_accepted')
       );
     }
   }

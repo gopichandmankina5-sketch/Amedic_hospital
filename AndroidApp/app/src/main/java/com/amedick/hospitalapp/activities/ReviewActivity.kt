@@ -70,6 +70,9 @@ class ReviewActivity : AppCompatActivity() {
                 binding.progressBar.visibility = View.GONE
                 Toast.makeText(this@ReviewActivity, "Review submitted successfully!", Toast.LENGTH_SHORT).show()
                 
+                // Update appointment to mark as rated
+                firestoreRepository.updateAppointmentRatedStatus(appointmentId, true)
+
                 // Notify doctor
                 firestoreRepository.createNotification(
                     userId = doctorId,

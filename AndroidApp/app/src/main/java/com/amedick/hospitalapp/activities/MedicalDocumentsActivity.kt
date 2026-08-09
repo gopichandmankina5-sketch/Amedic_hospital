@@ -94,7 +94,8 @@ class MedicalDocumentsActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         adapter = MedicalDocumentAdapter(
-            emptyList(),
+            documents = emptyList(),
+            showDeleteButton = patientId == authRepository.getCurrentUserId(),
             onViewClick = { document -> viewDocument(document) },
             onDeleteClick = { document -> deleteDocument(document) }
         )

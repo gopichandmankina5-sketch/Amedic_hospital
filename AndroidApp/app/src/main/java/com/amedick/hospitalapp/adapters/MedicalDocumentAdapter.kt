@@ -11,6 +11,7 @@ import java.util.Locale
 
 class MedicalDocumentAdapter(
     private var documents: List<MedicalDocument>,
+    private val showDeleteButton: Boolean = true,
     private val onViewClick: (MedicalDocument) -> Unit,
     private val onDeleteClick: (MedicalDocument) -> Unit
 ) : RecyclerView.Adapter<MedicalDocumentAdapter.DocumentViewHolder>() {
@@ -60,8 +61,13 @@ class MedicalDocumentAdapter(
                 onViewClick(document)
             }
             
-            binding.btnDeleteDocument.setOnClickListener {
-                onDeleteClick(document)
+            if (showDeleteButton) {
+                binding.btnDeleteDocument.visibility = android.view.View.VISIBLE
+                binding.btnDeleteDocument.setOnClickListener {
+                    onDeleteClick(document)
+                }
+            } else {
+                binding.btnDeleteDocument.visibility = android.view.View.GONE
             }
         }
     }

@@ -127,6 +127,13 @@ class HomeFragment : Fragment() {
         binding.notificationsCard.setOnClickListener {
             startActivity(Intent(requireContext(), com.amedick.hospitalapp.activities.NotificationsActivity::class.java))
         }
+
+        binding.profileImageCard.setOnClickListener {
+            (activity as? MainActivity)?.navigateToProfile()
+        }
+        binding.profileImage.setOnClickListener {
+            (activity as? MainActivity)?.navigateToProfile()
+        }
     }
 
     private fun setupSearch() {
@@ -150,6 +157,18 @@ class HomeFragment : Fragment() {
                         user?.let {
                             val firstName = it.name.split(" ").firstOrNull() ?: "there"
                             binding.userNameText.text = firstName
+                            
+                            if (it.profileImage.isNotEmpty()) {
+                                com.bumptech.glide.Glide.with(this@HomeFragment)
+                                    .load(it.profileImage)
+                                    .placeholder(com.amedick.hospitalapp.R.drawable.ic_user)
+                                    .circleCrop()
+                                    .into(binding.profileImage)
+                                binding.profileImage.setPadding(0, 0, 0, 0)
+                            } else {
+                                binding.profileImage.setImageResource(com.amedick.hospitalapp.R.drawable.ic_user)
+                                binding.profileImage.setPadding(8, 8, 8, 8)
+                            }
                         }
                     }
                 }
@@ -181,43 +200,11 @@ class HomeFragment : Fragment() {
                     }
                 }
 
-                launch {
-                    viewModel.upcomingAppointment.collect { appointment ->
-                        if (appointment != null) {
-                            showUpcomingAppointment(appointment)
-                        } else {
-                            binding.upcomingSection.visibility = View.GONE
-                        }
-                    }
-                }
             }
         }
     }
 
-    private fun showUpcomingAppointment(appt: Appointment) {
-        binding.upcomingSection.visibility = View.VISIBLE
-        binding.upcomingDoctorName.text = if (appt.doctorName.isNotEmpty()) "Dr. ${appt.doctorName}" else "Appointment"
-        binding.upcomingDate.text = "📅 ${appt.date}"
-        binding.upcomingTime.text = "  🕐 ${appt.time}"
-        binding.upcomingStatus.text = appt.status.lowercase().replaceFirstChar { it.uppercase() }
 
-        val (chipBgRes, chipTextRes) = when (appt.status) {
-            AppointmentStatus.ACCEPTED -> Pair(
-                com.amedick.hospitalapp.R.color.status_confirmed_bg,
-                com.amedick.hospitalapp.R.color.status_confirmed
-            )
-            AppointmentStatus.PENDING -> Pair(
-                com.amedick.hospitalapp.R.color.status_pending_bg,
-                com.amedick.hospitalapp.R.color.status_pending
-            )
-            else -> Pair(
-                com.amedick.hospitalapp.R.color.status_pending_bg,
-                com.amedick.hospitalapp.R.color.status_pending
-            )
-        }
-        binding.upcomingStatus.setChipBackgroundColorResource(chipBgRes)
-        binding.upcomingStatus.setTextColor(requireContext().getColor(chipTextRes))
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

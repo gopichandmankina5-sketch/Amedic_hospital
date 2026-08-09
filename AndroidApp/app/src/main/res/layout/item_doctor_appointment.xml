@@ -115,19 +115,46 @@
             android:layout_marginTop="8dp"
             android:visibility="gone" />
 
+        <!-- Consultation Type Row -->
+        <LinearLayout
+            android:id="@+id/consultationTypeRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/tvConsultationIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🏥"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvConsultationType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:text="Offline Consultation"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="@color/color_primary" />
+        </LinearLayout>
+
         <LinearLayout
             android:id="@+id/actionButtonsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="12dp"
-            android:gravity="end"
             android:visibility="gone">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/rejectButton"
                 style="@style/Widget.AmedicK.Button.Outlined"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="Reject"
                 android:textColor="@color/color_error"
@@ -138,9 +165,11 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/acceptButton"
                 style="@style/Widget.AmedicK.Button"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="Accept"
+                android:layout_marginStart="8dp"
                 android:textSize="13sp" />
         </LinearLayout>
 
@@ -148,26 +177,107 @@
             android:id="@+id/acceptedActionButtonsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_marginTop="12dp"
-            android:gravity="end"
             android:visibility="gone">
 
+            <!-- Join Google Meet (ONLINE only) -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnJoinGoogleMeet"
+                style="@style/Widget.AmedicK.Button.Outlined"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Join Google Meet"
+                android:layout_marginBottom="8dp"
+                android:textSize="13sp"
+                android:maxLines="1"
+                app:autoSizeTextType="uniform"
+                android:visibility="gone" />
+
+            <!-- Verification Status Label -->
+            <TextView
+                android:id="@+id/tvVerificationStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="@color/color_warning"
+                android:gravity="center"
+                android:visibility="gone" />
+
+            <!-- Open Chat & Mark Completed -->
+            <!-- Action Buttons Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3"
+                android:layout_marginBottom="8dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/markCompletedButton"
+                        style="@style/Widget.AmedicK.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Complete"
+                        android:textSize="12sp"
+                        android:maxLines="1"
+                        android:ellipsize="none"
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="9sp"
+                        app:autoSizeMaxTextSize="12sp"
+                        android:paddingStart="2dp"
+                        android:paddingEnd="2dp"
+                        android:layout_marginEnd="4dp"
+                        app:backgroundTint="@color/status_completed" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRescheduleMeet"
+                    style="@style/Widget.AmedicK.Button.Outlined"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Reschedule"
+                    android:textSize="12sp"
+                    android:maxLines="1"
+                    android:ellipsize="none"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="9sp"
+                    app:autoSizeMaxTextSize="12sp"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
+                    android:layout_marginEnd="4dp"
+                    app:strokeColor="@color/color_primary"
+                    android:textColor="@color/color_primary" />
+                    
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnCancelMeet"
+                        style="@style/Widget.AmedicK.Button.Outlined"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Cancel"
+                        android:textSize="12sp"
+                        android:maxLines="1"
+                        android:ellipsize="none"
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeMinTextSize="9sp"
+                        app:autoSizeMaxTextSize="12sp"
+                        android:paddingStart="2dp"
+                        android:paddingEnd="2dp"
+                        app:strokeColor="@color/color_error"
+                        android:textColor="@color/color_error" />
+                </LinearLayout>
+
+            <!-- Open Chat Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/openChatButton"
                 style="@style/Widget.AmedicK.Button.Outlined"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Open Chat"
-                android:layout_marginEnd="8dp"
-                android:textSize="13sp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/markCompletedButton"
-                style="@style/Widget.AmedicK.Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mark Completed"
                 android:textSize="13sp" />
         </LinearLayout>
     </LinearLayout>

@@ -177,6 +177,110 @@
                         android:nestedScrollingEnabled="false"
                         android:visibility="gone"/>
 
+                    <!-- Consultation Type Header -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="How would you like to consult the doctor?"
+                        android:textStyle="bold"
+                        android:textColor="@color/color_on_surface"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="8dp"/>
+
+                    <!-- Radio Cards Row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2"
+                        android:layout_marginBottom="12dp">
+
+                        <!-- OFFLINE Card -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cardOffline"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="6dp"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="0dp"
+                            app:strokeWidth="1dp"
+                            app:strokeColor="@color/color_outline"
+                            app:cardBackgroundColor="@color/color_surface">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:padding="16dp">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="🏥"
+                                    android:textSize="28sp" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="OFFLINE"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/color_on_surface"
+                                    android:layout_marginTop="8dp"
+                                    android:textSize="14sp"/>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Visit the hospital"
+                                    android:textColor="@color/color_text_secondary"
+                                    android:layout_marginTop="4dp"
+                                    android:textSize="11sp"
+                                    android:gravity="center"/>
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <!-- ONLINE Card -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cardOnline"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="6dp"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="0dp"
+                            app:strokeWidth="1dp"
+                            app:strokeColor="@color/color_outline"
+                            app:cardBackgroundColor="@color/color_surface">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:padding="16dp">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="📹"
+                                    android:textSize="28sp" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="ONLINE"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/color_on_surface"
+                                    android:layout_marginTop="8dp"
+                                    android:textSize="14sp"/>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Video consultation"
+                                    android:textColor="@color/color_text_secondary"
+                                    android:layout_marginTop="4dp"
+                                    android:textSize="11sp"
+                                    android:gravity="center"/>
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                    </LinearLayout>
+
                     <!-- Reason -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/reasonInputLayout"

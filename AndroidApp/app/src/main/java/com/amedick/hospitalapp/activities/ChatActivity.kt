@@ -55,7 +55,7 @@ class ChatActivity : AppCompatActivity() {
 
         appointmentId = intent.getStringExtra(EXTRA_APPOINTMENT_ID) ?: ""
         if (appointmentId.isEmpty()) {
-            Toast.makeText(this, "Unable to open this conversation.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Unable to open chat for this appointment.", Toast.LENGTH_SHORT).show()
             finish()
             return
         }

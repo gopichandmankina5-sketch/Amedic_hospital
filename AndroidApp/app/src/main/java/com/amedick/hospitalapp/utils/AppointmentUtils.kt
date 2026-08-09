@@ -66,4 +66,27 @@ object AppointmentUtils {
         // If we can't parse it, we default to allowing completion to not block the doctor indefinitely
         return true
     }
+
+    const val DEFAULT_APPOINTMENT_DURATION_MINUTES = 30
+
+    /**
+     * Checks if the current time is within the allowed video call window.
+     * Starts at the scheduled appointment time.
+     * Ends at scheduled time + DEFAULT_APPOINTMENT_DURATION_MINUTES.
+     */
+    fun isWithinVideoCallWindow(appointment: Appointment): Boolean {
+        val start = getAppointmentDateTime(appointment) ?: return false
+        val now = Date()
+        val end = Date(start.time + DEFAULT_APPOINTMENT_DURATION_MINUTES * 60 * 1000L)
+        return (now.after(start) || now.equals(start)) && now.before(end)
+    }
+
+    /**
+     * Checks if the meeting is in the future.
+     */
+    fun isBeforeVideoCallWindow(appointment: Appointment): Boolean {
+        val start = getAppointmentDateTime(appointment) ?: return false
+        val now = Date()
+        return now.before(start)
+    }
 }

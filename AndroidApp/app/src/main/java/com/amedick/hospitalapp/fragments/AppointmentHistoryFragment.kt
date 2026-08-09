@@ -30,6 +30,8 @@ class AppointmentHistoryFragment : Fragment() {
     private val viewModel: AppointmentViewModel by viewModels()
     private lateinit var appointmentAdapter: AppointmentAdapter
 
+    @javax.inject.Inject lateinit var firestoreRepository: com.amedick.hospitalapp.firebase.FirestoreRepository
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -63,6 +65,38 @@ class AppointmentHistoryFragment : Fragment() {
                     putExtra("doctorId", appointment.doctorId)
                 }
                 startActivity(intent)
+            },
+            onJoinMeetClick = { appointment ->
+                joinGoogleMeet(appointment.doctorId)
+            },
+            onRescheduleClick = { appointment ->
+                val intent = android.content.Intent(requireContext(), com.amedick.hospitalapp.activities.BookAppointmentActivity::class.java).apply {
+                    putExtra(com.amedick.hospitalapp.activities.BookAppointmentActivity.EXTRA_DOCTOR_ID, appointment.doctorId)
+                    putExtra(com.amedick.hospitalapp.activities.BookAppointmentActivity.EXTRA_DOCTOR_NAME, appointment.doctorName)
+                    putExtra("EXTRA_RESCHEDULE_APPOINTMENT_ID", appointment.appointmentId)
+                }
+                startActivity(intent)
+            },
+            onVerifyCompletionClick = { appointment, isConfirmed ->
+                if (isConfirmed) {
+                    androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                        .setTitle("Confirm Completion")
+                        .setMessage("Are you sure this consultation was completed?")
+                        .setPositiveButton("Yes") { _, _ ->
+                            viewModel.respondToCompletionVerification(appointment.appointmentId, true)
+                        }
+                        .setNegativeButton("Cancel", null)
+                        .show()
+                } else {
+                    androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                        .setTitle("Consultation Not Completed")
+                        .setMessage("Are you sure you want to state that the consultation was not completed? Your doctor will be notified.")
+                        .setPositiveButton("Yes") { _, _ ->
+                            viewModel.respondToCompletionVerification(appointment.appointmentId, false)
+                        }
+                        .setNegativeButton("Cancel", null)
+                        .show()
+                }
             }
         )
 
@@ -77,6 +111,28 @@ class AppointmentHistoryFragment : Fragment() {
 
         viewModel.loadMyAppointments()
         observeViewModel()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadMyAppointments()
+    }
+
+    private fun joinGoogleMeet(doctorId: String) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val result = firestoreRepository.getUserProfile(doctorId)
+            result.onSuccess { doctorProfile ->
+                val link = doctorProfile.googleMeetLink
+                if (link.isNotEmpty() && link.startsWith("https://meet.google.com/")) {
+                    val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(link))
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(requireContext(), "The doctor has not set up their meeting link yet.", Toast.LENGTH_LONG).show()
+                }
+            }.onFailure {
+                Toast.makeText(requireContext(), "Failed to load doctor profile. Try again.", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun showCancelDialog(appointmentId: String) {

@@ -154,16 +154,20 @@ class DoctorAvailabilityActivity : AppCompatActivity() {
         }
 
         var selectedDay = availableDays[0]
-        // Simplified for this phase: pre-generating common slots based on user prompt (09:00 AM - 12:00 PM)
-        // In a full implementation, you'd show time pickers.
-        val defaultSlots = listOf("09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM")
+        // Pre-generating common slots based on user prompt (09:00 AM - 06:00 PM)
+        val defaultSlots = listOf(
+            "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM",
+            "12:00 PM", "12:30 PM", "01:00 PM", "01:30 PM", "02:00 PM", "02:30 PM",
+            "03:00 PM", "03:30 PM", "04:00 PM", "04:30 PM", "05:00 PM", "05:30 PM",
+            "06:00 PM"
+        )
 
         MaterialAlertDialogBuilder(this)
             .setTitle("Add Availability")
             .setSingleChoiceItems(availableDays, 0) { _, which ->
                 selectedDay = availableDays[which]
             }
-            .setPositiveButton("Add Default (9 AM - 12 PM)") { _, _ ->
+            .setPositiveButton("Add Default (9 AM - 6 PM)") { _, _ ->
                 currentSchedule[selectedDay] = defaultSlots
                 updateScheduleUI()
             }
