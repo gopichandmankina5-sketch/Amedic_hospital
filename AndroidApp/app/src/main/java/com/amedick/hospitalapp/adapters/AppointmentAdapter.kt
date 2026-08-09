@@ -18,7 +18,8 @@ class AppointmentAdapter(
     private val onJoinMeetClick: (Appointment) -> Unit,
     private val onRescheduleClick: (Appointment) -> Unit,
     private val onVerifyCompletionClick: (Appointment, Boolean) -> Unit,
-    private val onItemClick: ((Appointment) -> Unit)? = null
+    private val onItemClick: ((Appointment) -> Unit)? = null,
+    private val isAdmin: Boolean = false
 ) : RecyclerView.Adapter<AppointmentAdapter.AppointmentViewHolder>() {
 
     inner class AppointmentViewHolder(private val binding: ItemAppointmentBinding) :
@@ -67,6 +68,14 @@ class AppointmentAdapter(
             }
 
             // Action Buttons
+            if (isAdmin) {
+                binding.patientActionButtonsContainer.visibility = View.GONE
+                binding.root.setOnClickListener { onItemClick?.invoke(appointment) }
+                return
+            }
+
+            binding.patientActionButtonsContainer.visibility = View.VISIBLE
+
             val canCancel = appointment.status == AppointmentStatus.PENDING ||
                     appointment.status == AppointmentStatus.ACCEPTED
             binding.cancelButton.visibility = if (canCancel) View.VISIBLE else View.GONE

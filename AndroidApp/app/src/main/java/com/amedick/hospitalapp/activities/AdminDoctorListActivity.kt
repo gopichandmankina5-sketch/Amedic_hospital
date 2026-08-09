@@ -52,6 +52,7 @@ class AdminDoctorListActivity : AppCompatActivity() {
         adapter = DoctorAdapter(emptyList()) { doctor ->
             val intent = Intent(this, DoctorDetailsActivity::class.java)
             intent.putExtra(DoctorDetailsActivity.EXTRA_DOCTOR, doctor)
+            intent.putExtra(DoctorDetailsActivity.EXTRA_IS_ADMIN, true)
             startActivity(intent)
         }
         binding.rvDoctors.layoutManager = LinearLayoutManager(this)

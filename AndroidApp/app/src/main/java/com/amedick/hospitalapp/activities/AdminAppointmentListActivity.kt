@@ -56,7 +56,8 @@ class AdminAppointmentListActivity : AppCompatActivity() {
             onVerifyCompletionClick = { _, _ -> },
             onItemClick = { appointment ->
                 showAppointmentDetailDialog(appointment)
-            }
+            },
+            isAdmin = true
         )
         binding.rvAppointments.layoutManager = LinearLayoutManager(this)
         binding.rvAppointments.adapter = adapter

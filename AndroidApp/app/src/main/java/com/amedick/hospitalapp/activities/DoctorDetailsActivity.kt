@@ -44,13 +44,19 @@ class DoctorDetailsActivity : AppCompatActivity() {
 
         doctor?.let { doc ->
             bindDoctor(doc)
-            binding.bookButton.setOnClickListener {
-                val intent = Intent(this, BookAppointmentActivity::class.java).apply {
-                    putExtra(BookAppointmentActivity.EXTRA_DOCTOR_ID, doc.doctorId)
-                    putExtra(BookAppointmentActivity.EXTRA_DOCTOR_NAME, doc.name)
-                    putExtra(BookAppointmentActivity.EXTRA_DOCTOR_SPEC, doc.specialization)
+            
+            val isAdmin = intent.getBooleanExtra(EXTRA_IS_ADMIN, false)
+            if (isAdmin) {
+                binding.bookButton.visibility = View.GONE
+            } else {
+                binding.bookButton.setOnClickListener {
+                    val intent = Intent(this, BookAppointmentActivity::class.java).apply {
+                        putExtra(BookAppointmentActivity.EXTRA_DOCTOR_ID, doc.doctorId)
+                        putExtra(BookAppointmentActivity.EXTRA_DOCTOR_NAME, doc.name)
+                        putExtra(BookAppointmentActivity.EXTRA_DOCTOR_SPEC, doc.specialization)
+                    }
+                    startActivity(intent)
                 }
-                startActivity(intent)
             }
         } ?: run {
             Toast.makeText(this, "Doctor details unavailable", Toast.LENGTH_SHORT).show()
@@ -129,6 +135,7 @@ class DoctorDetailsActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_DOCTOR = "extra_doctor"
+        const val EXTRA_IS_ADMIN = "extra_is_admin"
 
         fun newIntent(context: Context, doctor: Doctor): Intent =
             Intent(context, DoctorDetailsActivity::class.java).apply {
