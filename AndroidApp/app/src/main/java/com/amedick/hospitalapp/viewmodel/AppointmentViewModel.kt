@@ -110,14 +110,15 @@ class AppointmentViewModel @Inject constructor(
         }
     }
 
-    fun respondToCompletionVerification(appointmentId: String, isConfirmed: Boolean) {
+    fun respondToCompletionVerification(appointmentId: String, isConfirmed: Boolean, onResult: (Boolean, String?) -> Unit) {
         val patientId = authRepository.getCurrentUserId() ?: return
         viewModelScope.launch {
             val result = firestoreRepository.respondCompletionVerification(appointmentId, isConfirmed, patientId)
             if (result.isSuccess) {
+                onResult(true, null)
                 loadMyAppointments()
             } else {
-                _bookingState.value = AppointmentState.Error(result.exceptionOrNull()?.message ?: "Failed to verify consultation")
+                onResult(false, result.exceptionOrNull()?.message ?: "Failed to verify consultation")
             }
         }
     }

@@ -129,7 +129,7 @@ class DoctorDashboardActivity : AppCompatActivity() {
                             lifecycleScope.launch {
                                 val result = firestoreRepository.requestCompletionVerification(appt.appointmentId, reason)
                                 if (result.isSuccess) {
-                                    android.widget.Toast.makeText(this@DoctorDashboardActivity, "Verification requested", android.widget.Toast.LENGTH_SHORT).show()
+                                    android.widget.Toast.makeText(this@DoctorDashboardActivity, "Completion request sent to patient", android.widget.Toast.LENGTH_SHORT).show()
                                 } else {
                                     android.widget.Toast.makeText(this@DoctorDashboardActivity, "Failed to request verification", android.widget.Toast.LENGTH_SHORT).show()
                                 }
@@ -145,7 +145,7 @@ class DoctorDashboardActivity : AppCompatActivity() {
                             lifecycleScope.launch {
                                 val result = firestoreRepository.requestCompletionVerification(appt.appointmentId, "")
                                 if (result.isSuccess) {
-                                    android.widget.Toast.makeText(this@DoctorDashboardActivity, "Verification requested", android.widget.Toast.LENGTH_SHORT).show()
+                                    android.widget.Toast.makeText(this@DoctorDashboardActivity, "Completion request sent to patient", android.widget.Toast.LENGTH_SHORT).show()
                                 } else {
                                     android.widget.Toast.makeText(this@DoctorDashboardActivity, "Failed to request verification", android.widget.Toast.LENGTH_SHORT).show()
                                 }
@@ -251,7 +251,13 @@ class DoctorDashboardActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val result = firestoreRepository.updateAppointmentStatus(appointment.appointmentId, status)
             result.onSuccess {
-                android.widget.Toast.makeText(this@DoctorDashboardActivity, "Appointment updated", android.widget.Toast.LENGTH_SHORT).show()
+                val successMessage = when (status) {
+                    com.amedick.hospitalapp.models.AppointmentStatus.ACCEPTED -> "Appointment accepted"
+                    com.amedick.hospitalapp.models.AppointmentStatus.REJECTED,
+                    com.amedick.hospitalapp.models.AppointmentStatus.CANCELLED -> "Appointment cancelled"
+                    else -> "Appointment updated"
+                }
+                android.widget.Toast.makeText(this@DoctorDashboardActivity, successMessage, android.widget.Toast.LENGTH_SHORT).show()
                 
                 if (status == com.amedick.hospitalapp.models.AppointmentStatus.ACCEPTED) {
                     val notifMessage = if (appointment.consultationType == "ONLINE") {

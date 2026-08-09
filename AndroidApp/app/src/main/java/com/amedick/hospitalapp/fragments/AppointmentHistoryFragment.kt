@@ -44,6 +44,8 @@ class AppointmentHistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val currentUserId = firestoreRepository.getCurrentUserId() ?: ""
+
         appointmentAdapter = AppointmentAdapter(
             appointments = emptyList(),
             onCancelClick = { appointment ->
@@ -83,7 +85,13 @@ class AppointmentHistoryFragment : Fragment() {
                         .setTitle("Confirm Completion")
                         .setMessage("Are you sure this consultation was completed?")
                         .setPositiveButton("Yes") { _, _ ->
-                            viewModel.respondToCompletionVerification(appointment.appointmentId, true)
+                            viewModel.respondToCompletionVerification(appointment.appointmentId, true) { success, msg ->
+                                if (success) {
+                                    Toast.makeText(requireContext(), "Appointment completed successfully", Toast.LENGTH_SHORT).show()
+                                } else {
+                                    Toast.makeText(requireContext(), msg ?: "Action failed", Toast.LENGTH_SHORT).show()
+                                }
+                            }
                         }
                         .setNegativeButton("Cancel", null)
                         .show()
@@ -92,7 +100,13 @@ class AppointmentHistoryFragment : Fragment() {
                         .setTitle("Consultation Not Completed")
                         .setMessage("Are you sure you want to state that the consultation was not completed? Your doctor will be notified.")
                         .setPositiveButton("Yes") { _, _ ->
-                            viewModel.respondToCompletionVerification(appointment.appointmentId, false)
+                            viewModel.respondToCompletionVerification(appointment.appointmentId, false) { success, msg ->
+                                if (success) {
+                                    Toast.makeText(requireContext(), "Completion not confirmed", Toast.LENGTH_SHORT).show()
+                                } else {
+                                    Toast.makeText(requireContext(), msg ?: "Action failed", Toast.LENGTH_SHORT).show()
+                                }
+                            }
                         }
                         .setNegativeButton("Cancel", null)
                         .show()
@@ -186,7 +200,7 @@ class AppointmentHistoryFragment : Fragment() {
                                 viewModel.loadMyAppointments()
                             }
                             is CancelState.Error -> {
-                                Toast.makeText(requireContext(), state.message, Toast.LENGTH_LONG).show()
+                                Toast.makeText(requireContext(), "Failed to cancel appointment", Toast.LENGTH_SHORT).show()
                                 viewModel.resetCancelState()
                             }
                             else -> Unit

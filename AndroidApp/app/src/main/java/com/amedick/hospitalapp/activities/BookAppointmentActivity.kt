@@ -159,11 +159,20 @@ class BookAppointmentActivity : AppCompatActivity() {
                         is AppointmentState.Loading -> setLoading(true)
                         is AppointmentState.Success -> {
                             setLoading(false)
+                            if (rescheduleAppointmentId != null) {
+                                Toast.makeText(this@BookAppointmentActivity, "Reschedule request sent", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(this@BookAppointmentActivity, "Appointment booked successfully", Toast.LENGTH_SHORT).show()
+                            }
                             showSuccessDialog()
                         }
                         is AppointmentState.Error -> {
                             setLoading(false)
-                            Toast.makeText(this@BookAppointmentActivity, state.message, Toast.LENGTH_LONG).show()
+                            if (rescheduleAppointmentId != null) {
+                                Toast.makeText(this@BookAppointmentActivity, "Failed to send reschedule request", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(this@BookAppointmentActivity, "Failed to book appointment. Please try again.", Toast.LENGTH_SHORT).show()
+                            }
                             viewModel.resetBookingState()
                         }
                     }

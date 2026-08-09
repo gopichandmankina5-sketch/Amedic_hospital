@@ -215,6 +215,11 @@ class DoctorProfileActivity : AppCompatActivity() {
                 val newReg = regField.text.toString().trim()
                 val newMeet = meetField.text.toString().trim()
 
+                if (newMeet.isNotEmpty() && !newMeet.startsWith("https://meet.google.com/")) {
+                    Toast.makeText(this@DoctorProfileActivity, "Please enter a valid Google Meet link", Toast.LENGTH_SHORT).show()
+                    return@setPositiveButton
+                }
+
                 if (newName.isNotEmpty()) {
                     // Update only allowed fields, role and verificationStatus must NEVER change here
                     updateProfileData(
@@ -256,10 +261,20 @@ class DoctorProfileActivity : AppCompatActivity() {
 
             binding.progressBar.visibility = View.GONE
             if (result.isSuccess && resultExtra.isSuccess) {
-                Toast.makeText(this@DoctorProfileActivity, "Profile updated successfully.", Toast.LENGTH_SHORT).show()
+                val oldMeetLink = currentDoctor?.googleMeetLink ?: ""
+                if (updatedUser.googleMeetLink.isNotEmpty() && updatedUser.googleMeetLink != oldMeetLink) {
+                    Toast.makeText(this@DoctorProfileActivity, "Google Meet link added", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this@DoctorProfileActivity, "Profile updated successfully", Toast.LENGTH_SHORT).show()
+                }
                 loadDoctorProfile()
             } else {
-                Toast.makeText(this@DoctorProfileActivity, "Failed to update profile", Toast.LENGTH_SHORT).show()
+                val oldMeetLink = currentDoctor?.googleMeetLink ?: ""
+                if (updatedUser.googleMeetLink.isNotEmpty() && updatedUser.googleMeetLink != oldMeetLink) {
+                    Toast.makeText(this@DoctorProfileActivity, "Failed to save meeting link", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this@DoctorProfileActivity, "Failed to update profile", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

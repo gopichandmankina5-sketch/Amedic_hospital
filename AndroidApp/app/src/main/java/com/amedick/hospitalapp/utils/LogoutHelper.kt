@@ -19,6 +19,7 @@ object LogoutHelper {
             .setMessage("Are you sure you want to logout?")
             .setPositiveButton("Logout") { _, _ ->
                 FirebaseAuth.getInstance().signOut()
+                android.widget.Toast.makeText(activity, "Logged out successfully", android.widget.Toast.LENGTH_SHORT).show()
                 activity.startActivity(
                     Intent(activity, LoginActivity::class.java).apply {
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

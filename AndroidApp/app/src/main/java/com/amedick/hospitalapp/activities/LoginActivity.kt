@@ -114,6 +114,7 @@ class LoginActivity : AppCompatActivity() {
                             is LoginState.Loading -> setLoading(true)
                             is LoginState.Success -> {
                                 setLoading(false)
+                                Toast.makeText(this@LoginActivity, "Login successful", Toast.LENGTH_SHORT).show()
                                 val role = state.user?.role
                                 val intent = when (role) {
                                     "admin" -> Intent(this@LoginActivity, AdminDashboardActivity::class.java)
@@ -127,6 +128,7 @@ class LoginActivity : AppCompatActivity() {
                             is LoginState.Error -> {
                                 setLoading(false)
                                 binding.passwordInputLayout.error = state.message
+                                Toast.makeText(this@LoginActivity, "Login failed. Please check your credentials.", Toast.LENGTH_SHORT).show()
                                 viewModel.resetState()
                             }
                         }
@@ -140,11 +142,11 @@ class LoginActivity : AppCompatActivity() {
                             is ForgotPasswordState.Loading ->
                                 Toast.makeText(this@LoginActivity, "Sending reset link…", Toast.LENGTH_SHORT).show()
                             is ForgotPasswordState.Success -> {
-                                Toast.makeText(this@LoginActivity, "Reset link sent! Check your email.", Toast.LENGTH_LONG).show()
+                                Toast.makeText(this@LoginActivity, "Password reset email sent", Toast.LENGTH_SHORT).show()
                                 viewModel.resetForgotPasswordState()
                             }
                             is ForgotPasswordState.Error -> {
-                                Toast.makeText(this@LoginActivity, state.message, Toast.LENGTH_LONG).show()
+                                Toast.makeText(this@LoginActivity, "Unable to send reset email", Toast.LENGTH_SHORT).show()
                                 viewModel.resetForgotPasswordState()
                             }
                         }

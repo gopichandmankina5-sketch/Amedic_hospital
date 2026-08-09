@@ -22,6 +22,7 @@ import com.amedick.hospitalapp.databinding.FragmentProfileBinding
 import com.amedick.hospitalapp.firebase.FirestoreRepository
 import com.amedick.hospitalapp.viewmodel.ProfileState
 import com.amedick.hospitalapp.viewmodel.ProfileViewModel
+import com.amedick.hospitalapp.viewmodel.UpdateState
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -199,8 +200,6 @@ class ProfileFragment : Fragment() {
                 val newPhone = phoneField.text.toString().trim()
                 if (newName.isNotEmpty()) {
                     viewModel.updateProfile(user.copy(name = newName, phone = newPhone))
-                    Toast.makeText(requireContext(), "Profile updated.", Toast.LENGTH_SHORT).show()
-                    viewModel.loadProfile()
                 } else {
                     Toast.makeText(requireContext(), "Name cannot be empty.", Toast.LENGTH_SHORT).show()
                 }
@@ -234,7 +233,6 @@ class ProfileFragment : Fragment() {
                 val newPass = newPassField.text.toString()
                 if (newPass.length >= 6) {
                     viewModel.updatePassword(newPass)
-                    Toast.makeText(requireContext(), "Password changed successfully.", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(requireContext(), "Password must be at least 6 characters.", Toast.LENGTH_SHORT).show()
                 }
@@ -246,32 +244,51 @@ class ProfileFragment : Fragment() {
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.profileState.collect { state ->
-                    when (state) {
-                        is ProfileState.Idle -> binding.progressBar.visibility = View.GONE
-                        is ProfileState.Loading -> binding.progressBar.visibility = View.VISIBLE
-                        is ProfileState.Loaded -> {
-                            binding.progressBar.visibility = View.GONE
-                            binding.nameText.text = state.user.name.ifEmpty { "Your Name" }
-                            binding.emailText.text = state.user.email
-                            binding.phoneText.text = state.user.phone.ifEmpty { "Not set" }
+                launch {
+                    viewModel.profileState.collect { state ->
+                        when (state) {
+                            is ProfileState.Idle -> binding.progressBar.visibility = View.GONE
+                            is ProfileState.Loading -> binding.progressBar.visibility = View.VISIBLE
+                            is ProfileState.Loaded -> {
+                                binding.progressBar.visibility = View.GONE
+                                binding.nameText.text = state.user.name.ifEmpty { "Your Name" }
+                                binding.emailText.text = state.user.email
+                                binding.phoneText.text = state.user.phone.ifEmpty { "Not set" }
 
-                            // Load profile image using Glide
-                            if (state.user.profileImage.isNotEmpty()) {
-                                Glide.with(this@ProfileFragment)
-                                    .load(state.user.profileImage)
-                                    .placeholder(com.amedick.hospitalapp.R.drawable.ic_user)
-                                    .circleCrop()
-                                    .into(binding.profileImage)
-                                binding.profileImage.setPadding(0, 0, 0, 0)
-                            } else {
-                                binding.profileImage.setImageResource(com.amedick.hospitalapp.R.drawable.ic_user)
-                                binding.profileImage.setPadding(16, 16, 16, 16)
+                                // Load profile image using Glide
+                                if (state.user.profileImage.isNotEmpty()) {
+                                    Glide.with(this@ProfileFragment)
+                                        .load(state.user.profileImage)
+                                        .placeholder(com.amedick.hospitalapp.R.drawable.ic_user)
+                                        .circleCrop()
+                                        .into(binding.profileImage)
+                                    binding.profileImage.setPadding(0, 0, 0, 0)
+                                } else {
+                                    binding.profileImage.setImageResource(com.amedick.hospitalapp.R.drawable.ic_user)
+                                    binding.profileImage.setPadding(16, 16, 16, 16)
+                                }
+                            }
+                            is ProfileState.Error -> {
+                                binding.progressBar.visibility = View.GONE
+                                // Silently handle — user may not have a Firestore profile yet
                             }
                         }
-                        is ProfileState.Error -> {
-                            binding.progressBar.visibility = View.GONE
-                            // Silently handle — user may not have a Firestore profile yet
+                    }
+                }
+                
+                launch {
+                    viewModel.updateState.collect { state ->
+                        when (state) {
+                            is UpdateState.Success -> {
+                                Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
+                                viewModel.loadProfile()
+                                viewModel.resetUpdateState()
+                            }
+                            is UpdateState.Error -> {
+                                Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
+                                viewModel.resetUpdateState()
+                            }
+                            else -> Unit
                         }
                     }
                 }
