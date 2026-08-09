@@ -40,6 +40,10 @@ class DoctorDashboardActivity : AppCompatActivity() {
             startActivity(Intent(this, NotificationsActivity::class.java))
         }
 
+        binding.btnPaymentSetup.setOnClickListener {
+            startActivity(Intent(this, DoctorPaymentSetupActivity::class.java))
+        }
+
         binding.btnProfile.setOnClickListener {
             startActivity(Intent(this, DoctorProfileActivity::class.java))
         }
@@ -184,6 +188,17 @@ class DoctorDashboardActivity : AppCompatActivity() {
                     putExtra("EXTRA_PATIENT_ID", appt.patientId)
                 }
                 startActivity(intent)
+            },
+            onViewPaymentProofClick = { appt ->
+                if (appt.paymentProofUrl.isNotEmpty()) {
+                    val dialogView = layoutInflater.inflate(com.amedick.hospitalapp.R.layout.dialog_image_viewer, null)
+                    val imageView = dialogView.findViewById<android.widget.ImageView>(com.amedick.hospitalapp.R.id.ivFullscreenImage)
+                    com.bumptech.glide.Glide.with(this).load(appt.paymentProofUrl).into(imageView)
+                    androidx.appcompat.app.AlertDialog.Builder(this)
+                        .setView(dialogView)
+                        .setPositiveButton("Close", null)
+                        .show()
+                }
             }
         )
         binding.rvAppointments.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)

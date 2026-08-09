@@ -107,6 +107,10 @@ class AdminAppointmentListActivity : AppCompatActivity() {
         val tvMeetingProvider = dialogView.findViewById<android.widget.TextView>(R.id.tvDetailMeetingProvider)!!
         val tvMeetingStatus = dialogView.findViewById<android.widget.TextView>(R.id.tvDetailMeetingStatus)!!
         val tvMeetingLink = dialogView.findViewById<android.widget.TextView>(R.id.tvDetailMeetingLink)!!
+        val layoutAdminPayment = dialogView.findViewById<android.view.View>(R.id.layoutAdminPaymentDetails)!!
+        val tvPaymentFee = dialogView.findViewById<android.widget.TextView>(R.id.tvAdminPaymentFee)!!
+        val tvPaymentUpi = dialogView.findViewById<android.widget.TextView>(R.id.tvAdminPaymentUpi)!!
+        val tvPaymentStatus = dialogView.findViewById<android.widget.TextView>(R.id.tvAdminPaymentStatus)!!
 
         val dialog = com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
             .setView(dialogView as android.view.View)
@@ -137,9 +141,19 @@ class AdminAppointmentListActivity : AppCompatActivity() {
                         tvMeetingProvider.text = "Provider: ${if (appt.meetingProvider.isNotEmpty()) appt.meetingProvider else "Google Meet"}"
                         tvMeetingStatus.text = "Meeting Status: ${appt.meetingStatus}"
                         tvMeetingLink.text = "Link: ${if (appt.meetingUri.isNotEmpty()) appt.meetingUri else "Not available yet"}"
+                        
+                        if (appt.status == "accepted" || appt.status == "completed") {
+                            layoutAdminPayment.visibility = android.view.View.VISIBLE
+                            tvPaymentFee.text = "Fee: ₹${appt.consultationFee}"
+                            tvPaymentUpi.text = "UPI ID: ${if (appt.upiId.isNotEmpty()) appt.upiId else "N/A"}"
+                            tvPaymentStatus.text = "Status: ${appt.paymentStatus.replaceFirstChar { it.uppercase() }}"
+                        } else {
+                            layoutAdminPayment.visibility = android.view.View.GONE
+                        }
                     } else {
-                        tvConsultationType.setTextColor(getColor(R.color.color_text_secondary))
+                        tvConsultationType.setTextColor(getColor(R.color.color_on_background))
                         layoutOnline.visibility = android.view.View.GONE
+                        layoutAdminPayment.visibility = android.view.View.GONE
                     }
                 }
             }

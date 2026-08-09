@@ -179,14 +179,66 @@ class FirestoreRepository @Inject constructor(
             val ref = firestore.collection("Appointments").document(appointmentId)
             val snapshot = transaction.get(ref)
             if (snapshot.exists()) {
+                var fee = 0.0
+                var upiId = ""
+                var qrUrl = ""
+                var fetchPaymentInfo = false
+                
+                if (status == AppointmentStatus.ACCEPTED && snapshot.getString("consultationType") == "ONLINE") {
+                    val doctorId = snapshot.getString("doctorId") ?: ""
+                    if (doctorId.isNotEmpty()) {
+                        val docRef = firestore.collection("Users").document(doctorId)
+                        val docSnapshot = transaction.get(docRef)
+                        fee = docSnapshot.getDouble("consultationFee") ?: 0.0
+                        
+                        val paymentInfoRef = docRef.collection("payment_info").document("details")
+                        val paymentInfoSnapshot = transaction.get(paymentInfoRef)
+                        if (paymentInfoSnapshot.exists()) {
+                            upiId = paymentInfoSnapshot.getString("upiId") ?: ""
+                            qrUrl = paymentInfoSnapshot.getString("paymentQrUrl") ?: ""
+                        }
+                        fetchPaymentInfo = true
+                    }
+                }
+
+                // All reads are done, now perform writes
                 transaction.update(ref, "status", status)
+                
                 // If accepting an appointment that requested a reschedule, complete the reschedule.
                 if (status == AppointmentStatus.ACCEPTED && snapshot.getString("rescheduleStatus") == "requested") {
                     transaction.update(ref, "rescheduleStatus", "completed")
                 }
+                
+                if (fetchPaymentInfo) {
+                    transaction.update(ref, "consultationFee", fee)
+                    if (upiId.isNotEmpty() || qrUrl.isNotEmpty()) {
+                        transaction.update(ref, "upiId", upiId)
+                        transaction.update(ref, "paymentQrUrl", qrUrl)
+                    }
+                }
             }
         }.await()
         Result.success(true)
+    } catch (e: Exception) {
+        android.util.Log.e("AppointmentAccept", "Failed to accept appointment", e)
+        Result.failure(e)
+    }
+
+    suspend fun getDoctorPaymentBookingInfo(doctorId: String): Result<Map<String, Any?>> = try {
+        val userDoc = firestore.collection("Users").document(doctorId).get().await()
+        val fee = userDoc.getDouble("consultationFee") ?: 0.0
+
+        val paymentInfoDoc = firestore.collection("Users").document(doctorId)
+            .collection("payment_info").document("details").get().await()
+        
+        val upiId = if (paymentInfoDoc.exists()) paymentInfoDoc.getString("upiId") ?: "" else ""
+        val qrUrl = if (paymentInfoDoc.exists()) paymentInfoDoc.getString("paymentQrUrl") ?: "" else ""
+
+        Result.success(mapOf(
+            "consultationFee" to fee,
+            "upiId" to upiId,
+            "paymentQrUrl" to qrUrl
+        ))
     } catch (e: Exception) {
         Result.failure(e)
     }
@@ -253,6 +305,14 @@ class FirestoreRepository @Inject constructor(
     suspend fun updateAppointmentRatedStatus(appointmentId: String, isRated: Boolean): Result<Boolean> = try {
         firestore.collection("Appointments").document(appointmentId)
             .update("isRated", isRated).await()
+        Result.success(true)
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+
+    suspend fun updateAppointmentPaymentStatus(appointmentId: String, paymentStatus: String): Result<Boolean> = try {
+        firestore.collection("Appointments").document(appointmentId)
+            .update("paymentStatus", paymentStatus).await()
         Result.success(true)
     } catch (e: Exception) {
         Result.failure(e)
@@ -840,6 +900,32 @@ class FirestoreRepository @Inject constructor(
         firestore.collection("Users").document(userId)
             .update("profileImage", imageUrl).await()
         Result.success(Unit)
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+    
+    suspend fun saveDoctorPaymentInfo(doctorId: String, info: com.amedick.hospitalapp.models.DoctorPaymentInfo): Result<Boolean> = try {
+        firestore.collection("Users").document(doctorId)
+            .collection("payment_info").document("details")
+            .set(info).await()
+        Result.success(true)
+    } catch (e: Exception) {
+        Result.failure(e)
+    }
+    
+    suspend fun getDoctorPaymentInfo(doctorId: String): Result<com.amedick.hospitalapp.models.DoctorPaymentInfo> = try {
+        val snapshot = firestore.collection("Users").document(doctorId)
+            .collection("payment_info").document("details").get().await()
+        if (snapshot.exists()) {
+            val info = snapshot.toObject(com.amedick.hospitalapp.models.DoctorPaymentInfo::class.java)
+            if (info != null) {
+                Result.success(info)
+            } else {
+                Result.failure(Exception("Failed to parse payment info"))
+            }
+        } else {
+            Result.success(com.amedick.hospitalapp.models.DoctorPaymentInfo())
+        }
     } catch (e: Exception) {
         Result.failure(e)
     }

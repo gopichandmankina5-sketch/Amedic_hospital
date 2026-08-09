@@ -21,6 +21,9 @@ class StorageRepository @Inject constructor(
     suspend fun uploadDoctorProfileImage(doctorId: String, imageUri: Uri): Result<String> =
         upload("doctors/$doctorId/profile/${UUID.randomUUID()}", imageUri)
 
+    suspend fun uploadPaymentProof(patientId: String, imageUri: Uri): Result<String> =
+        upload("users/$patientId/profile/payment_${UUID.randomUUID()}", imageUri)
+
     private suspend fun upload(path: String, imageUri: Uri): Result<String> = try {
         val reference = storage.reference.child(path)
         reference.putFile(imageUri).await()

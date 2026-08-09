@@ -28,6 +28,16 @@ import androidx.recyclerview.widget.RecyclerView
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.provider.OpenableColumns
+import com.amedick.hospitalapp.config.CloudinaryConfig
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 
 @AndroidEntryPoint
 class BookAppointmentActivity : AppCompatActivity() {
@@ -44,12 +54,32 @@ class BookAppointmentActivity : AppCompatActivity() {
     @Inject
     lateinit var firestoreRepository: FirestoreRepository
 
+    @Inject
+    lateinit var storageRepository: com.amedick.hospitalapp.firebase.StorageRepository
+
     private var doctorAvailability: Availability? = null
     private var selectedDateStr: String = ""
     private var selectedTimeStr: String = ""
     private var bookedSlotsForDate: List<String> = emptyList()
     private var selectedConsultationType: String? = null
     private var patientName: String = ""
+    
+    private var doctorConsultationFee: Double = 0.0
+    private var doctorUpiId: String = ""
+    private var doctorPaymentQrUrl: String = ""
+
+    private var selectedPaymentProofUri: android.net.Uri? = null
+    private var ivScreenshotPreview: android.widget.ImageView? = null
+
+    private val pickPaymentProofLauncher = registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.GetContent()) { uri ->
+        if (uri != null) {
+            selectedPaymentProofUri = uri
+            ivScreenshotPreview?.visibility = View.VISIBLE
+            ivScreenshotPreview?.let {
+                com.bumptech.glide.Glide.with(this).load(uri).into(it)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,6 +127,7 @@ class BookAppointmentActivity : AppCompatActivity() {
         }
 
         loadDoctorAvailability(doctorId)
+        loadDoctorPaymentInfo(doctorId)
 
         // Fetch patient profile for name
         lifecycleScope.launch {
@@ -129,24 +160,14 @@ class BookAppointmentActivity : AppCompatActivity() {
 
         binding.bookButton.setOnClickListener {
             if (validateInputs(doctorId)) {
-                setLoading(true)
-                if (rescheduleAppointmentId != null) {
-                    viewModel.rescheduleAppointment(
-                        appointmentId = rescheduleAppointmentId,
-                        date = selectedDateStr,
-                        time = selectedTimeStr,
-                        consultationType = selectedConsultationType!!
-                    )
+                if (selectedConsultationType == "ONLINE") {
+                    if (doctorPaymentQrUrl.isEmpty() || doctorConsultationFee <= 0.0) {
+                        Toast.makeText(this, "Payment QR is not available for this doctor yet.", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    }
+                    showPaymentDialog(doctorId, doctorName, rescheduleAppointmentId)
                 } else {
-                    viewModel.bookAppointment(
-                        doctorId = doctorId,
-                        doctorName = doctorName,
-                        date = selectedDateStr,
-                        time = selectedTimeStr,
-                        reason = binding.reasonInput.text.toString().trim(),
-                        patientName = patientName,
-                        consultationType = selectedConsultationType!!
-                    )
+                    submitBooking(doctorId, doctorName, rescheduleAppointmentId)
                 }
             }
         }
@@ -162,7 +183,11 @@ class BookAppointmentActivity : AppCompatActivity() {
                             if (rescheduleAppointmentId != null) {
                                 Toast.makeText(this@BookAppointmentActivity, "Reschedule request sent", Toast.LENGTH_SHORT).show()
                             } else {
-                                Toast.makeText(this@BookAppointmentActivity, "Appointment booked successfully", Toast.LENGTH_SHORT).show()
+                                if (selectedConsultationType == "ONLINE") {
+                                    Toast.makeText(this@BookAppointmentActivity, "Payment submitted. Appointment request sent.", Toast.LENGTH_LONG).show()
+                                } else {
+                                    Toast.makeText(this@BookAppointmentActivity, "Appointment booked successfully", Toast.LENGTH_SHORT).show()
+                                }
                             }
                             showSuccessDialog()
                         }
@@ -171,7 +196,8 @@ class BookAppointmentActivity : AppCompatActivity() {
                             if (rescheduleAppointmentId != null) {
                                 Toast.makeText(this@BookAppointmentActivity, "Failed to send reschedule request", Toast.LENGTH_SHORT).show()
                             } else {
-                                Toast.makeText(this@BookAppointmentActivity, "Failed to book appointment. Please try again.", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@BookAppointmentActivity, "Failed to submit appointment request. Please try again.", Toast.LENGTH_LONG).show()
+                                android.util.Log.e("BookAppointment", "Failed to book appointment: ${state.message}")
                             }
                             viewModel.resetBookingState()
                         }
@@ -188,6 +214,152 @@ class BookAppointmentActivity : AppCompatActivity() {
                 doctorAvailability = it
             }
         }
+    }
+
+    private fun loadDoctorPaymentInfo(doctorId: String) {
+        lifecycleScope.launch {
+            val result = firestoreRepository.getDoctorPaymentBookingInfo(doctorId)
+            result.onSuccess { info ->
+                doctorConsultationFee = info["consultationFee"] as? Double ?: 0.0
+                doctorUpiId = info["upiId"] as? String ?: ""
+                doctorPaymentQrUrl = info["paymentQrUrl"] as? String ?: ""
+            }
+        }
+    }
+
+    private fun submitBooking(doctorId: String, doctorName: String, rescheduleAppointmentId: String?, paymentStatus: String = "pending", paymentProofUrl: String = "") {
+        setLoading(true)
+        if (rescheduleAppointmentId != null) {
+            viewModel.rescheduleAppointment(
+                appointmentId = rescheduleAppointmentId,
+                date = selectedDateStr,
+                time = selectedTimeStr,
+                consultationType = selectedConsultationType!!
+            )
+        } else {
+            viewModel.bookAppointment(
+                doctorId = doctorId,
+                doctorName = doctorName,
+                date = selectedDateStr,
+                time = selectedTimeStr,
+                reason = binding.reasonInput.text.toString().trim(),
+                patientName = patientName,
+                consultationType = selectedConsultationType!!,
+                consultationFee = if (selectedConsultationType == "ONLINE") doctorConsultationFee else 0.0,
+                upiId = if (selectedConsultationType == "ONLINE") doctorUpiId else "",
+                paymentQrUrl = if (selectedConsultationType == "ONLINE") doctorPaymentQrUrl else "",
+                paymentStatus = paymentStatus,
+                paymentProofUrl = paymentProofUrl
+            )
+        }
+    }
+
+    private fun uploadProofAndSubmit(doctorId: String, doctorName: String, rescheduleAppointmentId: String?) {
+        setLoading(true)
+        val patientId = firestoreRepository.getCurrentUserId()
+        if (patientId == null) {
+            setLoading(false)
+            return
+        }
+
+        val uri = selectedPaymentProofUri!!
+        var fileName = "payment_proof.jpg"
+        try {
+            contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+                if (cursor.moveToFirst()) {
+                    val nameIdx = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                    if (nameIdx != -1) fileName = cursor.getString(nameIdx)
+                }
+            }
+        } catch (_: Exception) {}
+
+        val mimeType = contentResolver.getType(uri) ?: "image/jpeg"
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val inputStream = contentResolver.openInputStream(uri)
+                val bytes = inputStream?.readBytes()
+                inputStream?.close()
+
+                if (bytes == null) throw Exception("Failed to read file bytes")
+
+                val requestBody = MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("upload_preset", CloudinaryConfig.UPLOAD_PRESET)
+                    .addFormDataPart("file", fileName, bytes.toRequestBody(mimeType.toMediaTypeOrNull()))
+                    .build()
+
+                val request = Request.Builder()
+                    .url("https://api.cloudinary.com/v1_1/${CloudinaryConfig.CLOUD_NAME}/auto/upload")
+                    .post(requestBody)
+                    .build()
+
+                val response = OkHttpClient().newCall(request).execute()
+                if (!response.isSuccessful) {
+                    throw Exception("Cloudinary server error: ${response.code}")
+                }
+
+                val responseBody = response.body?.string() ?: throw Exception("Empty response")
+                val secureUrl = JSONObject(responseBody).getString("secure_url")
+
+                withContext(Dispatchers.Main) {
+                    submitBooking(doctorId, doctorName, rescheduleAppointmentId, "submitted", secureUrl)
+                }
+            } catch (exception: Exception) {
+                withContext(Dispatchers.Main) {
+                    setLoading(false)
+                    Toast.makeText(this@BookAppointmentActivity, "Upload failed: ${exception.message}", Toast.LENGTH_LONG).show()
+                    android.util.Log.e("BookAppointment", "Upload failed", exception)
+                }
+            }
+        }
+    }
+
+    private fun showPaymentDialog(doctorId: String, doctorName: String, rescheduleAppointmentId: String?) {
+        val dialogView = layoutInflater.inflate(com.amedick.hospitalapp.R.layout.dialog_payment_booking, null)
+        
+        val tvDoctorName = dialogView.findViewById<android.widget.TextView>(com.amedick.hospitalapp.R.id.tvDoctorName)
+        val tvConsultationFee = dialogView.findViewById<android.widget.TextView>(com.amedick.hospitalapp.R.id.tvConsultationFee)
+        val tvUpiId = dialogView.findViewById<android.widget.TextView>(com.amedick.hospitalapp.R.id.tvUpiId)
+        val ivPaymentQr = dialogView.findViewById<android.widget.ImageView>(com.amedick.hospitalapp.R.id.ivPaymentQr)
+        val btnCancel = dialogView.findViewById<android.view.View>(com.amedick.hospitalapp.R.id.btnCancel)
+        val btnIHavePaid = dialogView.findViewById<android.view.View>(com.amedick.hospitalapp.R.id.btnIHavePaid)
+
+        tvDoctorName.text = doctorName
+        tvConsultationFee.text = "₹$doctorConsultationFee"
+        tvUpiId.text = doctorUpiId
+        
+        if (doctorPaymentQrUrl.isNotEmpty()) {
+            com.bumptech.glide.Glide.with(this).load(doctorPaymentQrUrl).into(ivPaymentQr)
+        }
+
+        val btnUploadScreenshot = dialogView.findViewById<android.view.View>(com.amedick.hospitalapp.R.id.btnUploadScreenshot)
+        ivScreenshotPreview = dialogView.findViewById<android.widget.ImageView>(com.amedick.hospitalapp.R.id.ivScreenshotPreview)
+        selectedPaymentProofUri = null
+
+        btnUploadScreenshot.setOnClickListener {
+            pickPaymentProofLauncher.launch("image/*")
+        }
+
+        val dialog = MaterialAlertDialogBuilder(this)
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        btnIHavePaid.setOnClickListener {
+            if (selectedPaymentProofUri == null) {
+                Toast.makeText(this, "Please upload a transaction screenshot", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            dialog.dismiss()
+            uploadProofAndSubmit(doctorId, doctorName, rescheduleAppointmentId)
+        }
+
+        dialog.show()
     }
 
     private fun checkAvailabilityForDate(dateStr: String, doctorId: String) {

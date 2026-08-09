@@ -18,6 +18,7 @@ class AppointmentAdapter(
     private val onJoinMeetClick: (Appointment) -> Unit,
     private val onRescheduleClick: (Appointment) -> Unit,
     private val onVerifyCompletionClick: (Appointment, Boolean) -> Unit,
+    private val onPaymentSubmitClick: ((Appointment) -> Unit)? = null,
     private val onItemClick: ((Appointment) -> Unit)? = null,
     private val isAdmin: Boolean = false
 ) : RecyclerView.Adapter<AppointmentAdapter.AppointmentViewHolder>() {
@@ -89,8 +90,35 @@ class AppointmentAdapter(
                 binding.btnJoinGoogleMeet.setOnClickListener {
                     onJoinMeetClick(appointment)
                 }
+                
+                // Show Payment Section
+                binding.layoutPayment.visibility = View.VISIBLE
+                binding.tvPaymentFee.text = "₹${appointment.consultationFee}"
+                binding.tvPaymentUpi.text = appointment.upiId
+                binding.tvPaymentStatus.text = "Payment Status: ${appointment.paymentStatus.replaceFirstChar { it.uppercase() }}"
+                
+                if (appointment.paymentQrUrl.isNotEmpty()) {
+                    binding.ivPaymentQr.visibility = View.VISIBLE
+                    com.bumptech.glide.Glide.with(ctx)
+                        .load(appointment.paymentQrUrl)
+                        .into(binding.ivPaymentQr)
+                } else {
+                    binding.ivPaymentQr.visibility = View.GONE
+                }
+                
+                if (appointment.paymentStatus == "submitted") {
+                    binding.btnSubmitPayment.visibility = View.GONE
+                    binding.tvPaymentStatus.setTextColor(ctx.getColor(R.color.color_success))
+                } else {
+                    binding.btnSubmitPayment.visibility = View.VISIBLE
+                    binding.tvPaymentStatus.setTextColor(ctx.getColor(R.color.status_pending))
+                    binding.btnSubmitPayment.setOnClickListener {
+                        onPaymentSubmitClick?.invoke(appointment)
+                    }
+                }
             } else {
                 binding.btnJoinGoogleMeet.visibility = View.GONE
+                binding.layoutPayment.visibility = View.GONE
             }
 
             if (appointment.status == AppointmentStatus.COMPLETED) {

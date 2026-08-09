@@ -35,7 +35,12 @@ class AppointmentViewModel @Inject constructor(
         time: String,
         reason: String,
         patientName: String = "",
-        consultationType: String = "OFFLINE"
+        consultationType: String = "OFFLINE",
+        consultationFee: Double = 0.0,
+        upiId: String = "",
+        paymentQrUrl: String = "",
+        paymentStatus: String = "pending",
+        paymentProofUrl: String = ""
     ) {
         val patientId = authRepository.getCurrentUserId()
         if (patientId == null) {
@@ -60,7 +65,13 @@ class AppointmentViewModel @Inject constructor(
                 status = AppointmentStatus.PENDING,
                 consultationType = consultationType,
                 videoRoomId = if (consultationType == "ONLINE") "amedick-$slotDocId" else "",
-                videoRoomUrl = if (consultationType == "ONLINE") "https://meet.jit.si/amedick-$slotDocId" else ""
+                videoRoomUrl = if (consultationType == "ONLINE") "https://meet.jit.si/amedick-$slotDocId" else "",
+                consultationFee = consultationFee,
+                upiId = upiId,
+                paymentQrUrl = paymentQrUrl,
+                paymentStatus = paymentStatus,
+                paymentDate = if (paymentStatus == "submitted") System.currentTimeMillis() else 0L,
+                paymentProofUrl = paymentProofUrl
             )
             val result = firestoreRepository.bookAppointment(appointment)
             _bookingState.value = result.fold(

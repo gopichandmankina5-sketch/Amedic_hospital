@@ -165,4 +165,52 @@
             android:textColor="@color/color_text_secondary" />
     </LinearLayout>
 
+    <!-- Payment info section (NO QR) -->
+    <LinearLayout
+        android:id="@+id/layoutAdminPaymentDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#F5F5F5"
+        android:layout_marginTop="8dp"
+        android:padding="12dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Payment details"
+            android:textStyle="bold"
+            android:textColor="@color/color_primary"
+            android:layout_marginBottom="6dp"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvAdminPaymentFee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fee: ₹0"
+            android:textSize="12sp"
+            android:textColor="@color/color_text_secondary"
+            android:layout_marginBottom="4dp" />
+            
+        <TextView
+            android:id="@+id/tvAdminPaymentUpi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="UPI ID: N/A"
+            android:textSize="12sp"
+            android:textColor="@color/color_text_secondary"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:id="@+id/tvAdminPaymentStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status: Pending"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/color_text_secondary" />
+    </LinearLayout>
+
 </LinearLayout>

@@ -84,6 +84,12 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
+        <!-- Doctor Payment Setup Activity -->
+        <activity
+            android:name="com.amedick.hospitalapp.activities.DoctorPaymentSetupActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+            
         <!-- Admin Dashboard -->
         <activity
             android:name="com.amedick.hospitalapp.activities.AdminDashboardActivity"

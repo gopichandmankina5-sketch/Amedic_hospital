@@ -17,8 +17,9 @@ class DoctorAppointmentAdapter(
     private val onMarkCompletedClick: (Appointment) -> Unit,
     private val onOpenChatClick: (Appointment) -> Unit,
     private val onJoinMeetClick: (Appointment) -> Unit,
-    private val onCancelMeetClick: (Appointment) -> Unit,
-    private val onRescheduleMeetClick: (Appointment) -> Unit,
+    private var onCancelMeetClick: (Appointment) -> Unit = {},
+    var onRescheduleMeetClick: (Appointment) -> Unit = {},
+    var onViewPaymentProofClick: ((Appointment) -> Unit)? = null,
     private val onItemClick: ((Appointment) -> Unit)? = null
 ) : RecyclerView.Adapter<DoctorAppointmentAdapter.AppointmentViewHolder>() {
 
@@ -78,6 +79,14 @@ class DoctorAppointmentAdapter(
             binding.btnJoinGoogleMeet.visibility = View.GONE
             binding.markCompletedButton.visibility = View.VISIBLE
             binding.tvVerificationStatus.visibility = View.GONE
+            binding.btnViewPaymentProof.visibility = View.GONE
+
+            if (appointment.paymentProofUrl.isNotEmpty()) {
+                binding.btnViewPaymentProof.visibility = View.VISIBLE
+                binding.btnViewPaymentProof.setOnClickListener {
+                    onViewPaymentProofClick?.invoke(appointment)
+                }
+            }
 
             // Show action buttons based on status
             if (appointment.status == AppointmentStatus.PENDING) {

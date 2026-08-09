@@ -133,13 +133,24 @@
 
             <TextView
                 android:id="@+id/tvConsultationType"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
                 android:text="Offline Consultation"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="@color/color_primary" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnViewPaymentProof"
+                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Payment Proof"
+                android:textSize="12sp"
+                app:icon="@android:drawable/ic_menu_gallery"
+                android:visibility="gone" />
         </LinearLayout>
 
         <LinearLayout

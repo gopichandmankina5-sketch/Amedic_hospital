@@ -131,6 +131,16 @@ data class Appointment(
     val completionVerifiedBy: String = "",
     val completedAt: Long = 0L,
     val completedBy: String = "",
+    
+    // Payment QR Feature
+    val paymentQrUrl: String = "",
+    val upiId: String = "",
+    val consultationFee: Double = 0.0,
+    val paymentStatus: String = "pending", // pending, submitted
+    val paymentDate: Long = 0L,
+    val paymentReferenceId: String = "",
+    val paymentProofUrl: String = "",
+    
     @ServerTimestamp val createdAt: Date? = null
 )
 
@@ -205,4 +215,11 @@ data class MedicalDocument(
     val storagePath: String = "",
     val storageProvider: String = "firebase",
     @ServerTimestamp val uploadedAt: Date? = null
+)
+
+data class DoctorPaymentInfo(
+    @DocumentId var id: String = "",
+    val upiId: String = "",
+    val paymentQrUrl: String = "",
+    @ServerTimestamp val updatedAt: Date? = null
 )

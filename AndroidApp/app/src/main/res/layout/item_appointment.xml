@@ -177,6 +177,100 @@
                 app:autoSizeTextType="uniform"
                 android:visibility="gone" />
 
+            <!-- Payment Details (ONLINE only, accepted) -->
+            <LinearLayout
+                android:id="@+id/layoutPayment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_rounded_border"
+                android:padding="12dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Payment Details"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_on_background"
+                    android:layout_marginBottom="8dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="4dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Consultation Fee"
+                        android:textColor="@color/color_text_secondary"/>
+                    <TextView
+                        android:id="@+id/tvPaymentFee"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="₹0"
+                        android:textStyle="bold"
+                        android:textColor="@color/color_primary"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="UPI ID"
+                        android:textColor="@color/color_text_secondary"/>
+                    <TextView
+                        android:id="@+id/tvPaymentUpi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="doctor@upi"
+                        android:textColor="@color/color_on_background"/>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Scan QR to Pay"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
+
+                <ImageView
+                    android:id="@+id/ivPaymentQr"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="12dp"
+                    android:scaleType="centerCrop"/>
+                    
+                <TextView
+                    android:id="@+id/tvPaymentStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Payment Status: Pending"
+                    android:gravity="center"
+                    android:textColor="@color/status_pending"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSubmitPayment"
+                    style="@style/Widget.AmedicK.Button.Outlined"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="I Have Paid"
+                    android:textColor="@color/color_primary"
+                    app:strokeColor="@color/color_primary"/>
+            </LinearLayout>
+
             <!-- Row 2: Cancel & Open Chat (shared for both) -->
             <LinearLayout
                 android:id="@+id/layoutCancelAndChat"

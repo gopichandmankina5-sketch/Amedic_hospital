@@ -70,6 +70,11 @@ service cloud.firestore {
         allow read: if isAuthenticated();
         allow write: if isOwner(userId);
       }
+      
+      // Payment Info (Subcollection of Users - Doctors)
+      match /payment_info/{docId} {
+        allow read, write: if isOwner(userId);
+      }
     }
 
     // Appointments Collection
@@ -100,6 +105,9 @@ service cloud.firestore {
           request.resource.data.completionVerificationStatus == 'confirmed' &&
           request.auth.uid == resource.data.patientId
         )
+      ) && (
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['paymentQrUrl', 'upiId', 'consultationFee']) ||
+        (resource.data.doctorId == request.auth.uid)
       );
       
       // No deletion from client

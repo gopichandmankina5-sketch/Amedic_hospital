@@ -111,6 +111,23 @@ class AppointmentHistoryFragment : Fragment() {
                         .setNegativeButton("Cancel", null)
                         .show()
                 }
+            },
+            onPaymentSubmitClick = { appointment ->
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Confirm Payment")
+                    .setMessage("Are you sure you have paid ₹${appointment.consultationFee} via UPI ID: ${appointment.upiId}?")
+                    .setPositiveButton("Yes, I Have Paid") { _, _ ->
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            val result = firestoreRepository.updateAppointmentPaymentStatus(appointment.appointmentId, "submitted")
+                            if (result.isSuccess) {
+                                Toast.makeText(requireContext(), "Payment status updated", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(requireContext(), "Failed to update payment status", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+                    .setNegativeButton("Cancel", null)
+                    .show()
             }
         )
 

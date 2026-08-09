@@ -42,6 +42,16 @@
                     app:tint="@color/color_primary" />
 
                 <ImageView
+                    android:id="@+id/btnPaymentSetup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    app:srcCompat="@drawable/ic_payment"
+                    app:tint="@color/color_primary"
+                    android:contentDescription="Payment Setup" />
+
+                <ImageView
                     android:id="@+id/btnNotifications"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
