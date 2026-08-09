@@ -147,4 +147,9 @@
         <item name="chipBackgroundColor">@color/status_cancelled_bg</item>
         <item name="android:textColor">@color/status_cancelled</item>
     </style>
+
+    <style name="Widget.AmedicK.Chip.Completed" parent="Widget.Material3.Chip.Suggestion">
+        <item name="chipBackgroundColor">@color/status_completed_bg</item>
+        <item name="android:textColor">@color/status_completed</item>
+    </style>
 </resources>

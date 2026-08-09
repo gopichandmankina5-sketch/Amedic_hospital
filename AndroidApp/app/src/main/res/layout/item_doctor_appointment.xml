@@ -51,7 +51,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/color_divider"
+            android:background="@color/color_outline"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp" />
 
@@ -208,12 +208,20 @@
 
             <!-- Open Chat & Mark Completed -->
             <!-- Action Buttons Row -->
+            <!-- Action Buttons Rows -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="3"
+                android:orientation="vertical"
                 android:layout_marginBottom="8dp">
+
+                <!-- Top row: Complete and Reschedule -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:layout_marginBottom="8dp">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/markCompletedButton"
@@ -222,54 +230,34 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Complete"
-                        android:textSize="12sp"
-                        android:maxLines="1"
-                        android:ellipsize="none"
-                        app:autoSizeTextType="uniform"
-                        app:autoSizeMinTextSize="9sp"
-                        app:autoSizeMaxTextSize="12sp"
-                        android:paddingStart="2dp"
-                        android:paddingEnd="2dp"
+                        android:textSize="13sp"
                         android:layout_marginEnd="4dp"
                         app:backgroundTint="@color/status_completed" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnRescheduleMeet"
-                    style="@style/Widget.AmedicK.Button.Outlined"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Reschedule"
-                    android:textSize="12sp"
-                    android:maxLines="1"
-                    android:ellipsize="none"
-                    app:autoSizeTextType="uniform"
-                    app:autoSizeMinTextSize="9sp"
-                    app:autoSizeMaxTextSize="12sp"
-                    android:paddingStart="2dp"
-                    android:paddingEnd="2dp"
-                    android:layout_marginEnd="4dp"
-                    app:strokeColor="@color/color_primary"
-                    android:textColor="@color/color_primary" />
-                    
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnCancelMeet"
+                        android:id="@+id/btnRescheduleMeet"
                         style="@style/Widget.AmedicK.Button.Outlined"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Cancel"
-                        android:textSize="12sp"
-                        android:maxLines="1"
-                        android:ellipsize="none"
-                        app:autoSizeTextType="uniform"
-                        app:autoSizeMinTextSize="9sp"
-                        app:autoSizeMaxTextSize="12sp"
-                        android:paddingStart="2dp"
-                        android:paddingEnd="2dp"
-                        app:strokeColor="@color/color_error"
-                        android:textColor="@color/color_error" />
+                        android:text="Reschedule"
+                        android:textSize="13sp"
+                        android:layout_marginStart="4dp"
+                        app:strokeColor="@color/color_primary"
+                        android:textColor="@color/color_primary" />
                 </LinearLayout>
+
+                <!-- Bottom row: Cancel -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCancelMeet"
+                    style="@style/Widget.AmedicK.Button.Outlined"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cancel"
+                    android:textSize="13sp"
+                    app:strokeColor="@color/color_error"
+                    android:textColor="@color/color_error" />
+            </LinearLayout>
 
             <!-- Open Chat Button -->
             <com.google.android.material.button.MaterialButton

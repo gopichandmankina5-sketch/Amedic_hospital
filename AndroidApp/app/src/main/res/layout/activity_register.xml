@@ -15,26 +15,26 @@
         <!-- Header -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@drawable/bg_gradient_primary"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
-            android:padding="24dp">
+            android:paddingTop="48dp"
+            android:paddingBottom="24dp">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_gravity="center"
                 app:cardCornerRadius="14dp"
-                app:cardElevation="6dp"
-                app:cardBackgroundColor="#FFFFFF">
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/color_primary">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="A"
-                    android:textSize="28sp"
+                    android:textSize="32sp"
                     android:textStyle="bold"
-                    android:textColor="@color/color_primary"
+                    android:textColor="@color/color_on_primary"
                     android:gravity="center" />
             </androidx.cardview.widget.CardView>
 
@@ -42,8 +42,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Create Account"
-                android:textColor="@android:color/white"
-                android:textSize="20sp"
+                android:textColor="@color/color_primary"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 android:layout_marginTop="12dp" />
 
@@ -51,8 +51,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Join AmedicK today"
-                android:textColor="#CCFFFFFF"
-                android:textSize="13sp"
+                android:textColor="@color/color_text_secondary"
+                android:textSize="14sp"
                 android:layout_marginTop="4dp" />
         </LinearLayout>
 
@@ -62,7 +62,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginTop="-28dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="8dp"
             app:cardBackgroundColor="@color/color_surface">

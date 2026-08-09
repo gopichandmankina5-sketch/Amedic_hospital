@@ -92,10 +92,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:visibility="gone"
-                app:cardBackgroundColor="#FFF3E0"
+                app:cardBackgroundColor="@color/color_warning_container"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="0dp"
-                app:strokeColor="#F57C00"
+                app:strokeColor="@color/color_warning"
                 app:strokeWidth="1dp">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -107,7 +107,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_notifications"
-                        app:tint="#F57C00" />
+                        app:tint="@color/color_warning" />
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -118,14 +118,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Verification Pending"
-                            android:textColor="#E65100"
+                            android:textColor="@color/color_warning"
                             android:textStyle="bold"
                             android:textSize="14sp" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Your professional documents are being reviewed."
-                            android:textColor="#BF360C"
+                            android:textColor="@color/color_text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
                     <Button
@@ -134,7 +134,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Documents"
-                        android:textColor="#E65100"
+                        android:textColor="@color/color_warning"
                         android:textSize="11sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -146,10 +146,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:visibility="gone"
-                app:cardBackgroundColor="#E8F5E9"
+                app:cardBackgroundColor="@color/color_success_container"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="0dp"
-                app:strokeColor="#2E7D32"
+                app:strokeColor="@color/color_success"
                 app:strokeWidth="1dp">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -161,7 +161,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_verified"
-                        app:tint="#2E7D32" />
+                        app:tint="@color/color_success" />
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -171,14 +171,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="✓ Account Verified"
-                            android:textColor="#1B5E20"
+                            android:textColor="@color/color_success"
                             android:textStyle="bold"
                             android:textSize="14sp" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Your professional credentials have been verified."
-                            android:textColor="#388E3C"
+                            android:textColor="@color/color_text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -191,51 +191,51 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:visibility="gone"
-                app:cardBackgroundColor="#FFF3F3"
+                app:cardBackgroundColor="@color/color_error_container"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="0dp"
-                app:strokeColor="#C62828"
+                app:strokeColor="@color/color_error"
                 app:strokeWidth="1dp">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
                     android:padding="14dp">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_close"
+                        app:tint="@color/color_error" />
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_close"
-                            app:tint="#C62828" />
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
                             android:text="Verification Rejected"
-                            android:textColor="#B71C1C"
+                            android:textColor="@color/color_error"
                             android:textStyle="bold"
                             android:textSize="14sp" />
+                        <TextView
+                            android:id="@+id/tvRejectionReason"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Please re-upload your documents."
+                            android:textColor="@color/color_text_secondary"
+                            android:textSize="12sp" />
                     </LinearLayout>
-                    <TextView
-                        android:id="@+id/tvRejectionReason"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:textColor="#C62828"
-                        android:textSize="12sp"
-                        android:text="Reason: Your submission could not be verified." />
                     <Button
                         android:id="@+id/btnUpdateDocs"
                         style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Update &amp; Resubmit Documents"
-                        android:textColor="#C62828" />
+                        android:text="Update"
+                        android:textColor="@color/color_error"
+                        android:textSize="11sp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
